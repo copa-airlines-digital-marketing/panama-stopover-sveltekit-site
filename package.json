@@ -43,5 +43,10 @@
 		"vite": "^5.0.3",
 		"vitest": "^2.0.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@directus/sdk": "^17.0.0",
+		"date-fns": "^3.6.0",
+		"ramda": "^0.30.1"
+	}
 }
