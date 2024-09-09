@@ -1,8 +1,0 @@
-/** 
-  * @param { string } param 
-  * @return { param is ('apple' | 'orange') } 
-  * @satisfies { import('@sveltejs/kit').ParamMatcher } 
-*/
-export function match(param) {
-  return /[a-z]{2}/.test(param);
-}

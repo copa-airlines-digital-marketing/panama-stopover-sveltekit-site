@@ -16,7 +16,7 @@ const customTwMerge = extendTailwindMerge({
   }
 })
 
-export function cn(...inputs: ClassValue[]) {
+function cn(...inputs: ClassValue[]) {
 	return customTwMerge(clsx(inputs));
 }
 
@@ -27,14 +27,14 @@ type FlyAndScaleParams = {
 	duration?: number;
 };
 
-export function styleToString(style: Record<string, number | string | undefined>): string {
+function styleToString(style: Record<string, number | string | undefined>): string {
 	return Object.keys(style).reduce((str, key) => {
 		if (style[key] === undefined) return str;
 		return `${str}${key}:${style[key]};`;
 	}, "");
 }
 
-export function flyAndScale(
+function flyAndScale(
 	node: Element,
 	params: FlyAndScaleParams = { y: -8, x: 0, start: 0.95, duration: 150 }
 ): TransitionConfig {
@@ -70,4 +70,10 @@ export function flyAndScale(
 		},
 		easing: cubicOut,
 	};
+}
+
+export {
+  cn,
+  flyAndScale,
+  styleToString, 
 }
