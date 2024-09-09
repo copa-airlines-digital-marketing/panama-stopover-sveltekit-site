@@ -1,7 +1,7 @@
 import type { SiteSettingsSchema } from "./site-settings"
 
-type Schema = {
-  siteSettings: SiteSettingsSchema
+interface Schema {
+  sites: SiteSettingsSchema
 }
 
 export type {

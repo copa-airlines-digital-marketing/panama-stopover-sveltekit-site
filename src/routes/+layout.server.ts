@@ -5,7 +5,7 @@ import { MAX_COOKIE_SERIALIZATION } from '../lib/cookies/index.js'
 
 const LOCALE_COOKIE_KEY = 'locale' 
 
-export async function load({ cookies, params, request: { headers } }) {
+export async function load({ cookies, params, request: { headers }, fetch }) {
   console.log('layout server')
 
   const localeCookie = cookies.get(LOCALE_COOKIE_KEY)
@@ -16,9 +16,7 @@ export async function load({ cookies, params, request: { headers } }) {
 
     const acceptLanguageHeader = headers.get('Accept-Language')
 
-    
-
-    const preferredLocale = 
+    //const preferredLocale = 
 
     return redirect(307, './en-US')
   }
@@ -26,7 +24,11 @@ export async function load({ cookies, params, request: { headers } }) {
   if( localeParam !== localeCookie )
     cookies.set(LOCALE_COOKIE_KEY, localeParam, MAX_COOKIE_SERIALIZATION)
 
+  const data = await fetch('/api/site-settings')
+
+  console.log(data)
+
 	return {
-		
+		hello: 'world'
 	};
 }

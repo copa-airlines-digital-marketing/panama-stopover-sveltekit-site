@@ -1,11 +1,13 @@
+import { getSiteSettings } from "./site-settings"
+
 const keyToDataMap = {
-  'site-settings': () => {}
+  'site-settings': getSiteSettings
 } as const
 
 type DirectusDataKeys = keyof typeof keyToDataMap
 
 const getData = (key: DirectusDataKeys, id?: string) => {
-  return keyToDataMap[key]()
+  return keyToDataMap[key](id)
 }
 
 export {
