@@ -12,7 +12,7 @@ const setData = ( key: string, data: unknown, timeToExpireInSeconds: number ) =>
 const getData = ( key: string ) => {
   const client = createRedisClient( UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN )
 
-  return client.get<string>( key )
+  return client.get( key )
 }
 
 export {

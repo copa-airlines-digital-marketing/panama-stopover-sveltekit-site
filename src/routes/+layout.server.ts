@@ -12,7 +12,9 @@ export async function load({ cookies, params, request: { headers }, fetch }) {
 
   const { locale: localeParam } = params
 
-  if ( !localeParam ) {
+  const siteSettings = await fetch('/api/site-settings')
+  
+  if ( !localeParam  ) {
 
     const acceptLanguageHeader = headers.get('Accept-Language')
 
@@ -23,10 +25,6 @@ export async function load({ cookies, params, request: { headers }, fetch }) {
 
   if( localeParam !== localeCookie )
     cookies.set(LOCALE_COOKIE_KEY, localeParam, MAX_COOKIE_SERIALIZATION)
-
-  const data = await fetch('/api/site-settings')
-
-  console.log(data)
 
 	return {
 		hello: 'world'
