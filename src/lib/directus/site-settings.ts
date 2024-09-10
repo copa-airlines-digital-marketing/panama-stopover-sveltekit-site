@@ -26,6 +26,8 @@ const siteSettingSchema = z.object({
 
 type SiteSettingsSchema = z.infer<typeof siteSettingSchema>
 
+const isSiteSettings = (value: unknown): value is SiteSettingsSchema => siteSettingSchema.safeParse(value).success
+
 const getSiteSettings = async () => {  
   const siteSettings = await getItem<SiteSettingsSchema>( 'sites', SITE_ID,  {fields:['environmet_status', {'favIcon': ['image', 'code']}, {'logo': ['image', 'code']}, {'supported_languages': ['lang_code', 'sort']}, 'head_code', 'start_of_body_code', 'end_of_body_code']})
 
@@ -33,8 +35,9 @@ const getSiteSettings = async () => {
 }
 
 export {
+  siteSettingSchema,
   getSiteSettings,
-  siteSettingSchema
+  isSiteSettings,
 }
 
 export type {

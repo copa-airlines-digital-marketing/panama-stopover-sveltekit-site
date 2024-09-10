@@ -4,6 +4,7 @@ import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
 import { extendTailwindMerge } from "tailwind-merge";
 import { default as Preset } from 'cmds-tailwind-styles';
+import { allPass, isNotEmpty, isNotNil } from "ramda";
 
 const customTwMerge = extendTailwindMerge({
   extend: {
@@ -72,8 +73,11 @@ function flyAndScale(
 	};
 }
 
+const isNotNilNorEmpty = allPass([isNotNil, isNotEmpty])
+
 export {
   cn,
   flyAndScale,
-  styleToString, 
+  styleToString,
+  isNotNilNorEmpty
 }

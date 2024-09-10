@@ -1,5 +1,6 @@
-import { pipe } from 'ramda'
+import { includes, isNotNil, map, pipe, prop } from 'ramda'
 import { MAX_COOKIE_SERIALIZATION, SESSION_COOKIE_SERIALIZATION } from '$lib/cookies'
+import { isSiteSettings } from '$lib/directus/site-settings'
 
 const CLIENT_ID_KEY = 'client'
 const SESSION_ID_KEY = 'session'
@@ -23,7 +24,11 @@ const hashValue = async ( value: string ) => {
 const setClientId = pipe(unknownToString, hashValue)
 
 export async function handle({ event, resolve }) {
-  const { cookies, getClientAddress } = event
+  const { cookies, 
+    getClientAddress, 
+    route: { id: routeID }, 
+    params: { locale }, 
+  } = event
 
   let userIdFromCookies = cookies.get( CLIENT_ID_KEY )
 
@@ -39,6 +44,14 @@ export async function handle({ event, resolve }) {
   }
 
   cookies.set( SESSION_ID_KEY, sessionIdFromCookies, SESSION_COOKIE_SERIALIZATION )
+
+  if(isNotNil(routeID) && (includes('api', routeID ) || includes('assets', routeID)))
+    return (await resolve(event))
+
+  console.log(event)
+
+  if(!locale && routeID === '/')
+    console.log('locale')
     
 	const response = await resolve(event);
 
