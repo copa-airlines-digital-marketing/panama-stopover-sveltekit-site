@@ -51,6 +51,7 @@ export async function handle({ event, resolve }) {
     route: { id: routeID }, 
     url: { pathname }
   } = event
+  console.log(event.params, pathname)
 
   const userId =  await getUserIdCookie(event)
 

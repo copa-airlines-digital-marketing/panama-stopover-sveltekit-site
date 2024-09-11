@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { logosSchema } from './logos'
 import { getItem, type DirectusRequestBody } from './utils'
 import { SITE_ID } from '$env/static/private'
-import { textContentSchema } from './text-content'
+import { getTextTranslationFilter, textContentSchema } from './text-content'
 
 const environmentStatusSchema = z.object({
   environment: z.string(),
@@ -40,16 +40,7 @@ const textContentFields = [{
 }]
 
 const getSiteSettings = async (filters: DirectusRequestBody) => {
-  const textTranslationFilter = {
-    'translations': {
-      _filter:{
-        'languages_code':{
-          '_eq': filters.locale
-        }
-      }
-    }
-  }
-  console.log(textTranslationFilter)
+  
   const siteSettings = await getItem<SiteSettingsSchema>( 'sites', SITE_ID,  {
     fields: [
       'environmet_status',
@@ -75,10 +66,10 @@ const getSiteSettings = async (filters: DirectusRequestBody) => {
       }
     ],
     deep: {
-      'maintenance_message': textTranslationFilter,
-      'coming_soon_message': textTranslationFilter,
+      'maintenance_message': getTextTranslationFilter(filters.locale),
+      'coming_soon_message': getTextTranslationFilter(filters.locale),
       'error_messages': {
-        'Text_Content_id': textTranslationFilter
+        'Text_Content_id': getTextTranslationFilter(filters.locale)
       }
     }
   })

@@ -18,10 +18,21 @@ const textContentSchema = z.object({
   translations: textContentTranslations.array()
 })
 
+const getTextTranslationFilter = (locale: string | number) => ({
+  'translations': {
+    _filter:{
+      'languages_code':{
+        '_eq': locale
+      }
+    }
+  }
+})
+
 type TextContentSchema = z.infer<typeof textContentSchema>
 
 export {
-  textContentSchema
+  textContentSchema,
+  getTextTranslationFilter
 }
 
 export type {
