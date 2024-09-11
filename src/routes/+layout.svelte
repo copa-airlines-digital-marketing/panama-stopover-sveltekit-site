@@ -4,6 +4,8 @@
 	import { isNotNil } from 'ramda';
 	export let data;
 
+	console.log('+layout.svelte');
+
 	/* const {
 		language,
 		siteSettings: { head_code, start_of_body_code, end_of_body_code, favIcon }
@@ -23,9 +25,10 @@
 
 <Pre name="Head Code" value={start_of_body_code}></Pre>
 
-<slot></slot>
 
 {#if isNotNil(end_of_body_code)}
-	{@html end_of_body_code}
+{@html end_of_body_code}
 {/if}
- -->
+-->
+
+<slot></slot>

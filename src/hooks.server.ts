@@ -1,6 +1,8 @@
-import { includes, isNotNil, map, pipe, prop } from 'ramda'
+import { includes, isNotNil, pipe, split } from 'ramda'
 import { MAX_COOKIE_SERIALIZATION, SESSION_COOKIE_SERIALIZATION } from '$lib/cookies'
-import { isSiteSettings } from '$lib/directus/site-settings'
+import { redirect, type RequestEvent } from '@sveltejs/kit'
+import { base } from '$app/paths'
+import { getPreferredLocale, isSupportedLocale } from '$lib/i18n'
 
 const CLIENT_ID_KEY = 'client'
 const SESSION_ID_KEY = 'session'
@@ -23,37 +25,53 @@ const hashValue = async ( value: string ) => {
 
 const setClientId = pipe(unknownToString, hashValue)
 
+const getUserIdCookie = async ({cookies, getClientAddress}: RequestEvent) => {
+  const userIdFromCookies = cookies.get(CLIENT_ID_KEY) 
+
+  if(isNotNil(userIdFromCookies))
+    return userIdFromCookies
+
+  const newUserId = await setClientId(getClientAddress())
+
+  return newUserId
+}
+
+const geSessionIdFromCookie = ({cookies}: RequestEvent, id: string) => {
+  const sessionIdFromCookies = cookies.get(SESSION_ID_KEY) 
+
+  if(isNotNil(sessionIdFromCookies))
+    return sessionIdFromCookies
+
+  return crypto.randomUUID() + '-' + (new Date()).getTime() + '-' + id
+}
+
 export async function handle({ event, resolve }) {
+  console.log('+hooks.server.svelte')
   const { cookies, 
-    getClientAddress, 
     route: { id: routeID }, 
-    params: { locale }, 
+    url: { pathname }
   } = event
 
-  let userIdFromCookies = cookies.get( CLIENT_ID_KEY )
+  const userId =  await getUserIdCookie(event)
 
-  if ( !userIdFromCookies ) {
-    userIdFromCookies = await setClientId(getClientAddress())
-    cookies.set( CLIENT_ID_KEY, userIdFromCookies, MAX_COOKIE_SERIALIZATION)
-  }
+  cookies.set( CLIENT_ID_KEY, userId, MAX_COOKIE_SERIALIZATION)
 
-  let sessionIdFromCookies = cookies.get( SESSION_ID_KEY )
-
-  if ( !sessionIdFromCookies ) {
-    sessionIdFromCookies = crypto.randomUUID() + '-' + (new Date()).getTime() + '-' + userIdFromCookies
-  }
-
-  cookies.set( SESSION_ID_KEY, sessionIdFromCookies, SESSION_COOKIE_SERIALIZATION )
+  cookies.set( SESSION_ID_KEY, geSessionIdFromCookie(event, userId), SESSION_COOKIE_SERIALIZATION )
 
   if(isNotNil(routeID) && (includes('api', routeID ) || includes('assets', routeID)))
     return (await resolve(event))
 
-  console.log(event)
+  const [,langFromPath] = split('/', pathname)
 
-  if(!locale && routeID === '/')
-    console.log('locale')
-    
-	const response = await resolve(event);
+  if(!langFromPath) {
+    const locale = getPreferredLocale(event)
+    console.log('redirecting to locale', locale)
+    throw redirect(307, `${base}/${locale}`)
+  }
 
-	return response;
+  const pageLocale = isSupportedLocale(langFromPath) ? langFromPath : getPreferredLocale(event) 
+
+  event.locals.locale = pageLocale
+
+	return await resolve(event, { transformPageChunk: ({ html }) => html.replace('%lang%', pageLocale) });
 }

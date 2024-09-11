@@ -1,4 +1,5 @@
 import { getSiteSettings } from "./site-settings"
+import type { DirectusRequestBody } from "./utils"
 
 const keyToDataMap = {
   'site-settings': getSiteSettings
@@ -6,8 +7,9 @@ const keyToDataMap = {
 
 type DirectusDataKeys = keyof typeof keyToDataMap
 
-const getData = async (key: DirectusDataKeys, id?: string) => {
-  const data = await keyToDataMap[key](id)
+
+const getData = async (key: DirectusDataKeys, body?: DirectusRequestBody, id?: string) => {
+  const data = await keyToDataMap[key](body)
 
   return data
 }

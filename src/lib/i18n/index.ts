@@ -1,8 +1,12 @@
-import { __, filter, head, includes, isNil, isNotEmpty, isNotNil, pipe, replace, split } from "ramda"
+import { PUBLIC_SUPPORTED_LANGUAGES } from "$env/static/public"
+import type { RequestEvent } from "@sveltejs/kit"
+import { __, filter, head, includes, isEmpty, isNil, isNotNil, pipe, replace, split } from "ramda"
 
 type FixedString<N extends number> = { 0: string, lenght: N } & string
 
 type Locale =  FixedString<2> | `${FixedString<2>}-${FixedString<2>}`
+
+const LOCALE_COOKIE_KEY = 'locale' 
 
 const removeQFactorWeighting = replace(/;q=[0-9.]+/g, '')
 
@@ -10,37 +14,48 @@ const splitByComma = split(',')
 
 const getAllLanguages = pipe(removeQFactorWeighting, splitByComma)
 
-const calculatePageLanguage = (siteLanguages: string[], languageFromCookies: string | undefined, languagePreferences: string[] | undefined) => {
-  const defaultSiteLang = siteLanguages[0]
+const getSiteLocales = () => split(',', PUBLIC_SUPPORTED_LANGUAGES)
 
-  if(isNotNil(languageFromCookies) && includes(languageFromCookies, siteLanguages))
-    return languageFromCookies
+const getPreferredLocale = ({cookies, request:{ headers }}: RequestEvent) => {
+  const siteLocales = getSiteLocales()
+  
+  const siteDefaultLocale = siteLocales[0]
 
-  if(isNil(languagePreferences))
-    return defaultSiteLang
+  const localeFromCookie = cookies.get(LOCALE_COOKIE_KEY)
 
-  let preferredLocale = null
+  if(isNotNil(localeFromCookie) && includes(localeFromCookie, siteLocales))
+    return localeFromCookie
+
+  const browserPreferredLocales = getAllLanguages(headers.get('Accept-Language') || '')
+
+  if(isNil(browserPreferredLocales) || isEmpty(browserPreferredLocales))
+    return siteDefaultLocale
+
+  let preferredLocale: string | undefined
 
   let i = 0
 
   do {
-    const getSitePreferedLang = pipe(filter(includes(__, languagePreferences[i])), head)
-    const sitePreferedLang = getSitePreferedLang(siteLanguages)
-    if(isNotNil(sitePreferedLang) && isNotEmpty(sitePreferedLang))
-      preferredLocale = sitePreferedLang
+    const getSitePreferedLocale = pipe(filter(includes(__, browserPreferredLocales[i])), head)
+    const sitePreferredLocale = getSitePreferedLocale(siteLocales)
+    if(isNotNil(sitePreferredLocale) && typeof sitePreferredLocale === 'string')
+      preferredLocale = sitePreferredLocale
 
     i+=1
-  } while (!preferredLocale && i < languagePreferences.length)
+  } while (!preferredLocale && i < browserPreferredLocales.length)
 
   if(!preferredLocale)
-    preferredLocale = defaultSiteLang
+    preferredLocale = siteDefaultLocale
   
   return preferredLocale
+
 }
 
+const isSupportedLocale = (locale: string) => includes(locale, getSiteLocales())
+
 export {
-  getAllLanguages,
-  calculatePageLanguage
+  getPreferredLocale,
+  isSupportedLocale
 }
 
 export type {
