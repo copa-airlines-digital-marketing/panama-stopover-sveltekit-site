@@ -143,7 +143,7 @@ const getPage = async (filters: DirectusRequestBody) => {
 
   const firstPage = pageRequest[0]
 
-  console.log('page request', toString(pageSchema.safeParse(firstPage).error))
+  console.log('page request', pageSchema.safeParse(firstPage).error)
 
   if(!isPageSettings(firstPage))
     return null

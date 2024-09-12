@@ -9,7 +9,7 @@ const content_distribution = z.union([z.literal('space-around'), z.literal('spac
 const sectionContentSchema = z.object({
   id: z.union([z.string(), z.number()]),
   item: textContentSchema.or(navigationSchema),
-  collection: z.union([z.literal('Text_Conent'), z.literal('navigation')]),
+  collection: z.union([z.literal('Text_Content'), z.literal('navigation')]),
   component_name: z.string().nullable(),
   display: z.union([z.literal('100'), z.literal('75'), z.literal('50'), z.literal('25')]).nullable(),
   theme: z.union([z.literal('light'), z.literal('dark')]).nullable(),

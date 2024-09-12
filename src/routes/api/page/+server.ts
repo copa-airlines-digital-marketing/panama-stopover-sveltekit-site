@@ -1,5 +1,5 @@
 import { getData } from "$lib/data/index.js"
-import { siteSettingSchema } from "$lib/directus/site-settings"
+import { pageSchema } from "$lib/directus/page.js"
 import { error, json } from "@sveltejs/kit"
 import { isEmpty, isNil } from "ramda"
 
@@ -22,7 +22,7 @@ export async function GET({ url: { searchParams } }) {
   }
   
   try {
-    siteSettingSchema.parse(data)
+    pageSchema.parse(data)
     return json( data, { status: 200 } )
   } catch (exception) {
     console.log('Error while parsing data', exception)

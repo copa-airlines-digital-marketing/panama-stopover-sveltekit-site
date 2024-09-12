@@ -10,7 +10,7 @@ const textContentTranslations = z.object({
   title: z.string().nullish(),
   description: z.string().nullish(),
   media: z.optional(z.string().nullish()),
-  call_to_actions: z.nullable(callToActionSchema.array()),
+  call_to_actions: callToActionSchema.array().nullish(),
   languages_code: z.optional(z.string())
 })
 
