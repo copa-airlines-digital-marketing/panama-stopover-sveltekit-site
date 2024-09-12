@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { logosSchema } from './logos'
-import { getItem, type DirectusRequestBody } from './utils'
+import { logoQuery, logosSchema } from './logos'
+import { getItem, getTranslationFilter, type DirectusRequestBody } from './utils'
 import { SITE_ID } from '$env/static/private'
-import { getTextTranslationFilter, textContentSchema } from './text-content'
+import { textContentQuery, textContentSchema } from './text-content'
 
 const environmentStatusSchema = z.object({
   environment: z.string(),
@@ -31,13 +31,6 @@ type SiteSettingsSchema = z.infer<typeof siteSettingSchema>
 
 const isSiteSettings = (value: unknown): value is SiteSettingsSchema => siteSettingSchema.safeParse(value).success
 
-const textContentFields = [{
-  'translations': [
-    'title',
-    'description',
-    'call_to_actions',
-  ]
-}]
 
 const getSiteSettings = async (filters: DirectusRequestBody) => {
   
@@ -45,31 +38,31 @@ const getSiteSettings = async (filters: DirectusRequestBody) => {
     fields: [
       'environmet_status',
       { 
-        'favIcon': ['image', 'code']
+        'favIcon': logoQuery
       }, {
-        'logo': ['image', 'code']
+        'logo': logoQuery
       }, 
       'head_code',
       'start_of_body_code',
       'end_of_body_code',
       {
-        'maintenance_message': textContentFields
+        'maintenance_message': textContentQuery
       },
       {
-        'coming_soon_message': textContentFields
+        'coming_soon_message': textContentQuery
       },
       {
         'error_messages': [
-          { 'Text_Content_id': textContentFields },
+          { 'Text_Content_id': textContentQuery },
           'error_code'
         ]
       }
     ],
     deep: {
-      'maintenance_message': getTextTranslationFilter(filters.locale),
-      'coming_soon_message': getTextTranslationFilter(filters.locale),
+      'maintenance_message': getTranslationFilter(filters.locale),
+      'coming_soon_message': getTranslationFilter(filters.locale),
       'error_messages': {
-        'Text_Content_id': getTextTranslationFilter(filters.locale)
+        'Text_Content_id': getTranslationFilter(filters.locale)
       }
     }
   })

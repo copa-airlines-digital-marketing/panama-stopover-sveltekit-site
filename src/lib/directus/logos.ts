@@ -7,8 +7,11 @@ const logosSchema = z.object({
 
 type LogoSchema = z.infer<typeof logosSchema>
 
+const logoQuery = [ 'image', 'code' ]
+
 export {
-  logosSchema
+  logosSchema,
+  logoQuery
 }
 
 export type {

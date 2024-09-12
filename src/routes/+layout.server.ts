@@ -15,6 +15,7 @@ export async function load({ fetch, locals: { locale } }) {
   }
   
 	return {
-		siteSettings: siteSettings
+    locale,
+		siteSettings
 	};
 }

@@ -7,9 +7,9 @@ const callToActionSchema = z.object({
 })
 
 const textContentTranslations = z.object({
-  title: z.string().nullable(),
-  description: z.string().nullable(),
-  media: z.optional(z.string().nullable()),
+  title: z.string().nullish(),
+  description: z.string().nullish(),
+  media: z.optional(z.string().nullish()),
   call_to_actions: z.nullable(callToActionSchema.array()),
   languages_code: z.optional(z.string())
 })
@@ -18,21 +18,20 @@ const textContentSchema = z.object({
   translations: textContentTranslations.array()
 })
 
-const getTextTranslationFilter = (locale: string | number) => ({
-  'translations': {
-    _filter:{
-      'languages_code':{
-        '_eq': locale
-      }
-    }
-  }
-})
+const textContentQuery =[{
+  'translations': [
+    'title',
+    'media',
+    'description',
+    'call_to_actions',
+  ]
+}]
 
 type TextContentSchema = z.infer<typeof textContentSchema>
 
 export {
   textContentSchema,
-  getTextTranslationFilter
+  textContentQuery
 }
 
 export type {

@@ -5,15 +5,19 @@ import { isEmpty, isNil } from "ramda"
 
 /** @type {import('./$types').PageServerLoad} */
 export async function GET({ url: { searchParams } }) {
-  const locale = searchParams.get('locale') 
+  const locale = searchParams.get('locale')
+  const category = searchParams.get('category')
+  const subCategory = searchParams.get('subcategory')
+  const article = searchParams.get('article')
 
   if (!locale) 
     return error(400)
 
-  const data = await getData('site-settings', 60*5, {locale}) //5 minutes of site settings
+  const data = await getData('page', 60*30, {locale, category, subCategory, article}) //5 minutes of site settings
+
 
   if ( isNil(data) || isEmpty(data)) {
-    console.log('Error while getting site settings no data', data)
+    console.log('Error while getting page no data', data)
     return error(404)
   }
   

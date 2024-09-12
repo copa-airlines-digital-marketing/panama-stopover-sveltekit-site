@@ -3,7 +3,7 @@ import { readItem, readItems, type QueryItem } from "@directus/sdk"
 import { getClient } from "./client"
 import type { Schema } from "./schema"
 
-type DirectusRequestBody = Record<string, string | number>
+type DirectusRequestBody = Record<string, string | number | undefined | null>
 
 const getItem = async <T>(collection: keyof Schema, id: string | number, query: QueryItem<Schema, T>) => {
   try {
@@ -27,9 +27,20 @@ const getItems = async < T >( collection: keyof Schema, query: QueryItem< Schema
   }
 }
 
+const getTranslationFilter = (locale: string | number) =>  ({
+  'translations': {
+    _filter:{
+      'languages_code':{
+        '_eq': locale
+      }
+    }
+  }
+})
+
 export {
   getItem,
-  getItems
+  getItems,
+  getTranslationFilter
 }
 
 export type {
