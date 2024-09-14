@@ -14,6 +14,18 @@ const siteErrorMessages = z.object({
   error_code: z.number()
 })
 
+const pagePathSchema = z.object({
+  translations: z.array(z.object({
+    path: z.string()
+  })),
+  parent: z.lazy(() => pagePathSchema).nullish()
+})
+
+const articleAssociationSchema = z.object({
+  collection: z.string(),
+  pages_id: pagePathSchema
+})
+
 const siteSettingSchema = z.object({
   id: z.optional(z.number()),
   environmet_status: environmentStatusSchema,
@@ -24,48 +36,66 @@ const siteSettingSchema = z.object({
   end_of_body_code: z.string().nullable(),
   maintenance_message: z.nullable(textContentSchema),
   coming_soon_message: z.nullable(textContentSchema),
-  error_messages: z.nullable(siteErrorMessages.array())
+  error_messages: z.nullable(siteErrorMessages.array()),
+  articles_association: articleAssociationSchema.array().nullish()
 })
 
 type SiteSettingsSchema = z.infer<typeof siteSettingSchema>
 
 const isSiteSettings = (value: unknown): value is SiteSettingsSchema => siteSettingSchema.safeParse(value).success
 
+const translationPath = { 'translations': ['path'] }
 
 const getSiteSettings = async (filters: DirectusRequestBody) => {
+
+  const translationFilter = getTranslationFilter(filters.locale)
   
   const siteSettings = await getItem<SiteSettingsSchema>( 'sites', SITE_ID,  {
     fields: [
       'environmet_status',
-      { 
-        'favIcon': logoQuery
-      }, {
-        'logo': logoQuery
-      }, 
       'head_code',
       'start_of_body_code',
       'end_of_body_code',
-      {
-        'maintenance_message': textContentQuery
-      },
-      {
-        'coming_soon_message': textContentQuery
-      },
-      {
-        'error_messages': [
-          { 'Text_Content_id': textContentQuery },
-          'error_code'
+      {'articles_association': [
+        'collection',
+        { 'pages_id': [
+          translationPath,
+          { 'parent': [
+            translationPath,
+            { 'parent': [translationPath] }
+          ]}
+        ]}
+      ]},
+      { 'favIcon': logoQuery }, 
+      { 'logo': logoQuery }, 
+      { 'maintenance_message': textContentQuery },
+      { 'coming_soon_message': textContentQuery },
+      { 'error_messages': [
+          'error_code',
+          { 'Text_Content_id': textContentQuery }
         ]
       }
     ],
     deep: {
-      'maintenance_message': getTranslationFilter(filters.locale),
-      'coming_soon_message': getTranslationFilter(filters.locale),
+      'articles_association': {
+        pages_id: {
+          ...translationFilter,
+          parent: {
+            ...translationFilter,
+            parent:{
+              ...translationFilter
+            }
+          }
+        },
+      },
+      'maintenance_message': translationFilter,
+      'coming_soon_message': translationFilter,
       'error_messages': {
-        'Text_Content_id': getTranslationFilter(filters.locale)
+        'Text_Content_id': translationFilter
       }
     }
   })
+
   if(!isSiteSettings(siteSettings))
     return null
   

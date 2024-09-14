@@ -22,7 +22,7 @@ const getItems = async < T >( collection: keyof Schema, query: QueryItem< Schema
     const request = await client.request( readItems( collection, query ) )
     return request
   } catch (error) {
-    console.log(`error while getting items from collection: ${collection}`, error)
+    console.log(`error while getting items from collection: ${collection}`, JSON.stringify(error, null, 2))
     return null
   }
 }

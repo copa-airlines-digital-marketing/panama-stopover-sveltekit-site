@@ -3,7 +3,7 @@ import { sectionSchema } from "./section";
 import { getItems, getTranslationFilter, type DirectusRequestBody } from "./utils";
 import { textContentQuery } from "./text-content";
 import { logoQuery } from "./logos";
-import { isNil, toString } from "ramda";
+import { isNil } from "ramda";
 
 const pageTranslationsSchema = z.object({
   languages_code: z.string().optional(),
@@ -34,31 +34,64 @@ const pageSchema = z.object({
 
 type PageSchema = z.infer<typeof pageSchema>
 
-const getTranslatedPageFilter = (locale: string | number, path: string | number ) => ({
-  'translations': {
-    '_and': [
-      { 'languages_code': { '_eq':locale } },
-      { 'path': { '_eq': path } }
+type NullishID = null | number | string | undefined
+
+const getTranslatedPageFilterRecursive = (locale: NullishID, path: NullishID, totalParents: number ) => {
+  if (totalParents < 1) 
+    return ([
+      {
+        'translations': {
+          'languages_code': { '_eq':locale }
+        },
+      },
+      {
+        'translations': {
+          'path': { '_eq':path }
+        },
+      }
+    ])
+  
+  return getTranslatedPageFilterRecursive(locale, path, totalParents - 1 ).map(value => ({parent: value}))
+} 
+
+const getPageFilter = ( filter: DirectusRequestBody ) => {
+
+  const { locale, home, category, subCategory } = filter
+  
+  const base = {
+    _and: [
+      ...getTranslatedPageFilterRecursive(locale, '/', 0)
     ]
   }
-})
 
-const getPageFilter = (locale: string | number, category?: string | number, subcategory?: string | number, article?: string | number) => {
-  
-  const base = getTranslatedPageFilter(locale, '/')
+  let result = base
 
-  const result = {
-    ...base
-  }
+  if (home)
+    result = {
+      _and: [
+        ...getTranslatedPageFilterRecursive(locale, '/', 1),
+        ...getTranslatedPageFilterRecursive(locale, locale, 0),
+      ]
+    }
 
   if (category)
-    result.parent = getTranslatedPageFilter(locale, category)
+    result = {
+      _and: [
+        ...getTranslatedPageFilterRecursive(locale, '/', 2),
+        ...getTranslatedPageFilterRecursive(locale, locale, 1),
+        ...getTranslatedPageFilterRecursive(locale, category, 0),
+      ]
+    }
 
-  if (subcategory) 
-    result.parent.parent = getTranslatedPageFilter(locale, subcategory)
-  
-  if (article)
-    result.parent.parent.parent = getTranslatedPageFilter(locale, article)
+  if (subCategory) 
+    result = {
+      _and: [
+        ...getTranslatedPageFilterRecursive(locale, '/', 3),
+        ...getTranslatedPageFilterRecursive(locale, locale, 2),
+        ...getTranslatedPageFilterRecursive(locale, category, 1),
+        ...getTranslatedPageFilterRecursive(locale, subCategory, 0)
+      ]
+    }
 
   return result
   
@@ -68,8 +101,8 @@ const isPageSettings = (value: unknown): value is PageSchema => pageSchema.safeP
 
 const getPage = async (filters: DirectusRequestBody) => {
 
-  const val = getPageFilter(filters.locale, filters.category, filters.subcategory, filters.article)
-  console.log(toString(val))
+  const val = getPageFilter(filters)
+  console.log('val', JSON.stringify(val, null, 2))
   const pageRequest = await getItems<PageSchema>('pages', {
     fields: [
       'id',
@@ -119,7 +152,7 @@ const getPage = async (filters: DirectusRequestBody) => {
         }] }
       ] }
     ],
-    filter: getPageFilter(filters.locale, filters.category, filters.subcategory, filters.article),
+    filter: getPageFilter(filters),
     deep: {
       storefronts: {
         _filter: {
@@ -128,9 +161,11 @@ const getPage = async (filters: DirectusRequestBody) => {
           }
         },
         sections: {
-          section_content: {
-            "item:Text_Content": getTranslationFilter(filters.locale),
-            "item:navigation": getTranslationFilter(filters.locale),
+          sections_id:{
+            section_content: {
+              "item:Text_Content": getTranslationFilter(filters.locale),
+              "item:navigation": getTranslationFilter(filters.locale),
+            }
           }
         }
       },
@@ -138,12 +173,12 @@ const getPage = async (filters: DirectusRequestBody) => {
     }
   })
 
+  console.log('result', JSON.stringify(pageRequest, null, 2))
+
   if(isNil(pageRequest))
     return null
 
   const firstPage = pageRequest[0]
-
-  console.log('page request', pageSchema.safeParse(firstPage).error)
 
   if(!isPageSettings(firstPage))
     return null

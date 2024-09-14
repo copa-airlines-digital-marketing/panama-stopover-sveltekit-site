@@ -1,10 +1,15 @@
 <script>
 	import { page } from '$app/stores';
 	import { Pre } from '$lib/components/testing/';
+	import { equals, filter, pipe, prop } from 'ramda';
 
 	export let data;
+
+	const {
+		siteSettings: { error_messages }
+	} = data;
+
+	const message = filter(pipe(prop('error_code'), equals($page.status)), error_messages);
 </script>
 
-<h1>Error page</h1>
-
-<Pre name="data" value={data}></Pre>
+<Pre name="data" value={message}></Pre>

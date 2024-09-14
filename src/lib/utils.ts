@@ -75,9 +75,14 @@ function flyAndScale(
 
 const isNotNilNorEmpty = allPass([isNotNil, isNotEmpty])
 
+const say = (message: string) => (value: unknown) => {
+  console.log(message, value)
+}
+
 export {
   cn,
   flyAndScale,
+  isNotNilNorEmpty,
+  say,
   styleToString,
-  isNotNilNorEmpty
 }

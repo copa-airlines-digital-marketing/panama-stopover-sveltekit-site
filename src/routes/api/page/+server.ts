@@ -6,15 +6,15 @@ import { isEmpty, isNil } from "ramda"
 /** @type {import('./$types').PageServerLoad} */
 export async function GET({ url: { searchParams } }) {
   const locale = searchParams.get('locale')
+  const home = searchParams.get('home')
   const category = searchParams.get('category')
   const subCategory = searchParams.get('subcategory')
-  const article = searchParams.get('article')
+  const preview = searchParams.get('preview')
 
   if (!locale) 
     return error(400)
 
-  const data = await getData('page', 60*30, {locale, category, subCategory, article}) //5 minutes of site settings
-
+  const data = await getData('page', 60*60*2, {locale, home, category, subCategory, preview}) //2h mins for pages 
 
   if ( isNil(data) || isEmpty(data)) {
     console.log('Error while getting page no data', data)
@@ -25,7 +25,7 @@ export async function GET({ url: { searchParams } }) {
     pageSchema.parse(data)
     return json( data, { status: 200 } )
   } catch (exception) {
-    console.log('Error while parsing data', exception)
+    console.log('Error while parsing page data', exception)
     return error(500)
   }
 }
