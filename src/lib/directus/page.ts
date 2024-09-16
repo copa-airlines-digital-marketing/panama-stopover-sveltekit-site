@@ -101,8 +101,6 @@ const isPageSettings = (value: unknown): value is PageSchema => pageSchema.safeP
 
 const getPage = async (filters: DirectusRequestBody) => {
 
-  const val = getPageFilter(filters)
-  console.log('val', JSON.stringify(val, null, 2))
   const pageRequest = await getItems<PageSchema>('pages', {
     fields: [
       'id',
@@ -172,8 +170,6 @@ const getPage = async (filters: DirectusRequestBody) => {
 
     }
   })
-
-  console.log('result', JSON.stringify(pageRequest, null, 2))
 
   if(isNil(pageRequest))
     return null

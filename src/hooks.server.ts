@@ -1,4 +1,4 @@
-import { includes, isNotNil, pipe, split } from 'ramda'
+import { any, includes, isNotNil, pipe, split, test } from 'ramda'
 import { MAX_COOKIE_SERIALIZATION, SESSION_COOKIE_SERIALIZATION } from '$lib/cookies'
 import { redirect, type RequestEvent } from '@sveltejs/kit'
 import { base } from '$app/paths'
@@ -45,11 +45,13 @@ const geSessionIdFromCookie = ({cookies}: RequestEvent, id: string) => {
   return crypto.randomUUID() + '-' + (new Date()).getTime() + '-' + id
 }
 
+const existAndHaveCapitalLeters = (value: string | undefined) => !!value && test(/[A-Z]/g, value)
+
 export async function handle({ event, resolve }) {
-  console.log('+hooks.server.svelte')
   const { cookies, 
     route: { id: routeID }, 
-    url: { pathname }
+    url: { pathname, searchParams },
+    params: { path }
   } = event
 
   const userId =  await getUserIdCookie(event)
@@ -60,18 +62,28 @@ export async function handle({ event, resolve }) {
 
   if(isNotNil(routeID) && (includes('api', routeID ) || includes('assets', routeID)))
     return (await resolve(event))
-
+  
   const [,langFromPath] = split('/', pathname)
+  
+  const langCookie = cookies.get('locale')
 
   if(!langFromPath) {
-    const locale = getPreferredLocale(event)
-    console.log('redirecting to locale', locale)
+    const locale = langCookie || getPreferredLocale(event)
     throw redirect(307, `${base}/${locale}`)
   }
 
   const pageLocale = isSupportedLocale(langFromPath) ? langFromPath : getPreferredLocale(event) 
 
+  cookies.set('locale', pageLocale, MAX_COOKIE_SERIALIZATION)
+  
   event.locals.locale = pageLocale
+
+  if(path && any(existAndHaveCapitalLeters, path.split('/')) ) {
+    const newroute = [base, pageLocale, path].map(value => value ? value.toLowerCase() : value).filter(value => !!value).join('/')
+
+    console.log(searchParams.size)
+    throw redirect(307, `/${newroute}${searchParams.size > 0 ? '?' + searchParams.toString() : ''}`)
+  }
 
 	return await resolve(event, { transformPageChunk: ({ html }) => html.replace('%lang%', pageLocale) });
 }

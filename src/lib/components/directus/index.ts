@@ -5,9 +5,9 @@ import { default as TextContent } from './text-content.svelte'
 import { default as Navigation } from './navigation.svelte'
 
 export {
+  Navigation,
   Page,
   Section,
   SectionContent,
   TextContent,
-  Navigation
 }

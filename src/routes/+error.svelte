@@ -12,4 +12,8 @@
 	const message = filter(pipe(prop('error_code'), equals($page.status)), error_messages);
 </script>
 
-<Pre name="data" value={message}></Pre>
+<svelte:head>
+	<meta name="robots" content="noindex" />
+</svelte:head>
+
+<Pre name="error" value={message}></Pre>

@@ -17,7 +17,6 @@ const getEnvironment = pipe(
 )
 
 export async function load({ fetch, locals: { locale }, url: { hostname } }) {
-  console.log('+layout.server.svelte')
   const layoutDataRequest = await Promise.all([
     fetch('/api/site-settings?locale='+locale),
     fetch(`/api/page?locale=${locale}`)

@@ -1,13 +1,16 @@
 <script lang="ts">
-	import type { PageSchema } from '$lib/directus/page';
 	import { isNotNil } from 'ramda';
+	import type { PageSchema } from '$lib/directus/page';
+	import type { SiteSettingsSchema } from '$lib/directus/site-settings';
 	import { Section as SectionComponent } from '$lib/components/directus';
 
+	export let siteSettings: SiteSettingsSchema;
 	export let page: PageSchema;
+	export let layout: PageSchema;
 
 	const {
 		share_image,
-		translatations: {
+		translations: {
 			0: { title_tag, meta_description }
 		},
 		index,
