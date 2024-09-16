@@ -14,7 +14,8 @@ export async function load(event) {
 
   const pageRequest = await fetch(`/api/page?locale=${locale}&home=home${preview ? '&preview='+preview : ''}`)
   const parentData = await parent()
-  const page = await pageRequest.json()
+  const pageData = await pageRequest.json()
+  const page = pageData.page
 
   if(!isPageSettings(page)) {
     say('Requested page does not fulfill the page schema', pageSchema.safeParse(page).error)

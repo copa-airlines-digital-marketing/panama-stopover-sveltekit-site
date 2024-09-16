@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { articleToWordString, getItems, type DirectusRequestBody } from "./utils";
+import { filesSchema, getItems, locationSchema, type DirectusRequestBody } from "./utils";
 import { say } from "$lib/utils";
 import { isNil } from "ramda";
-import { textContentSchema } from "./text-content";
+import { textContentQuery, textContentSchema } from "./text-content";
 
 const placeTranslationsSchema = z.object({
   lang_code: z.string(),
@@ -15,19 +15,17 @@ const placeTranslationsSchema = z.object({
 
 const placeSchema = z.object({
   main_image: z.string(),
-  gallery: z.string(),
+  gallery: filesSchema.array(),
   translations: placeTranslationsSchema.array(),
   promo_code: z.string().nullish(),
   promo_discount_amount: z.number().nullish(),
   promo_discount_percent: z.number().nullish(),
-  whatsapp: z.string(),
-  booking_email: z.string(),
-  supported_languages: z.any().array().nullish(), // fix
+  supported_languages: z.string().array().nullish(),
   experiences: textContentSchema.array().nullish(),
   duration: z.string(),
   pilar: z.string(),
-  category: z.any().array(),
-  location: z.any() //fix
+  category: z.string().array(),
+  location: locationSchema
 })
 
 type PlaceSchema = z.infer<typeof placeSchema>
@@ -43,20 +41,37 @@ const getPlace = async (filters: DirectusRequestBody) => {
   }
 
   const directusPlaceRequest = await getItems('stopover_place_to_visit', {
-    fields: ['*', '*.*'],
+    fields: [
+      'main_image',
+      'promo_code',
+      'promo_discount_amount',
+      'promo_discount_percent',
+      'supported_languages',
+      'duration',
+      'pilar',
+      'category',
+      'location',
+      { 'experiences': textContentQuery },
+      { 'gallery': ['directus_files_id', 'sort'] },
+      { 'translations': [
+        'lang_code',
+        'name',
+        'description',
+        'url',
+        'promo_name',
+        'promo_description'
+      ]}
+    ],
     filter: {
-      translations: {
-        name: {
-          _icontains: articleToWordString(article)
-        }
-      }
+      _and: [
+        { translations: { lang_code: { _eq: filters.locale } } },
+        { translations: {path: { _eq: article} } }
+      ]
     },
   })
 
   if(isNil(directusPlaceRequest))
     return null
-
-  say('Place Returned', directusPlaceRequest)
 
   if(directusPlaceRequest.length > 1) {
     say('Query returned more than one result, review is required', directusPlaceRequest.map(value => value.translations.name))

@@ -4,6 +4,7 @@ import { error } from '@sveltejs/kit'
 import { isSiteSettings } from '$lib/directus/site-settings.js'
 import { head, includes, isEmpty, pipe, split } from 'ramda'
 import { isPageSettings } from '$lib/directus/page.js'
+import { say } from '$lib/utils.js'
 
 const ifLocalHostDev = (value: string) => includes(value, ['localhost', '127.0.0.1']) ? 'dev' : value
 
@@ -24,10 +25,11 @@ export async function load({ fetch, locals: { locale }, url: { hostname } }) {
   const [siteSettingsRequest, layoutRequest] = layoutDataRequest
 
   const siteSettings = await siteSettingsRequest.json()
-  const layout = await layoutRequest.json()
+  const layoutPage = await layoutRequest.json()
+  const layout = layoutPage.page
   
   if (!siteSettings || isEmpty(siteSettings) || !isSiteSettings(siteSettings) || !layout || isEmpty(layout) || !isPageSettings(layout)) {
-    console.log(`error while loading site settings and layout`, siteSettings, layout)
+    say(`error while loading site settings and layout`, {siteSettings, layout} )
     return error(500) 
   }
   

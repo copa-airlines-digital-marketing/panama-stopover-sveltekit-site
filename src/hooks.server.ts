@@ -80,8 +80,6 @@ export async function handle({ event, resolve }) {
 
   if(path && any(existAndHaveCapitalLeters, path.split('/')) ) {
     const newroute = [base, pageLocale, path].map(value => value ? value.toLowerCase() : value).filter(value => !!value).join('/')
-
-    console.log(searchParams.size)
     throw redirect(307, `/${newroute}${searchParams.size > 0 ? '?' + searchParams.toString() : ''}`)
   }
 

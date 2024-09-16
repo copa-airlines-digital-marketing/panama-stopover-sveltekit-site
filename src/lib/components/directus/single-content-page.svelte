@@ -1,13 +1,12 @@
 <script lang="ts">
 	import type { PageSchema } from '$lib/directus/page';
 	import type { SiteSettingsSchema } from '$lib/directus/site-settings';
-	import { isNotNil } from 'ramda';
-	import { Section as SectionComponent } from '$lib/components/directus';
+	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { Pre } from '$lib/components/testing';
 
 	export let siteSettings: SiteSettingsSchema;
 	export let layout: PageSchema;
-	export let page: PageSchema;
+	export let single_content: TextContentSchema;
 </script>
 
-<Pre name="Page" value={page}></Pre>
+<Pre name="Single Content" value={single_content}></Pre>

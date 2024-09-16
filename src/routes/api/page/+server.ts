@@ -1,35 +1,8 @@
-import { CATEGORIES_MAP } from "$env/static/private"
 import { getData } from "$lib/data/index.js"
-import type { DirectusDataKeys } from "$lib/directus/index.js"
-import { pageSchema } from "$lib/directus/page.js"
+import { articleToKeyMap, keyToSchemaMap, keyToValidationMap } from "$lib/directus/index.js"
 import { say } from "$lib/utils.js"
 import { error, json } from "@sveltejs/kit"
-import { filter, head, includes, isEmpty, isNil, keys, pipe } from "ramda"
-
-const keymapFilter = (subCategory: string) => (value: string) => {
-  return includes(subCategory, value)
-}
-
-const getKeyOfArticle = (subCategory: string, map: Record<DirectusDataKeys, string>) => pipe(filter(keymapFilter(subCategory)), keys, head)(map)
-
-const articleToKeyMap = (subCategory: string | null): DirectusDataKeys | null => {
-  if(isNil(subCategory))
-    return 'page'
-
-  try {
-    const keyMap = JSON.parse(CATEGORIES_MAP)
-
-    const key: DirectusDataKeys | undefined = getKeyOfArticle(subCategory, keyMap)
-
-    if(!key || typeof key !== 'string')
-      return 'page'
-
-    return key
-  } catch (err) {
-    say('An error ocurred while identifying the table to query', err)
-    return null
-  }
-}
+import { isEmpty, isNil } from "ramda"
 
 /** @type {import('./$types').PageServerLoad} */
 export async function GET({ url: { searchParams } }) {
@@ -43,7 +16,7 @@ export async function GET({ url: { searchParams } }) {
   if (!locale) 
     return error(400)
 
-  const key = articleToKeyMap(subCategory)
+  const key = articleToKeyMap(subCategory, article)
 
   if(isNil(key))
     return error(500)
@@ -54,12 +27,13 @@ export async function GET({ url: { searchParams } }) {
     console.log('Error while getting page no data', data)
     return error(404)
   }
+
+  const isValidDataFn = keyToValidationMap[key]
   
-  try {
-    pageSchema.parse(data)
-    return json( data, { status: 200 } )
-  } catch (exception) {
-    console.log('Error while parsing page data', exception)
-    return error(500)
+  if (!isValidDataFn(data)) {
+    say('Data is not valid schema of: '+key, keyToSchemaMap[key].safeParse(data).error)
+    return error(404)
   }
+  
+  return json( {[key]: data}, { status: 200 } )
 }

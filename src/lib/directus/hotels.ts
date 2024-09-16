@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { articleToWordString, filesSchema, getItems, locationSchema, type DirectusRequestBody } from "./utils";
 import { say } from "$lib/utils";
-import { isNil } from "ramda";
+import { filter, isNil } from "ramda";
 
 const hotelTranslationsSchema = z.object({
   lang_code: z.string(),
@@ -9,7 +9,8 @@ const hotelTranslationsSchema = z.object({
   description: z.string(),
   url: z.string().nullish(),
   promo_name: z.string().nullish(),
-  promo_description: z.string().nullish()
+  promo_description: z.string().nullish(),
+  path: z.string().nullish()
 })
 
 const hotelSchema = z.object({
@@ -62,11 +63,10 @@ const getHotel = async (filters: DirectusRequestBody) => {
       ]}
     ],
     filter: {
-      translations: {
-        name: {
-          _icontains: articleToWordString(article)
-        }
-      }
+      _and: [
+        { translations: { lang_code: { _eq: filters.locale } } },
+        { translations: {path: { _eq: article} } }
+      ]
     },
   })
 

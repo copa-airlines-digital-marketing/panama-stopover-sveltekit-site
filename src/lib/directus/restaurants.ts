@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { articleToWordString, getItems, type DirectusRequestBody } from "./utils";
+import { filesSchema, getItems, locationSchema, type DirectusRequestBody } from "./utils";
 import { say } from "$lib/utils";
 import { isNil } from "ramda";
 
@@ -14,19 +14,17 @@ const restaurantTranslationsSchema = z.object({
 
 const restaurantSchema = z.object({
   main_image: z.string(),
-  gallery: z.string(),
+  gallery: filesSchema.array(),
   translations: restaurantTranslationsSchema.array(),
   promo_code: z.string().nullish(),
   promo_discount_amount: z.number().nullish(),
   promo_discount_percent: z.number().nullish(),
-  whatsapp: z.string(),
-  booking_email: z.string(),
-  supported_languages: z.any().array(), // fix
-  type: z.any().array(), //fix
-  meals: z.any().array(),
-  cuisines: z.any().array(),
-  schedule: z.any().array(),
-  location: z.any() //fix
+  whatsapp: z.string().nullish(),
+  supported_languages: z.string().array(),
+  type: z.string().array(),
+  meals: z.string().array(),
+  cuisines: z.string().array(),
+  location: locationSchema
 })
 
 type RestaurantSchema = z.infer<typeof restaurantSchema>
@@ -42,20 +40,37 @@ const getRestaurant = async (filters: DirectusRequestBody) => {
   }
 
   const directusRestaurantRequest = await getItems('stopover_restaurants', {
-    fields: ['*', '*.*'],
+    fields: [
+      'main_image',
+      'promo_code',
+      'promo_discount_amount',
+      'promo_discount_percent',
+      'whatsapp',
+      'supported_languages',
+      'type',
+      'meals',
+      'cuisines',
+      'location',
+      { 'gallery': ['directus_files_id', 'sort'] },
+      { 'translations': [
+        'lang_code',
+        'name',
+        'description',
+        'url',
+        'promo_name',
+        'promo_description'
+      ]}
+    ],
     filter: {
-      translations: {
-        name: {
-          _icontains: articleToWordString(article)
-        }
-      }
+      _and: [
+        { translations: { lang_code: { _eq: filters.locale } } },
+        { translations: {path: { _eq: article} } }
+      ]
     },
   })
 
   if(isNil(directusRestaurantRequest))
     return null
-
-  say('Hotels Returned', directusRestaurantRequest)
 
   if(directusRestaurantRequest.length > 1) {
     say('Query returned more than one result, review is required', directusRestaurantRequest.map(value => value.translations.name))

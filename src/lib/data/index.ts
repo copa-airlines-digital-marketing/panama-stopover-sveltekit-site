@@ -5,7 +5,7 @@ import { isNotEmpty, isNotNil } from "ramda"
 
 type RequestBody = Record<string, string | number | undefined | null>
 
-const getRedisKey = (key: string, body?: RequestBody) => {
+const getRedisKey = (key: string, body: RequestBody) => {
   if (!body)
     return key
 
@@ -14,7 +14,7 @@ const getRedisKey = (key: string, body?: RequestBody) => {
   return `${key}${locale ? '-'+ locale : ''}${home ? '-home' : ''}${category ? '-'+category : ''}${subCategory ? '-'+subCategory : ''}${article ? '-'+article : ''}`
 }
 
-const getDataFromDirectusAndSaveToRedis = async (key: DirectusDataKeys, timeToExpireInSeconds: number, body?: RequestBody) => {
+const getDataFromDirectusAndSaveToRedis = async (key: DirectusDataKeys, timeToExpireInSeconds: number, body: RequestBody) => {
   const data = await getDataFromDirectus( key, body )
 
   if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
@@ -23,7 +23,7 @@ const getDataFromDirectusAndSaveToRedis = async (key: DirectusDataKeys, timeToEx
   return data
 } 
 
-const getData = async(key: DirectusDataKeys, timeToExpireInSeconds: number, body?: RequestBody) => {
+const getData = async(key: DirectusDataKeys, timeToExpireInSeconds: number, body: RequestBody) => {
   if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
     const data = await getDataFromRedis(getRedisKey(key, body))
 

@@ -1,13 +1,12 @@
 <script lang="ts">
+	import type { HotelSchema } from '$lib/directus/hotels';
 	import type { PageSchema } from '$lib/directus/page';
 	import type { SiteSettingsSchema } from '$lib/directus/site-settings';
-	import { isNotNil } from 'ramda';
-	import { Section as SectionComponent } from '$lib/components/directus';
 	import { Pre } from '$lib/components/testing';
 
 	export let siteSettings: SiteSettingsSchema;
 	export let layout: PageSchema;
-	export let page: PageSchema;
+	export let stopover_hotels: HotelSchema;
 </script>
 
-<Pre name="Page" value={page}></Pre>
+<Pre name="Hotels" value={stopover_hotels}></Pre>

@@ -1,29 +1,25 @@
 <script>
 	import '../app.css';
-	import { Pre } from '$lib/components/testing';
 	import { equals, filter, head, pipe, prop } from 'ramda';
+	import { Procesor } from '$lib/components/directus';
 	export let data;
 
-	const {
-		environment,
-		siteSettings: { coming_soon_message, environmet_status, maintenance_message },
-		layout
-	} = data;
+	const { environment, siteSettings, layout } = data;
+
+	const { coming_soon_message, environmet_status, maintenance_message } = siteSettings;
 
 	const status = head(
 		filter(pipe(prop('environment'), equals(environment)), environmet_status)
 	)?.state;
 </script>
 
-<Pre name="Layout" value={layout}></Pre>
-
 {#if status}
 	{#if status === 'live'}
 		<slot></slot>
 	{:else if status === 'maintenance'}
-		<Pre name="Maintenance" value={maintenance_message}></Pre>
+		<Procesor {siteSettings} {layout} single_content={maintenance_message} {environment} />
 	{:else if status === 'coming-soon'}
-		<Pre name="Coming soon" value={coming_soon_message}></Pre>
+		<Procesor {siteSettings} {layout} single_content={coming_soon_message} {environment} />
 	{:else if status === 'dark'}
 		{console.warn('dark site not configured')}
 	{:else}
