@@ -17,6 +17,7 @@
 	} from '$lib/components/directus';
 	import StartOfPage from './start-of-page.svelte';
 
+	export let locale: string;
 	export let siteSettings: SiteSettingsSchema;
 	export let layout: PageSchema;
 	export let page: PageSchema | undefined = undefined;
@@ -49,7 +50,7 @@
 />
 
 {#if isNotNil(single_content)}
-	<SingleContentPage {siteSettings} {layout} {single_content} />
+	<SingleContentPage {siteSettings} {layout} {single_content} {locale} />
 {:else if isNotNil(page)}
 	<Page {siteSettings} {layout} {page} />
 {:else if isNotNil(stopover_hotels)}

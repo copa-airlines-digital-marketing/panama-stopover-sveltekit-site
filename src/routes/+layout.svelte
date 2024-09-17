@@ -4,7 +4,7 @@
 	import { Procesor } from '$lib/components/directus';
 	export let data;
 
-	const { environment, siteSettings, layout } = data;
+	const { environment, siteSettings, layout, locale } = data;
 
 	const { coming_soon_message, environmet_status, maintenance_message } = siteSettings;
 
@@ -17,9 +17,9 @@
 	{#if status === 'live'}
 		<slot></slot>
 	{:else if status === 'maintenance'}
-		<Procesor {siteSettings} {layout} single_content={maintenance_message} {environment} />
+		<Procesor {siteSettings} {layout} single_content={maintenance_message} {environment} {locale} />
 	{:else if status === 'coming-soon'}
-		<Procesor {siteSettings} {layout} single_content={coming_soon_message} {environment} />
+		<Procesor {siteSettings} {layout} single_content={coming_soon_message} {environment} {locale} />
 	{:else if status === 'dark'}
 		{console.warn('dark site not configured')}
 	{:else}

@@ -6,7 +6,7 @@ import { logoQuery } from "./logos";
 import { isNil } from "ramda";
 
 const pageTranslationsSchema = z.object({
-  languages_code: z.string().optional(),
+  languages_code: z.string(),
   path: z.string(),
   title_tag: z.string(),
   meta_description: z.string()
@@ -110,6 +110,7 @@ const getPage = async (filters: DirectusRequestBody) => {
       'start_of_body_code',
       'end_of_body_code',
       { 'translations': [
+        'languages_code',
         'path',
         'title_tag',
         'meta_description'

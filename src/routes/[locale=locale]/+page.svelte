@@ -3,7 +3,7 @@
 
 	export let data;
 
-	const { environment, siteSettings, layout, page } = data;
+	const { environment, siteSettings, layout, page, locale } = data;
 </script>
 
-<Procesor {siteSettings} {layout} {page} {environment} />
+<Procesor {siteSettings} {layout} {page} {environment} {locale} />

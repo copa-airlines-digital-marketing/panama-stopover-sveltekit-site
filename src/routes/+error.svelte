@@ -5,10 +5,10 @@
 
 	export let data;
 
-	const { environment, siteSettings, layout } = data;
+	const { environment, siteSettings, layout, locale } = data;
 
 	const { error_messages } = siteSettings;
 	const message = filter(pipe(prop('error_code'), equals($page.status)), error_messages);
 </script>
 
-<Procesor {siteSettings} {layout} single_content={message} {environment} />
+<Procesor {siteSettings} {layout} single_content={message} {environment} {locale} />

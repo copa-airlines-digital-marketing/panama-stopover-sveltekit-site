@@ -7,6 +7,7 @@
 		environment,
 		siteSettings,
 		layout,
+		locale,
 		page,
 		stopover_hotels,
 		stopover_place_to_visit,
@@ -17,6 +18,7 @@
 <Procesor
 	{siteSettings}
 	{layout}
+	{locale}
 	{page}
 	{stopover_hotels}
 	{stopover_place_to_visit}
