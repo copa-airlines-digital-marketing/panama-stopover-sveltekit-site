@@ -4,6 +4,9 @@ import { getItems, getTranslationFilter, type DirectusRequestBody } from "./util
 import { textContentQuery } from "./text-content";
 import { logoQuery } from "./logos";
 import { isNil } from "ramda";
+import { say } from "$lib/utils";
+import { navigationQuery } from "./navigation";
+import { headerQuery } from "./header";
 
 const pageTranslationsSchema = z.object({
   languages_code: z.string(),
@@ -137,14 +140,10 @@ const getPage = async (filters: DirectusRequestBody) => {
               'horizontal_alignment',
               'vertical_alignment',
               { 'item': {
-                'navigation': [
-                  { 'icon': logoQuery },
-                  { 'translations': [
-                    'title',
-                    'items'
-                  ] }
-                ],
+                'navigation': navigationQuery,
                 'Text_Content': textContentQuery,
+                'logos': logoQuery,
+                'header': headerQuery
               } }
             ]}
           ]
@@ -164,6 +163,11 @@ const getPage = async (filters: DirectusRequestBody) => {
             section_content: {
               "item:Text_Content": getTranslationFilter(filters.locale),
               "item:navigation": getTranslationFilter(filters.locale),
+              "item:header": {
+                navigations: {
+                  navigation_id: getTranslationFilter(filters.locale)
+                }
+              }
             }
           }
         }
@@ -177,8 +181,12 @@ const getPage = async (filters: DirectusRequestBody) => {
 
   const firstPage = pageRequest[0]
 
-  if(!isPageSettings(firstPage))
+  say('checking error', pageRequest)
+
+  if(!isPageSettings(firstPage)){
+    say('Page does not match schema', pageSchema.safeParse(firstPage).error)
     return null
+  }
 
   return firstPage
 }

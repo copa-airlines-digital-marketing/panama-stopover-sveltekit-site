@@ -10,12 +10,15 @@
 		EndOfPage,
 		Head,
 		HotelPage,
+		Navigation,
+		Section,
 		Page,
 		PlacePage,
 		RestaurantPage,
+		StartOfPage,
 		SingleContentPage
 	} from '$lib/components/directus';
-	import StartOfPage from './start-of-page.svelte';
+	import { say } from '$lib/utils';
 
 	export let locale: string;
 	export let siteSettings: SiteSettingsSchema;
@@ -34,6 +37,14 @@
 			!!stopover_restaurants ||
 			!!stopover_place_to_visit ||
 			!!single_content);
+
+	const {
+		storefronts: {
+			0: { sections }
+		}
+	} = layout;
+
+	const [headerSection, footerSection] = sections || [];
 </script>
 
 <Head
@@ -42,6 +53,12 @@
 	page_head_code={page?.head_code}
 	{indexPage}
 />
+
+{#if headerSection}
+	<Section section={headerSection.sections_id}></Section>
+{:else}
+	{say('missing header section', sections)}
+{/if}
 
 <StartOfPage
 	site_start_of_page_code={siteSettings.start_of_body_code}
@@ -59,6 +76,12 @@
 	<RestaurantPage {siteSettings} {layout} {stopover_restaurants} />
 {:else if isNotNil(stopover_place_to_visit)}
 	<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
+{/if}
+
+{#if footerSection}
+	<Section section={footerSection.sections_id}></Section>
+{:else}
+	{say('missing footer section', sections)}
 {/if}
 
 <EndOfPage

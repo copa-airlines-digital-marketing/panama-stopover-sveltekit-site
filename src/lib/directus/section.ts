@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { textContentSchema } from "./text-content";
 import { navigationSchema } from "./navigation";
+import { logosSchema } from "./logos";
+import { headerSchema } from "./header";
 
 const horizontal_alignment = z.union([z.literal('left'), z.literal('center'), z.literal('right')])
 const vertical_alignment = z.union([z.literal('top'), z.literal('center'), z.literal('bottom'), z.literal('baseline'), z.literal('stretch')])
@@ -8,8 +10,8 @@ const content_distribution = z.union([z.literal('space-around'), z.literal('spac
 
 const sectionContentSchema = z.object({
   id: z.union([z.string(), z.number()]),
-  item: textContentSchema.or(navigationSchema),
-  collection: z.union([z.literal('Text_Content'), z.literal('navigation')]),
+  item: z.union([textContentSchema, navigationSchema, logosSchema, headerSchema]),
+  collection: z.union([z.literal('Text_Content'), z.literal('navigation'), z.literal('logos'), z.literal('header')]),
   component_name: z.string().nullable(),
   display: z.union([z.literal('100'), z.literal('75'), z.literal('50'), z.literal('25')]).nullable(),
   theme: z.union([z.literal('light'), z.literal('dark')]).nullable(),

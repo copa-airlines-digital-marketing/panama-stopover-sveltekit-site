@@ -1,21 +1,16 @@
 import { z } from "zod";
-import { logosSchema } from "./logos";
+import { logoQuery, logosSchema } from "./logos"
+import { linkQuery, linkSchema } from "./links";
 
-const navigationItemSchema = z.object({
-  icon: z.optional(logosSchema),
-  text: z.string(),
-  href: z.string(),
-  target: z.optional(z.string()),
-  referrerpolicy: z.optional(z.string().array()),
-  rel: z.optional(z.string().array()),
-  hreflang: z.optional(z.string()),
-  ping: z.optional(z.string())
+const navigationTranslationLinkSchema = z.object({
+  links_id: linkSchema
 })
+
 
 const navigationTranslationSchema = z.object({
  languages_code: z.optional(z.string()),
  title: z.string(),
- items: navigationItemSchema.array()
+ links: navigationTranslationLinkSchema.array()
 })
 
 const navigationSchema = z.object({
@@ -27,8 +22,17 @@ type NavigationSchema = z.infer<typeof navigationSchema>
 
 const isNavigationSchema = (value: unknown): value is NavigationSchema => navigationSchema.safeParse(value).success
 
+const navigationQuery = [
+  { 'icon': logoQuery },
+  { 'translations': [
+    'title',
+    { 'links': [{ 'links_id': linkQuery }]}
+  ] }
+]
+
 export {
   navigationSchema,
+  navigationQuery,
   isNavigationSchema,
 }
 
