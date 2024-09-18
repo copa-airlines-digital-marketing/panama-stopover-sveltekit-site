@@ -122,7 +122,14 @@ const getPage = async (filters: DirectusRequestBody) => {
     return null
   }
 
-  return pageRequest[0]
+  const firstPage = pageRequest[0]
+
+  if(!isPageSettings(firstPage)){
+    say('first page does not comply with the schema', { filters, firstPage })
+    return null
+  }
+
+  return firstPage
 }
 
 export {

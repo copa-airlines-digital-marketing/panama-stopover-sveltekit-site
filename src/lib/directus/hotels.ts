@@ -30,7 +30,7 @@ const hotelSchema = z.object({
 
 type HotelSchema = z.infer<typeof hotelSchema>
 
-const isHotelSchema = (value: unknown) => hotelSchema.safeParse(value).success
+const isHotelSchema = (value: unknown): value is HotelSchema => hotelSchema.safeParse(value).success
 
 const getHotel = async (filters: DirectusRequestBody) => {
   const { article } = filters

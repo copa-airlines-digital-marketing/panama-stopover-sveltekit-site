@@ -6,6 +6,8 @@ import { extendTailwindMerge } from "tailwind-merge";
 import { default as Preset } from 'cmds-tailwind-styles';
 import { allPass, curry, isNotEmpty, isNotNil } from "ramda";
 
+console.log(Preset.theme.extend.fontSize)
+
 const customTwMerge = extendTailwindMerge({
   extend: {
     classGroups: {

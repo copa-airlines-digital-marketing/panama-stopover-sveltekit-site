@@ -1,4 +1,25 @@
+import { isHeaderSchema, type HeaderSchema } from "$lib/directus/header";
+import { isLogoSchema, type LogoSchema } from "$lib/directus/logos";
+import { isNavigationSchema, type NavigationSchema } from "$lib/directus/navigation";
 import type { SectionContentSchema, SectionSchema } from "$lib/directus/section";
+import { isTextContentSchema, type TextContentSchema } from "$lib/directus/text-content";
+
+type DirectusCollectionItems = SectionContentSchema['collection']
+
+type DirectusCollectionToSchemaMap = {
+  'header': HeaderSchema,
+  'logos': LogoSchema,
+  'navigation': NavigationSchema
+  'Text_Content': TextContentSchema
+}
+
+const DirectusCollectionToValidationMap: Record<DirectusCollectionItems, (v: unknown) => v is DirectusCollectionToSchemaMap[DirectusCollectionItems]> = {
+  'header': isHeaderSchema,
+  'logos': isLogoSchema,
+  'navigation': isNavigationSchema,
+  'Text_Content': isTextContentSchema
+}
+
 
 const landmarkToTag = (landmark: SectionSchema['landmark']): keyof HTMLElementTagNameMap => {
   if (landmark === 'aside')
@@ -37,5 +58,6 @@ const collectionToComponent = async (collection: SectionContentSchema['collectio
 
 export {
   landmarkToTag,
-  collectionToComponent
+  collectionToComponent,
+  DirectusCollectionToValidationMap
 }

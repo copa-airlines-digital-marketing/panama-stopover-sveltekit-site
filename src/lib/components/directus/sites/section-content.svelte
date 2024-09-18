@@ -2,23 +2,14 @@
 	import type { SectionContentSchema } from '$lib/directus/section';
 	import { cn, say } from '$lib/utils';
 	import { contentVariant } from '.';
-	import { collectionToComponent } from '../utils';
+	import { collectionToComponent, DirectusCollectionToValidationMap } from '../utils';
 
 	export let section_content: SectionContentSchema;
 
-	const {
-		collection,
-		component_name,
-		display,
-		horizontal_alignment,
-		item,
-		theme,
-		vertical_alignment
-	} = section_content;
+	const { collection, component_name, display, horizontal_alignment, item, vertical_alignment } =
+		section_content;
 
 	const collectionComponentPromise = collectionToComponent(collection);
-
-	console.log(collection);
 
 	const variant = { display, horizontal_alignment, vertical_alignment };
 </script>
@@ -30,5 +21,7 @@
 		<div class={cn(contentVariant(variant))}>
 			<svelte:component this={collectionComponent} {item} component={component_name} />
 		</div>
+	{:else}
+		{say('collection did not match a component', { collection, collectionComponent })}
 	{/if}
 {/await}

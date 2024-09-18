@@ -51,7 +51,11 @@
 	{indexPage}
 />
 
-<Section section={headerSection}></Section>
+{#if headerSection}
+	<Section section={headerSection}></Section>
+{:else}
+	{say('header section in layout is required', headerSection)}
+{/if}
 
 <StartOfPage
 	site_start_of_page_code={siteSettings.start_of_body_code}
@@ -71,7 +75,11 @@
 	<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
 {/if}
 
-<Section section={footerSection}></Section>
+{#if headerSection}
+	<Section section={footerSection}></Section>
+{:else}
+	{say('header section in layout is required', footerSection)}
+{/if}
 
 <EndOfPage
 	site_end_of_page_code={siteSettings.end_of_body_code}

@@ -30,10 +30,9 @@ const keyToDataMap: Record<DirectusDataKeys, (body: DirectusRequestBody) => Prom
   'stopover_place_to_visit': getPlace
 } as const
 
-
 const isDirectusDataKey = (value: unknown): value is DirectusDataKeys => includes(value, keys(keyToDataMap))
 
-const keyToValidationMap: Record<DirectusDataKeys, (value: unknown) => boolean > = {
+const keyToValidationMap: Record<DirectusDataKeys, (value: unknown) => value is KeyToTypeMap[DirectusDataKeys] > = {
   'site-settings': isSiteSettings,
   'page': isPageSettings,
   'sections': isSectionSchema,

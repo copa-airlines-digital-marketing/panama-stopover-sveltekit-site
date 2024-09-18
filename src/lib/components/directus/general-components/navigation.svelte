@@ -1,9 +1,18 @@
 <script lang="ts">
 	import type { NavigationSchema } from '$lib/directus/navigation';
-	import { Pre } from '../../testing';
+	import { say } from '$lib/utils';
+	import { componentNameToComponentMap } from './utils';
 
 	export let item: NavigationSchema;
 	export let component: string | null;
 </script>
 
-<Pre name="Navigation: {component}" value={item} />
+{#await componentNameToComponentMap(component)}
+	...loading
+{:then svelteComponent}
+	{#if svelteComponent}
+		<svelte:component this={svelteComponent} navigation={item}></svelte:component>
+	{:else}
+		{say('could not resolve component', { component, item })}
+	{/if}
+{/await}

@@ -5,7 +5,7 @@
 
 <section>
 	<h4>{name}</h4>
-	<pre class="max-w-full text-wrap">
+	<pre class="max-w-prose text-wrap">
     {JSON.stringify(value, null, 2)}
   </pre>
 </section>

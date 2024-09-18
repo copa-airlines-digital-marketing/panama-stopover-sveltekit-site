@@ -30,7 +30,7 @@ const placeSchema = z.object({
 
 type PlaceSchema = z.infer<typeof placeSchema>
 
-const isPlaceSchema = (value: unknown) => placeSchema.safeParse(value).success
+const isPlaceSchema = (value: unknown): value is PlaceSchema => placeSchema.safeParse(value).success
 
 const getPlace = async (filters: DirectusRequestBody) => {
   const { article } = filters

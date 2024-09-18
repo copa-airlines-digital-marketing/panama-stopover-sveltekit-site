@@ -1,12 +1,29 @@
 import { tv } from "tailwind-variants";
 
-const sectionVariants = tv({
-  base: 'grid grid-cols-4',
+const containerVariant = tv({
+  base:'',
   variants: {
     horizontal_behaviour: {
-      full: '',
+      full: 'grid',
       contained: 'container mx-auto',
       'container-grid': 'container-grid'
+    },
+  }
+})
+
+const sectionVariants = tv({
+  base: 'grid grid-cols-12',
+  variants: {
+    vertical_spacing: {
+      none:'py-0',
+      minimal:'py-minimal',
+      tiny:'py-tiny',
+      petit:'py-petit',
+      normal:'py-normal',
+      roomy:'py-roomy',
+      spacious:'py-spacious',
+      big:'py-big',
+      huge:'py-huge'
     },
 		content_spacing: {
       none:'gap-0',
@@ -59,9 +76,10 @@ const contentVariant = tv({
   variants: {
     display: {
       100: '',
-      75: 'col-span-3',
-      50: 'col-span-2',
-      25: 'col-span-1',
+      75: 'md:col-span-4',
+      70: 'md:col-span-8',
+      50: 'sm:col-span-6',
+      25: 'md:col-span-3',
     },
     horizontal_alignment: {
       left: 'justify-self-start',
@@ -79,6 +97,7 @@ const contentVariant = tv({
 })
 
 export {
+  contentVariant,
+  containerVariant,
   sectionVariants,
-  contentVariant
 }

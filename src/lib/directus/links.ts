@@ -25,9 +25,12 @@ const linkQuery = [
   { 'icon': logoQuery }
 ]
 
+const isLinkSchema = (value: unknown): value is LinkSchema => linkSchema.safeParse(value).success
+
 export {
   linkSchema,
-  linkQuery
+  linkQuery,
+  isLinkSchema
 }
 
 export type {

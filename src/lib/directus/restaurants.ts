@@ -29,7 +29,7 @@ const restaurantSchema = z.object({
 
 type RestaurantSchema = z.infer<typeof restaurantSchema>
 
-const isRestaurantSchema = (value: unknown) => restaurantSchema.safeParse(value).success
+const isRestaurantSchema = (value: unknown): value is RestaurantSchema => restaurantSchema.safeParse(value).success
 
 const getRestaurant = async (filters: DirectusRequestBody) => {
   const { article } = filters

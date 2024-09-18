@@ -29,9 +29,12 @@ const textContentQuery =[{
 
 type TextContentSchema = z.infer<typeof textContentSchema>
 
+const isTextContentSchema = (value: unknown): value is TextContentSchema => textContentSchema.safeParse(value).success
+
 export {
   textContentSchema,
-  textContentQuery
+  textContentQuery,
+  isTextContentSchema
 }
 
 export type {
