@@ -1,29 +1,42 @@
 import type { ZodObject, ZodRawShape } from "zod"
-import { getHotel, hotelSchema, isHotelSchema } from "./hotels"
-import { getPage, isPageSettings, pageSchema } from "./page"
-import { getPlace, isPlaceSchema, placeSchema } from "./place-to-visit"
-import { getRestaurant, isRestaurantSchema, restaurantSchema } from "./restaurants"
-import { getSiteSettings, isSiteSettings, siteSettingSchema } from "./site-settings"
+import { getHotel, hotelSchema, isHotelSchema, type HotelSchema } from "./hotels"
+import { getPage, isPageSettings, pageSchema, type PageSchema } from "./page"
+import { getPlace, isPlaceSchema, placeSchema, type PlaceSchema } from "./place-to-visit"
+import { getRestaurant, isRestaurantSchema, restaurantSchema, type RestaurantSchema } from "./restaurants"
+import { getSiteSettings, isSiteSettings, siteSettingSchema, type SiteSettingsSchema } from "./site-settings"
 import type { DirectusRequestBody } from "./utils"
 import { filter, head, includes, isNil, keys, pipe } from "ramda"
 import { CATEGORIES_MAP } from "$env/static/private"
 import { say } from "$lib/utils"
+import { getSections, isSectionSchema, sectionSchema, type SectionSchema } from "./section"
 
-const keyToDataMap = {
+type KeyToTypeMap = {
+  'site-settings': SiteSettingsSchema,
+  'page': PageSchema,
+  'sections': SectionSchema[],
+  'stopover_hotels': HotelSchema,
+  'stopover_restaurants': RestaurantSchema,
+  'stopover_place_to_visit': PlaceSchema
+}
+
+type DirectusDataKeys = keyof KeyToTypeMap
+
+const keyToDataMap: Record<DirectusDataKeys, (body: DirectusRequestBody) => Promise<KeyToTypeMap[DirectusDataKeys] | null> > = {
   'site-settings': getSiteSettings,
   'page': getPage,
+  'sections': getSections,
   'stopover_hotels': getHotel,
   'stopover_restaurants': getRestaurant,
   'stopover_place_to_visit': getPlace
 } as const
 
-type DirectusDataKeys = keyof typeof keyToDataMap
 
 const isDirectusDataKey = (value: unknown): value is DirectusDataKeys => includes(value, keys(keyToDataMap))
 
-const keyToValidationMap: Record<DirectusDataKeys, (value: unknown) => boolean> = {
+const keyToValidationMap: Record<DirectusDataKeys, (value: unknown) => boolean > = {
   'site-settings': isSiteSettings,
   'page': isPageSettings,
+  'sections': isSectionSchema,
   'stopover_hotels': isHotelSchema,
   'stopover_restaurants': isRestaurantSchema,
   'stopover_place_to_visit': isPlaceSchema
@@ -32,6 +45,7 @@ const keyToValidationMap: Record<DirectusDataKeys, (value: unknown) => boolean> 
 const keyToSchemaMap: Record<DirectusDataKeys, ZodObject<ZodRawShape>> = {
   'site-settings': siteSettingSchema,
   'page': pageSchema,
+  'sections': sectionSchema,
   'stopover_hotels': hotelSchema,
   'stopover_restaurants': restaurantSchema,
   'stopover_place_to_visit': placeSchema
@@ -79,5 +93,6 @@ export {
 
 
 export type {
+  KeyToTypeMap,
   DirectusDataKeys
 }

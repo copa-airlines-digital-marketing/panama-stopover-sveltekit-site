@@ -1,4 +1,5 @@
 import { isPageSettings, pageSchema } from '$lib/directus/page.js';
+import { isSectionSchema } from '$lib/directus/section.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
 
@@ -15,15 +16,16 @@ export async function load(event) {
   const pageRequest = await fetch(`/api/page?locale=${locale}&home=home${preview ? '&preview='+preview : ''}`)
   const parentData = await parent()
   const pageData = await pageRequest.json()
-  const page = pageData.page
+  const { page, sections: pageSections } = pageData
 
   if(!isPageSettings(page)) {
-    say('Requested page does not fulfill the page schema', pageSchema.safeParse(page).error)
+    say('error ocurred while getting homepage info')
     return error(500)
   }
 
   return {
     ...parentData,
-    page
+    page,
+    pageSections
   }
 }

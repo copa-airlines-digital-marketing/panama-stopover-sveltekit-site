@@ -6,6 +6,7 @@ import type { NavigationSchema } from "./navigation"
 import type { PageSchema } from "./page"
 import type { PlaceSchema } from "./place-to-visit"
 import type { RestaurantSchema } from "./restaurants"
+import type { SectionContentSchema, SectionSchema } from "./section"
 import type { SiteSettingsSchema } from "./site-settings"
 import type { TextContentSchema } from "./text-content"
 
@@ -20,11 +21,13 @@ interface Schema {
   //Blocks
   header: HeaderSchema
   //Website
+  pages: PageSchema
+  sections: SectionSchema
+  sections_section_content: SectionContentSchema
   sites: SiteSettingsSchema
-  pages: PageSchema,
   //Panama Stopover
-  stopover_hotels: HotelSchema,
-  stopover_restaurants: RestaurantSchema,
+  stopover_hotels: HotelSchema
+  stopover_restaurants: RestaurantSchema
   stopover_place_to_visit: PlaceSchema
 }
 

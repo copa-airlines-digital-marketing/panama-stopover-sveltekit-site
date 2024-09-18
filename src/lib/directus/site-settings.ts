@@ -3,6 +3,7 @@ import { logoQuery, logosSchema } from './logos'
 import { getItem, getTranslationFilter, type DirectusRequestBody } from './utils'
 import { SITE_ID } from '$env/static/private'
 import { textContentQuery, textContentSchema } from './text-content'
+import { say } from '$lib/utils'
 
 const environmentStatusSchema = z.object({
   environment: z.string(),
@@ -48,7 +49,14 @@ const translationPath = { 'translations': ['path'] }
 
 const getSiteSettings = async (filters: DirectusRequestBody) => {
 
-  const translationFilter = getTranslationFilter(filters.locale)
+  const { locale } = filters
+
+  if(!locale){
+    say('locale is required to get the site settings')
+    return null
+  }
+
+  const translationFilter = getTranslationFilter(locale)
   
   const siteSettings = await getItem<SiteSettingsSchema>( 'sites', SITE_ID,  {
     fields: [

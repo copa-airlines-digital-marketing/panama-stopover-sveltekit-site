@@ -19,11 +19,14 @@
 		SingleContentPage
 	} from '$lib/components/directus';
 	import { say } from '$lib/utils';
+	import type { SectionSchema } from '$lib/directus/section';
 
 	export let locale: string;
 	export let siteSettings: SiteSettingsSchema;
 	export let layout: PageSchema;
+	export let layoutSections: SectionSchema[];
 	export let page: PageSchema | undefined = undefined;
+	export let pageSections: SectionSchema[] | undefined = undefined;
 	export let stopover_hotels: HotelSchema | undefined = undefined;
 	export let stopover_restaurants: RestaurantSchema | undefined = undefined;
 	export let stopover_place_to_visit: PlaceSchema | undefined = undefined;
@@ -38,13 +41,7 @@
 			!!stopover_place_to_visit ||
 			!!single_content);
 
-	const {
-		storefronts: {
-			0: { sections }
-		}
-	} = layout;
-
-	const [headerSection, footerSection] = sections || [];
+	const [headerSection, footerSection] = layoutSections;
 </script>
 
 <Head
@@ -54,11 +51,7 @@
 	{indexPage}
 />
 
-{#if headerSection}
-	<Section section={headerSection.sections_id}></Section>
-{:else}
-	{say('missing header section', sections)}
-{/if}
+<Section section={headerSection}></Section>
 
 <StartOfPage
 	site_start_of_page_code={siteSettings.start_of_body_code}
@@ -69,7 +62,7 @@
 {#if isNotNil(single_content)}
 	<SingleContentPage {siteSettings} {layout} {single_content} {locale} />
 {:else if isNotNil(page)}
-	<Page {siteSettings} {layout} {page} />
+	<Page {siteSettings} {layout} {page} {pageSections} />
 {:else if isNotNil(stopover_hotels)}
 	<HotelPage {siteSettings} {layout} {stopover_hotels} />
 {:else if isNotNil(stopover_restaurants)}
@@ -78,11 +71,7 @@
 	<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
 {/if}
 
-{#if footerSection}
-	<Section section={footerSection.sections_id}></Section>
-{:else}
-	{say('missing footer section', sections)}
-{/if}
+<Section section={footerSection}></Section>
 
 <EndOfPage
 	site_end_of_page_code={siteSettings.end_of_body_code}

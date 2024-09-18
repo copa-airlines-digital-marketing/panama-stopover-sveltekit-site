@@ -1,5 +1,5 @@
 import { ENVIRONMENT, PREVIEW_SECRET, PRODUCTION_ENVIRONMENT } from "$env/static/private"
-import { getData as getDataFromDirectus, type DirectusDataKeys } from "$lib/directus"
+import { getData as getDataFromDirectus, keyToValidationMap, type DirectusDataKeys, type KeyToTypeMap } from "$lib/directus"
 import { getData as getDataFromRedis, setData as saveDataToRedis } from "$lib/redis"
 import { isNotEmpty, isNotNil } from "ramda"
 
@@ -14,7 +14,7 @@ const getRedisKey = (key: string, body: RequestBody) => {
   return `${key}${locale ? '-'+ locale : ''}${home ? '-home' : ''}${category ? '-'+category : ''}${subCategory ? '-'+subCategory : ''}${article ? '-'+article : ''}`
 }
 
-const getDataFromDirectusAndSaveToRedis = async (key: DirectusDataKeys, timeToExpireInSeconds: number, body: RequestBody) => {
+const getDataFromDirectusAndSaveToRedis = async <T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
   const data = await getDataFromDirectus( key, body )
 
   if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
@@ -23,11 +23,11 @@ const getDataFromDirectusAndSaveToRedis = async (key: DirectusDataKeys, timeToEx
   return data
 } 
 
-const getData = async(key: DirectusDataKeys, timeToExpireInSeconds: number, body: RequestBody) => {
+const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
   if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
     const data = await getDataFromRedis(getRedisKey(key, body))
 
-    if ( isNotNil(data) && isNotEmpty(data) )
+    if (keyToValidationMap[key](data))
       return data
   }
 

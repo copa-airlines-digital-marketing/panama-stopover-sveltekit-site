@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { SectionContentSchema } from '$lib/directus/section';
-	import { collectionToComponent } from './utils';
+	import { cn, say } from '$lib/utils';
+	import { contentVariant } from '.';
+	import { collectionToComponent } from '../utils';
 
 	export let section_content: SectionContentSchema;
 
@@ -15,13 +17,18 @@
 	} = section_content;
 
 	const collectionComponentPromise = collectionToComponent(collection);
+
+	console.log(collection);
+
+	const variant = { display, horizontal_alignment, vertical_alignment };
 </script>
 
 {#await collectionComponentPromise}
 	...Loading
 {:then collectionComponent}
 	{#if collectionComponent}
-		<svelte:component this={collectionComponent} {item} component={component_name}
-		></svelte:component>
+		<div class={cn(contentVariant(variant))}>
+			<svelte:component this={collectionComponent} {item} component={component_name} />
+		</div>
 	{/if}
 {/await}

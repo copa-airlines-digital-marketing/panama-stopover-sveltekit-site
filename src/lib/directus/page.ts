@@ -1,27 +1,13 @@
 import { z } from "zod";
-import { sectionSchema } from "./section";
 import { getItems, getTranslationFilter, type DirectusRequestBody } from "./utils";
-import { textContentQuery } from "./text-content";
-import { logoQuery } from "./logos";
-import { isNil } from "ramda";
+import { isEmpty, isNil } from "ramda";
 import { say } from "$lib/utils";
-import { navigationQuery } from "./navigation";
-import { headerQuery } from "./header";
 
 const pageTranslationsSchema = z.object({
   languages_code: z.string(),
   path: z.string(),
   title_tag: z.string(),
   meta_description: z.string()
-})
-
-const pageStorefrontSection = z.object({
-  sections_id: sectionSchema
-})
-
-const pageStorefront = z.object({
-  storefronts_code: z.string().optional(),
-  sections: pageStorefrontSection.array().nullish()
 })
 
 const pageSchema = z.object({
@@ -32,7 +18,6 @@ const pageSchema = z.object({
   head_code: z.string().nullish(),
   start_of_body_code: z.string().nullish(),
   end_of_body_code: z.string().nullish(),
-  storefronts: pageStorefront.array(),
 })
 
 type PageSchema = z.infer<typeof pageSchema>
@@ -117,78 +102,27 @@ const getPage = async (filters: DirectusRequestBody) => {
         'path',
         'title_tag',
         'meta_description'
-      ] },
-      { 'storefronts': [
-        { 'sections': [{
-          'sections_id': [
-            'id',
-            'landmark',
-            'section_id',
-            'horizontal_behaviour',
-            'content_spacing',
-            'content_horizontal_alignment',
-            'content_horizontal_distribution',
-            'content_vertical_alignment',
-            'content_vertical_distribution',
-            'background_color',
-            { 'section_content': [
-              'id',
-              'collection',
-              'component_name',
-              'display',
-              'theme',
-              'horizontal_alignment',
-              'vertical_alignment',
-              { 'item': {
-                'navigation': navigationQuery,
-                'Text_Content': textContentQuery,
-                'logos': logoQuery,
-                'header': headerQuery
-              } }
-            ]}
-          ]
-        }] }
-      ] }
+      ]}
     ],
-    filter: getPageFilter(filters),
-    deep: {
-      storefronts: {
-        _filter: {
-          storefronts_code: {
-            _eq: filters.storefront
-          }
-        },
-        sections: {
-          sections_id:{
-            section_content: {
-              "item:Text_Content": getTranslationFilter(filters.locale),
-              "item:navigation": getTranslationFilter(filters.locale),
-              "item:header": {
-                navigations: {
-                  navigation_id: getTranslationFilter(filters.locale)
-                }
-              }
-            }
-          }
-        }
-      },
-
-    }
+    filter: getPageFilter(filters)
   })
 
-  if(isNil(pageRequest))
-    return null
-
-  const firstPage = pageRequest[0]
-
-  say('checking error', pageRequest)
-
-  if(!isPageSettings(firstPage)){
-    say('Page does not match schema', pageSchema.safeParse(firstPage).error)
+  if(isNil(pageRequest) || isEmpty(pageRequest)){
+    say('request to directus returned a nil or empty item', pageRequest)
     return null
   }
 
-  return firstPage
+  if(!pageSchema.array().safeParse(pageRequest).success){
+    say('request is not an array of pages', {pageRequest, errors:pageSchema.safeParse(pageRequest).error})
+    return null
+  }
+
+  if(Array.isArray(pageRequest) && pageRequest.length > 1) {
+    say('request returned more than one page please check in directus', {filters, id: pageRequest.map(p => p.id)})
+    return null
+  }
+
+  return pageRequest[0]
 }
 
 export {

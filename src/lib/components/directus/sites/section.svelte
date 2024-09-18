@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { SectionSchema } from '$lib/directus/section';
 	import { SectionContent } from '$lib/components/directus';
-	import { landmarkToTag } from './utils';
+	import { landmarkToTag } from '../utils';
 	import { isNotNil } from 'ramda';
+	import { cn } from '$lib/utils';
+	import { sectionVariants } from '.';
 
 	export let section: SectionSchema;
 
@@ -19,9 +21,23 @@
 		background_color,
 		section_content
 	} = section;
+
+	const variantObject = {
+		horizontal_behaviour,
+		content_spacing,
+		content_horizontal_aligment,
+		content_horizontal_distribution,
+		content_vertical_alignment,
+		content_vertical_distribution
+	};
 </script>
 
-<svelte:element this={landmarkToTag(landmark)} id={section_id || undefined}>
+<svelte:element
+	this={landmarkToTag(landmark)}
+	id={section_id || undefined}
+	class={cn(sectionVariants(variantObject))}
+	style="background-color:{background_color || 'transparent'};"
+>
 	{#if isNotNil(section_content)}
 		{#each section_content as item}
 			<SectionContent section_content={item} />

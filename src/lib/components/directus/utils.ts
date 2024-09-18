@@ -19,14 +19,18 @@ const landmarkToTag = (landmark: SectionSchema['landmark']): keyof HTMLElementTa
 }
 
 const collectionToComponent = async (collection: SectionContentSchema['collection']) => {
+  const components = await import('./')
   if (collection === 'Text_Content')
-    return (await import('./')).TextContent
+    return components.TextContent
 
   if (collection === 'navigation')
-    return (await import('./')).Navigation
+    return components.Navigation
 
   if (collection === 'logos')
-    return (await import('./')).Logo
+    return components.Logo
+
+  if (collection === 'header')
+    return components.Header
 
   return null
 }

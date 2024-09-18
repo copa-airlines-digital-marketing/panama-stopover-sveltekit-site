@@ -1,5 +1,7 @@
 import { getData } from "$lib/data/index.js"
-import { articleToKeyMap, keyToSchemaMap, keyToValidationMap } from "$lib/directus/index.js"
+import { articleToKeyMap } from "$lib/directus/index.js"
+import { isPageSettings } from "$lib/directus/page.js"
+import { isSectionSchema, type SectionSchema } from "$lib/directus/section.js"
 import { say } from "$lib/utils.js"
 import { error, json } from "@sveltejs/kit"
 import { isEmpty, isNil } from "ramda"
@@ -13,6 +15,8 @@ export async function GET({ url: { searchParams } }) {
   const article = searchParams.get('article')
   const preview = searchParams.get('preview')
 
+  const storefront = 'gs'
+
   if (!locale) 
     return error(400)
 
@@ -23,17 +27,21 @@ export async function GET({ url: { searchParams } }) {
 
   const data = await getData(key, 60*60*2, {locale, home, category, subCategory, article, preview}) //2h mins for pages 
 
-  if ( isNil(data) || isEmpty(data)) {
-    console.log('Error while getting page no data', data)
+  if (isNil(data) || isEmpty(data)) {
     return error(404)
   }
 
-  const isValidDataFn = keyToValidationMap[key]
-  
-  if (!isValidDataFn(data)) {
-    say('Data is not valid schema of: '+key, keyToSchemaMap[key].safeParse(data).error)
-    return error(404)
+  let sections: SectionSchema[] | undefined = undefined
+
+  if(isPageSettings(data)) {
+    const sectionsRequest = await getData('sections', 60*60*2, { locale, storefront, page: data.id })
+
+    if(!isSectionSchema(sectionsRequest)) {
+      return error(500)
+    }
+
+    sections = sectionsRequest
   }
   
-  return json( {[key]: data}, { status: 200 } )
+  return json( {[key]: data, sections}, { status: 200 } )
 }

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { logoQuery, logosSchema } from "./logos";
 
 const linkSchema = z.object({
-  icon: logosSchema.nullish(),
+  icon: logosSchema.nullable(),
   text: z.string(),
   href: z.string(),
   target: z.string(),

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { LogoSchema } from '$lib/directus/logos';
-	import { SVG } from '../foundations/icon';
+	import { SVG } from '$lib/components/foundations/icon';
 
 	export let item: LogoSchema;
 	export let component: string | null;

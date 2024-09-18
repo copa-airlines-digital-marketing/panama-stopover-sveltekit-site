@@ -3,6 +3,7 @@ import { isNotFoundSchema } from '$lib/directus/not-found.js';
 import type { PageSchema } from '$lib/directus/page.js';
 import type { PlaceSchema } from '$lib/directus/place-to-visit.js';
 import type { RestaurantSchema } from '$lib/directus/restaurants.js';
+import type { SectionSchema } from '$lib/directus/section.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
 import { filter, isNotNil } from 'ramda';
@@ -21,6 +22,7 @@ const valueToSeachParams = (locale: string, path: string, preview: string | null
 
 type DataTypeMap = {
   page: PageSchema | undefined,
+  pageSections: SectionSchema[] | undefined,
   stopover_hotels: HotelSchema | undefined,
   stopover_restaurants: RestaurantSchema | undefined,
   stopover_place_to_visit: PlaceSchema | undefined
@@ -49,6 +51,7 @@ export async function load(event) {
 
   const finalData: DataTypeMap = {
     page: undefined,
+    pageSections: undefined,
     stopover_hotels: undefined,
     stopover_restaurants: undefined,
     stopover_place_to_visit: undefined,

@@ -14,7 +14,7 @@ const navigationTranslationSchema = z.object({
 })
 
 const navigationSchema = z.object({
-  icon: z.optional(logosSchema),
+  icon: logosSchema.nullish(),
   translations: navigationTranslationSchema.array()
 })
 

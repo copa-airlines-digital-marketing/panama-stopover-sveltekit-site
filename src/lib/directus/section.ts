@@ -1,8 +1,10 @@
 import { z } from "zod";
-import { textContentSchema } from "./text-content";
-import { navigationSchema } from "./navigation";
-import { logosSchema } from "./logos";
-import { headerSchema } from "./header";
+import { textContentQuery, textContentSchema } from "./text-content";
+import { navigationQuery, navigationSchema } from "./navigation";
+import { logoQuery, logosSchema } from "./logos";
+import { headerQuery, headerSchema } from "./header";
+import { getItems, getTranslationFilter, type DirectusRequestBody } from "./utils";
+import { say } from "$lib/utils";
 
 const horizontal_alignment = z.union([z.literal('left'), z.literal('center'), z.literal('right')])
 const vertical_alignment = z.union([z.literal('top'), z.literal('center'), z.literal('bottom'), z.literal('baseline'), z.literal('stretch')])
@@ -10,13 +12,23 @@ const content_distribution = z.union([z.literal('space-around'), z.literal('spac
 
 const sectionContentSchema = z.object({
   id: z.union([z.string(), z.number()]),
-  item: z.union([textContentSchema, navigationSchema, logosSchema, headerSchema]),
+  item: textContentSchema.or(navigationSchema).or(logosSchema).or(headerSchema),
   collection: z.union([z.literal('Text_Content'), z.literal('navigation'), z.literal('logos'), z.literal('header')]),
-  component_name: z.string().nullable(),
-  display: z.union([z.literal('100'), z.literal('75'), z.literal('50'), z.literal('25')]).nullable(),
-  theme: z.union([z.literal('light'), z.literal('dark')]).nullable(),
-  horizontal_alignment: horizontal_alignment.nullable(),
-  vertical_alignment: vertical_alignment.nullable(),
+  component_name: z.string().nullish(),
+  display: z.union([z.literal('100'), z.literal('75'), z.literal('50'), z.literal('25')]).nullish(),
+  theme: z.union([z.literal('light'), z.literal('dark')]).nullish(),
+  horizontal_alignment: horizontal_alignment.nullish(),
+  vertical_alignment: vertical_alignment.nullish(),
+})
+
+const pageStorefrontSchema = z.object({
+  storefronts_code: z.string(),
+  pages_id: z.number()
+})
+
+const pageStorefrontSectionsSchema = z.object({
+  page_storefronts_id: pageStorefrontSchema,
+  sort: z.number()
 })
 
 const sectionSchema = z.object({
@@ -25,22 +37,90 @@ const sectionSchema = z.object({
   section_id: z.string().nullable(),
   horizontal_behaviour: z.union([z.literal('full'), z.literal('contained'), z.literal('container-grid')]),
   content_spacing: z.union([z.literal('none'), z.literal('minimal'), z.literal('tiny'), z.literal('petit'), z.literal('normal'), z.literal('roomy'), z.literal('spacious'), z.literal('big'), z.literal('huge')]),
-  content_horizontal_alignment: horizontal_alignment,
-  content_horizontal_distribution: z.union([horizontal_alignment, content_distribution]),
-  content_vertical_alignment: vertical_alignment,
-  content_vertical_distribution: z.union([vertical_alignment, content_distribution]),
-  background_color: z.string(),
-  section_content: sectionContentSchema.array().nullish()
+  content_horizontal_alignment: horizontal_alignment.nullish(),
+  content_horizontal_distribution: z.union([horizontal_alignment, content_distribution]).nullish(),
+  content_vertical_alignment: vertical_alignment.nullish(),
+  content_vertical_distribution: z.union([vertical_alignment, content_distribution]).nullish(),
+  background_color: z.string().nullish(),
+  section_content: sectionContentSchema.array().nullish(),
+  page_storefronts: pageStorefrontSectionsSchema.array().nullish()
 })
 
 type SectionSchema = z.infer<typeof sectionSchema>
 
 type SectionContentSchema = z.infer<typeof sectionContentSchema>
 
-const isSectionSchema = (value: unknown): value is SectionSchema => sectionSchema.safeParse(value).success
+const isSectionSchema = (value: unknown): value is SectionSchema[] => sectionSchema.array().safeParse(value).success
+
+const getSections = async (filters: DirectusRequestBody) => {
+
+  const { locale, storefront, page } = filters
+
+  if(!locale || !storefront || !page){
+    say('Locale, storefront, and page are required to get the sections', filters)
+    return null
+  }
+
+  const sectionRequest = await getItems('sections', {
+    fields: [
+      'id',
+      'landmark',
+      'section_id',
+      'horizontal_behaviour',
+      'content_spacing',
+      'content_horizontal_alignment',
+      'content_horizontal_distribution',
+      'content_vertical_alignment',
+      'content_vertical_distribution',
+      'background_color',
+      { 'section_content': [
+        'id',
+        'collection',
+        'component_name',
+        'display',
+        'theme',
+        'horizontal_alignment',
+        'vertical_alignment',
+        { 'item': {
+          'navigation': navigationQuery,
+          'Text_Content': textContentQuery,
+          'logos': logoQuery,
+          'header': headerQuery
+        } }
+      ]}
+    ],
+    filter: {
+      _and: [
+        { page_storefronts: { pages_storefronts_id: { storefronts_code: { _eq: storefront }}}},
+        { page_storefronts: { pages_storefronts_id: { pages_id: { _eq: page }}}}
+      ]
+    },
+    deep: {
+      section_content: {
+        "item:Text_Content": getTranslationFilter(locale),
+        "item:navigation": getTranslationFilter(locale),
+        "item:header": {
+          navigations: {
+            navigation_id: getTranslationFilter(locale)
+          }
+        }
+      }
+    },
+    sort: ['page_storefronts.sort']
+  })
+
+  
+  if(isSectionSchema(sectionRequest)) {
+    return sectionRequest
+  }
+  
+  say('Sections did not comply with the schema', {sectionRequest, filters, errors: sectionSchema.array().safeParse(sectionRequest).error})
+  return null
+}
 
 export {
   sectionSchema,
+  getSections,
   isSectionSchema
 }
 

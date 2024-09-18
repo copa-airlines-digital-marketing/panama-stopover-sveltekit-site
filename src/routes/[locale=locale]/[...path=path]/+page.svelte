@@ -7,8 +7,10 @@
 		environment,
 		siteSettings,
 		layout,
+		layoutSections,
 		locale,
 		page,
+		pageSections,
 		stopover_hotels,
 		stopover_place_to_visit,
 		stopover_restaurants
@@ -18,8 +20,10 @@
 <Procesor
 	{siteSettings}
 	{layout}
+	{layoutSections}
 	{locale}
 	{page}
+	{pageSections}
 	{stopover_hotels}
 	{stopover_place_to_visit}
 	{stopover_restaurants}
