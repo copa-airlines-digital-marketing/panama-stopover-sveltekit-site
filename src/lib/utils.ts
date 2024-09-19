@@ -4,17 +4,43 @@ import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
 import { extendTailwindMerge } from "tailwind-merge";
 import { default as Preset } from 'cmds-tailwind-styles';
-import { allPass, curry, isNotEmpty, isNotNil } from "ramda";
+import { all, allPass, curry, isNotEmpty, isNotNil, keys, values } from "ramda";
+import { createTV } from "tailwind-variants";
 
-console.log(Preset.theme.extend.fontSize)
+/* function flatObject(item: object) {
+
+  const objectValues = values(item)
+
+  console.log(typeof objectValues[0])
+
+  if(typeof objectValues[0] === 'string') 
+    return keys(item)
+
+  return [...flatObject(objectValues)]
+} */
+
+const cmTailwindVariants = createTV({
+  twMergeConfig: {
+    extend: {
+      classGroups: {
+        'font-size': [...Object.keys(Preset.theme.extend.fontSize).map(v => 'text-'+v)],
+        'font-family': [...Object.keys(Preset.theme.extend.fontFamily).map(v => 'font-'+v)],
+        'text-color': [...Object.keys(Preset.theme.extend.colors).map(v => 'text-'+v)],
+        'border-color': [...Object.keys(Preset.theme.extend.colors)]
+      }
+    }
+  }
+})
+
+//console.log(flatObject(Preset.theme.extend.colors))
 
 const customTwMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      'font-size': [{text:Object.keys(Preset.theme.extend.fontSize)}],
-      'font-family': [{font:Object.keys(Preset.theme.extend.fontFamily)}],
-      'text-color': [{text:Object.keys(Preset.theme.extend.colors)}],
-      'border-color': [{text:Object.keys(Preset.theme.extend.colors)}]
+      'font-size': [...Object.keys(Preset.theme.extend.fontSize).map(v => 'text-'+v)],
+      'font-family': [...Object.keys(Preset.theme.extend.fontFamily).map(v => 'font-'+v)],
+      'text-color': [...Object.keys(Preset.theme.extend.colors).map(v => 'text-'+v)],
+      'border-color': [...Object.keys(Preset.theme.extend.colors)]
     }
   }
 })
@@ -87,4 +113,5 @@ export {
   isNotNilNorEmpty,
   say,
   styleToString,
+  cmTailwindVariants,
 }

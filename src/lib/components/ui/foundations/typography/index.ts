@@ -1,17 +1,7 @@
-import { tv, defaultConfig, type VariantProps } from "tailwind-variants";
-import { default as Preset } from 'cmds-tailwind-styles';
-import { cn } from "$lib/utils";
+import { type VariantProps } from "tailwind-variants";
+import { cmTailwindVariants, cn } from "$lib/utils";
 
-defaultConfig.twMergeConfig = {
-  classGroups: {
-    'font-size': [{text:Object.keys(Preset.theme.extend.fontSize)}],
-    'font-family': [{font:Object.keys(Preset.theme.extend.fontFamily)}],
-    'text-color': [{text:Object.keys(Preset.theme.extend.colors)}],
-    'border-color': [{text:Object.keys(Preset.theme.extend.colors)}]
-  }
-}
-
-const typography = tv({
+const typography = cmTailwindVariants({
   base: 'text-b font-suisse font-normal',
   variants: {
     size: {
