@@ -3,6 +3,12 @@ import { isLogoSchema, type LogoSchema } from "$lib/directus/logos";
 import { isNavigationSchema, type NavigationSchema } from "$lib/directus/navigation";
 import type { SectionContentSchema, SectionSchema } from "$lib/directus/section";
 import { isTextContentSchema, type TextContentSchema } from "$lib/directus/text-content";
+import { Header } from "./blocks/header";
+import Logo from "./general-components/logo.svelte";
+import Navigation from "./general-components/navigation.svelte";
+import TextContent from "./general-components/text-content.svelte";
+import { FooterPrimary } from "./section/footer-primary";
+import { NoComponentSection } from "./section/no-component";
 
 type DirectusCollectionItems = SectionContentSchema['collection']
 
@@ -39,25 +45,33 @@ const landmarkToTag = (landmark: SectionSchema['landmark']): keyof HTMLElementTa
   return 'div'
 }
 
-const collectionToComponent = async (collection: SectionContentSchema['collection']) => {
-  const components = await import('./')
+const collectionToComponent = (collection: SectionContentSchema['collection']) => {
   if (collection === 'Text_Content')
-    return components.TextContent
+    return TextContent
 
   if (collection === 'navigation')
-    return components.Navigation
+    return Navigation
 
   if (collection === 'logos')
-    return components.Logo
+    return Logo
 
   if (collection === 'header')
-    return components.Header
+    return Header
 
   return null
+}
+
+const sectionToComponentMap = (component: SectionSchema['component']) => {
+  if(component === 'footer-primary')
+    return FooterPrimary
+
+  return NoComponentSection
+
 }
 
 export {
   landmarkToTag,
   collectionToComponent,
+  sectionToComponentMap,
   DirectusCollectionToValidationMap
 }

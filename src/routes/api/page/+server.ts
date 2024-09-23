@@ -2,7 +2,6 @@ import { getData } from "$lib/data/index.js"
 import { articleToKeyMap } from "$lib/directus/index.js"
 import { isPageSettings } from "$lib/directus/page.js"
 import { isSectionSchema, type SectionSchema } from "$lib/directus/section.js"
-import { say } from "$lib/utils.js"
 import { error, json } from "@sveltejs/kit"
 import { isEmpty, isNil } from "ramda"
 
@@ -23,7 +22,7 @@ export async function GET({ url: { searchParams } }) {
   const key = articleToKeyMap(subCategory, article)
 
   if(isNil(key))
-    return error(500)
+    return error(404)
 
   const data = await getData(key, 60*60*2, {locale, home, category, subCategory, article, preview}) //2h mins for pages 
 
@@ -37,7 +36,7 @@ export async function GET({ url: { searchParams } }) {
     const sectionsRequest = await getData('sections', 60*60*2, { locale, storefront, page: data.id })
 
     if(!isSectionSchema(sectionsRequest)) {
-      return error(500)
+      return error(404)
     }
 
     sections = sectionsRequest

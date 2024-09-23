@@ -4,45 +4,37 @@ import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
 import { extendTailwindMerge } from "tailwind-merge";
 import { default as Preset } from 'cmds-tailwind-styles';
-import { all, allPass, curry, isNotEmpty, isNotNil, keys, values } from "ramda";
+import { allPass, curry, has, isNotEmpty, isNotNil } from "ramda";
 import { createTV } from "tailwind-variants";
 
-/* function flatObject(item: object) {
+function flatObject(entry: [string, string | object]) {
+  const [key, value] = entry
 
-  const objectValues = values(item)
+  if(typeof value === 'string')
+    return key === 'DEFAULT' ? null : key
 
-  console.log(typeof objectValues[0])
+  return Object.entries(value).flatMap(flatObject).map(v => key + ( v ? '-'+v : '') )
+}
 
-  if(typeof objectValues[0] === 'string') 
-    return keys(item)
+const colors = Object.entries(Preset.theme.extend.colors).flatMap(flatObject)
 
-  return [...flatObject(objectValues)]
-} */
+const cmTWMergeConfig = {
+  extend: {
+    theme: {
+      colors: colors,
+      spacing: Object.keys(Preset.theme.extend.spacing)
+    },
+    classGroups: {
+      'font-family': [{font:Object.keys(Preset.theme.extend.fontFamily)}], //this is good,
+      'font-size': [{text:Object.keys(Preset.theme.extend.fontSize)}],
+    }
+  }
+} as const
+
+const customTwMerge = extendTailwindMerge(cmTWMergeConfig)
 
 const cmTailwindVariants = createTV({
-  twMergeConfig: {
-    extend: {
-      classGroups: {
-        'font-size': [...Object.keys(Preset.theme.extend.fontSize).map(v => 'text-'+v)],
-        'font-family': [...Object.keys(Preset.theme.extend.fontFamily).map(v => 'font-'+v)],
-        'text-color': [...Object.keys(Preset.theme.extend.colors).map(v => 'text-'+v)],
-        'border-color': [...Object.keys(Preset.theme.extend.colors)]
-      }
-    }
-  }
-})
-
-//console.log(flatObject(Preset.theme.extend.colors))
-
-const customTwMerge = extendTailwindMerge({
-  extend: {
-    classGroups: {
-      'font-size': [...Object.keys(Preset.theme.extend.fontSize).map(v => 'text-'+v)],
-      'font-family': [...Object.keys(Preset.theme.extend.fontFamily).map(v => 'font-'+v)],
-      'text-color': [...Object.keys(Preset.theme.extend.colors).map(v => 'text-'+v)],
-      'border-color': [...Object.keys(Preset.theme.extend.colors)]
-    }
-  }
+  twMergeConfig: cmTWMergeConfig
 })
 
 function cn(...inputs: ClassValue[]) {
@@ -105,13 +97,20 @@ const isNotNilNorEmpty = allPass([isNotNil, isNotEmpty])
 
 const say = curry((message: string, value: unknown) => {
   console.log(message, JSON.stringify(value, null, 2))
+  return value
 })
+
+function isKeyOfObject<T>(key: string | number | symbol, obj: T): key is keyof T {
+  return has(key, obj)
+}
 
 export {
   cn,
   flyAndScale,
+  isKeyOfObject,
   isNotNilNorEmpty,
   say,
   styleToString,
   cmTailwindVariants,
+  customTwMerge,
 }

@@ -9,7 +9,7 @@
 
 <div
 	class={cn(
-		'my-2 flex items-center gap-4 rounded-lg bg-backgound-paper px-4 py-1 shadow-md md:gap-6'
+		'my-2 flex items-center justify-between gap-4 rounded-lg bg-backgound-paper px-4 py-1 shadow-md shadow-black/20 md:gap-6'
 	)}
 >
 	{#each item.navigations as navigation}

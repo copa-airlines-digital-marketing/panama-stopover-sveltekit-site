@@ -14,12 +14,13 @@ const spacing = z.union([z.literal('none'), z.literal('minimal'), z.literal('tin
 const sectionContentSchema = z.object({
   id: z.union([z.string(), z.number()]),
   item: textContentSchema.or(navigationSchema).or(logosSchema).or(headerSchema),
-  collection: z.union([z.literal('Text_Content'), z.literal('navigation'), z.literal('logos'), z.literal('header')]),
-  component_name: z.string().nullish(),
-  display: z.union([z.literal('100'), z.literal('75'), z.literal('50'), z.literal('25')]).nullish(),
-  theme: z.union([z.literal('light'), z.literal('dark')]).nullish(),
-  horizontal_alignment: horizontal_alignment.nullish(),
-  vertical_alignment: vertical_alignment.nullish(),
+  collection: z.union([z.literal('Text_Content'), z.literal('navigation'), z.literal('logos'), z.literal('header'), z.literal('icons')]),
+  component_name: z.string().nullable(),
+  area: z.string().nullable(),
+  display: z.union([z.literal('100'), z.literal('75'), z.literal('50'), z.literal('25')]).nullable(),
+  theme: z.union([z.literal('light'), z.literal('dark')]).nullable(),
+  horizontal_alignment: horizontal_alignment.nullable(),
+  vertical_alignment: vertical_alignment.nullable(),
 })
 
 const pageStorefrontSchema = z.object({
@@ -34,6 +35,7 @@ const pageStorefrontSectionsSchema = z.object({
 
 const sectionSchema = z.object({
   id: z.union([z.string(), z.number()]),
+  component: z.union([z.literal('header-primary'), z.literal('hero-primary'), z.literal('footer-primary')]).nullable(),
   landmark: z.union([z.literal('aside'), z.literal('footer'), z.literal('header'), z.literal('hero'), z.literal('loading'), z.literal('modal'), z.literal('regular'), z.literal('section')]),
   section_id: z.string().nullable(),
   horizontal_behaviour: z.union([z.literal('full'), z.literal('contained'), z.literal('container-grid')]),
@@ -69,6 +71,7 @@ const getSections = async (filters: DirectusRequestBody) => {
       'landmark',
       'section_id',
       'horizontal_behaviour',
+      'component',
       'content_spacing',
       'vertical_spacing',
       'content_horizontal_alignment',
@@ -80,6 +83,7 @@ const getSections = async (filters: DirectusRequestBody) => {
         'id',
         'collection',
         'component_name',
+        'area',
         'display',
         'theme',
         'horizontal_alignment',
@@ -88,6 +92,7 @@ const getSections = async (filters: DirectusRequestBody) => {
           'navigation': navigationQuery,
           'Text_Content': textContentQuery,
           'logos': logoQuery,
+          'icons': logoQuery,
           'header': headerQuery
         } }
       ]}

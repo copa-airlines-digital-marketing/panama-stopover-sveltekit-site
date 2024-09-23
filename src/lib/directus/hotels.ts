@@ -18,7 +18,7 @@ const hotelSchema = z.object({
   gallery: filesSchema.array(),
   translations: hotelTranslationsSchema.array(),
   promo_code: z.string().nullish(),
-  promo_discount_amount: z.number().nullish(),
+  promo_discount_amount: z.string().nullish(),
   promo_discount_percent: z.number().nullish(),
   phone_number: z.string(),
   booking_email: z.string(),
@@ -65,7 +65,7 @@ const getHotel = async (filters: DirectusRequestBody) => {
     filter: {
       _and: [
         { translations: { lang_code: { _eq: filters.locale } } },
-        { translations: {path: { _eq: article} } }
+        { translations: { path: { _eq: article} } }
       ]
     },
   })
@@ -77,8 +77,6 @@ const getHotel = async (filters: DirectusRequestBody) => {
     say('Query returned more than one result, review is required', directusHotelRequest.map(value => value.translations[0].name))
     return null
   }
-
-  say('Hotels Returned', directusHotelRequest)
 
   const [hotel] = directusHotelRequest
 

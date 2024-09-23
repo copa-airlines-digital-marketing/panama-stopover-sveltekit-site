@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/foundations/button';
+	import { SVG } from '$lib/components/ui/foundations/icon';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 	import { say } from '$lib/utils';
 
@@ -12,14 +13,19 @@
 	} = navigation;
 </script>
 
-<nav aria-label={navigation.translations[0].title} class="container fixed bottom-0 left-0 w-full">
-	<ul
-		class="container mx-auto my-6 flex items-center justify-between gap-2 rounded-lg bg-backgound-paper shadow-md"
-	>
+<nav aria-label={navigation.translations[0].title}>
+	<ul class="flex gap-4">
 		{#each links as link}
-			{@const { href, text, target } = link.links_id}
+			{@const { href, text, target, rel } = link.links_id}
 			<li>
-				<Button {href} {target} size="slim" variant="transparent-primary-main">
+				<Button
+					{href}
+					{target}
+					rel={rel?.join(' ')}
+					size="link"
+					variant="link"
+					class="text-d3 font-normal text-primary-light sm:text-d3 md:text-d3 lg:text-d3"
+				>
 					{text}
 				</Button>
 			</li>

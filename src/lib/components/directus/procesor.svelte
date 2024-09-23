@@ -10,7 +10,6 @@
 		EndOfPage,
 		Head,
 		HotelPage,
-		Navigation,
 		Section,
 		Page,
 		PlacePage,
@@ -20,6 +19,7 @@
 	} from '$lib/components/directus';
 	import { say } from '$lib/utils';
 	import type { SectionSchema } from '$lib/directus/section';
+	import { ScrollArea } from 'bits-ui';
 
 	export let locale: string;
 	export let siteSettings: SiteSettingsSchema;
@@ -51,35 +51,52 @@
 	{indexPage}
 />
 
-{#if headerSection}
-	<Section section={headerSection}></Section>
-{:else}
-	{say('header section in layout is required', headerSection)}
-{/if}
-
 <StartOfPage
 	site_start_of_page_code={siteSettings.start_of_body_code}
 	layout_start_of_page_code={layout.start_of_body_code}
 	page_start_of_page_code={page?.start_of_body_code}
 />
 
-{#if isNotNil(single_content)}
-	<SingleContentPage {siteSettings} {layout} {single_content} {locale} />
-{:else if isNotNil(page)}
-	<Page {siteSettings} {layout} {page} {pageSections} />
-{:else if isNotNil(stopover_hotels)}
-	<HotelPage {siteSettings} {layout} {stopover_hotels} />
-{:else if isNotNil(stopover_restaurants)}
-	<RestaurantPage {siteSettings} {layout} {stopover_restaurants} />
-{:else if isNotNil(stopover_place_to_visit)}
-	<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
-{/if}
+<ScrollArea.Root class="relative">
+	<ScrollArea.Viewport class="h-svh w-full">
+		<ScrollArea.Content>
+			<div class="relative grid min-h-svh grid-cols-1 grid-rows-[auto_1fr_auto]">
+				<div class="z-50 col-start-1 row-start-1">
+					{#if headerSection}
+						<Section section={headerSection}></Section>
+					{:else}
+						{say('header section in layout is required', headerSection)}
+					{/if}
+				</div>
 
-{#if headerSection}
-	<Section section={footerSection}></Section>
-{:else}
-	{say('header section in layout is required', footerSection)}
-{/if}
+				<main class="col-start-1 row-span-2 row-start-1">
+					{#if isNotNil(single_content)}
+						<SingleContentPage {layout} {single_content} {locale} />
+					{:else if isNotNil(page)}
+						<Page {siteSettings} {layout} {page} {pageSections} />
+					{:else if isNotNil(stopover_hotels)}
+						<HotelPage {stopover_hotels} />
+					{:else if isNotNil(stopover_restaurants)}
+						<RestaurantPage {siteSettings} {layout} {stopover_restaurants} />
+					{:else if isNotNil(stopover_place_to_visit)}
+						<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
+					{/if}
+				</main>
+
+				<div class="col-start-1 row-start-3">
+					{#if footerSection}
+						<Section section={footerSection}></Section>
+					{:else}
+						{say('footer section in layout is required', footerSection)}
+					{/if}
+				</div>
+			</div>
+		</ScrollArea.Content>
+	</ScrollArea.Viewport>
+	<ScrollArea.Scrollbar orientation="vertical">
+		<ScrollArea.Thumb />
+	</ScrollArea.Scrollbar>
+</ScrollArea.Root>
 
 <EndOfPage
 	site_end_of_page_code={siteSettings.end_of_body_code}

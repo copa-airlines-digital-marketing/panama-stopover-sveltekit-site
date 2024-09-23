@@ -1,13 +1,13 @@
 /** @type {import('./$types').LayoutServerLoad} */
 
 import { error } from '@sveltejs/kit'
-import { isSiteSettings, siteSettingSchema } from '$lib/directus/site-settings.js'
-import { head, includes, isEmpty, pipe, split } from 'ramda'
-import { isPageSettings, pageSchema } from '$lib/directus/page.js'
+import { isSiteSettings } from '$lib/directus/site-settings.js'
+import { head, includes, pipe, split } from 'ramda'
+import { isPageSettings } from '$lib/directus/page.js'
 import { say } from '$lib/utils.js'
 import { isSectionSchema } from '$lib/directus/section.js'
 
-const ifLocalHostDev = (value: string) => includes(value, ['localhost', '127.0.0.1']) ? 'dev' : value
+const ifLocalHostDev = (value: string) => includes(value, ['localhost', '127.0.0.1', '192']) ? 'dev' : value
 
 const ifProdHostProd = (value: string) => includes(value, ['www', 'stopoverinpanama', 'panama-stopover']) ? 'prod' : value
 

@@ -21,9 +21,9 @@
 				<Button
 					{href}
 					{target}
-					size="icon-only"
+					size="slim"
 					variant="transparent-primary-main"
-					class="max-h-none px-4 py-0.5"
+					class="rounded-full *:max-h-14 sm:*:max-h-14 md:*:max-h-14 lg:*:max-h-14"
 				>
 					{#if icon}
 						<SVG data={icon?.code} class="h-14 w-auto"></SVG>
@@ -33,7 +33,7 @@
 				</Button>
 			</li>
 		{:else}
-			{say('no items inculded', navigation)}
+			{say('no links inculded', navigation)}
 		{/each}
 	</ul>
 </nav>

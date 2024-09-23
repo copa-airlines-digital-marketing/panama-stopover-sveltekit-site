@@ -89,6 +89,7 @@ const isPageSettings = (value: unknown): value is PageSchema => pageSchema.safeP
 
 const getPage = async (filters: DirectusRequestBody) => {
 
+
   const pageRequest = await getItems<PageSchema>('pages', {
     fields: [
       'id',

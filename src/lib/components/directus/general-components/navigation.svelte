@@ -5,14 +5,12 @@
 
 	export let item: NavigationSchema;
 	export let component: string | null;
+
+	const svelteComponent = componentNameToComponentMap(component);
 </script>
 
-{#await componentNameToComponentMap(component)}
-	...loading
-{:then svelteComponent}
-	{#if svelteComponent}
-		<svelte:component this={svelteComponent} navigation={item}></svelte:component>
-	{:else}
-		{say('could not resolve component', { component, item })}
-	{/if}
-{/await}
+{#if svelteComponent}
+	<svelte:component this={svelteComponent} navigation={item}></svelte:component>
+{:else}
+	{say('could not resolve component', component)}
+{/if}
