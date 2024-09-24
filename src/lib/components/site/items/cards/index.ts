@@ -1,0 +1,1 @@
+export { default as StopoverPromoCard } from './promo.svelte'

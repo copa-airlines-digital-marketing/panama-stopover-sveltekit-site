@@ -1,4 +1,4 @@
-import type { Locale } from "../lib/i18n";
+import { isSupportedLocale, type Locale } from "../lib/i18n";
 
 /** 
   * @param {string} param 
@@ -7,5 +7,5 @@ import type { Locale } from "../lib/i18n";
 */
 
 export function match(param): param is Locale {
-  return /^[a-z]{2}$|^[a-z]{2}-[A-Z]{2}$/.test(param) 
+  return isSupportedLocale(param)
 }

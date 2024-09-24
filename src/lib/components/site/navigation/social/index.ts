@@ -1,0 +1,1 @@
+export { default as SocialNavigation } from './social-navigation.svelte'

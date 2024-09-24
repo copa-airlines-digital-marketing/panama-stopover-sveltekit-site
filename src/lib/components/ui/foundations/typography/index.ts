@@ -1,18 +1,8 @@
-import { tv, defaultConfig, type VariantProps } from "tailwind-variants";
-import { default as Preset } from 'cmds-tailwind-styles';
-import { cn } from "$lib/utils";
+import { type VariantProps } from "tailwind-variants";
+import { cmTailwindVariants, cn } from "$lib/utils";
 
-defaultConfig.twMergeConfig = {
-  classGroups: {
-    'font-size': [{text:Object.keys(Preset.theme.extend.fontSize)}],
-    'font-family': [{font:Object.keys(Preset.theme.extend.fontFamily)}],
-    'text-color': [{text:Object.keys(Preset.theme.extend.colors)}],
-    'border-color': [{text:Object.keys(Preset.theme.extend.colors)}]
-  }
-}
-
-const typography = tv({
-  base: 'text-b font-suisse font-normal',
+const typography = cmTailwindVariants({
+  base: 'text-b font-jakarta font-normal',
   variants: {
     size: {
       u6: 'text-u6',
@@ -36,14 +26,14 @@ const typography = tv({
       'overline-small': 'text-d1'
     },
     variant: {
-      h1: 'text-u5 font-gilroy font-medium text-primary',
-      h2: 'text-u2 font-gilroy font-bold text-primary-dark',
-      h3: 'text-u1 font-gilroy font-bold text-grey-700',
-      h4: 'text-b font-gilroy font-bold text-grey-700',
-      'display-big': 'text-u6 font-gilroy font-bold text-primary',
-      'display': 'text-u4 font-gilroy font-bold text-primary',
-      'display-small': 'text-u2 font-gilroy font-normal text-grey-700',
-      'display-tiny': 'text-u1 font-gilroy font-normal text-grey-700',
+      h1: 'text-u5 font-jakarta font-medium text-primary',
+      h2: 'text-u2 font-jakarta font-bold text-primary-dark',
+      h3: 'text-u1 font-jakarta font-bold text-grey-700',
+      h4: 'text-b font-jakarta font-bold text-grey-700',
+      'display-big': 'text-u6 font-jakarta font-bold text-primary',
+      'display': 'text-u4 font-jakarta font-bold text-primary',
+      'display-small': 'text-u2 font-jakarta font-normal text-grey-700',
+      'display-tiny': 'text-u1 font-jakarta font-normal text-grey-700',
       'overline': 'text-grey-700',
       'overline-invert': 'text-common-white',
       'caption': 'text-grey-700',

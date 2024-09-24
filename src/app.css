@@ -1,3 +1,105 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+
+  
+  @font-face {
+    font-family: Gilroy;
+    font-weight: 400;
+    src:
+    url('https://cm-marketing.directus.app/assets/1995f55d-4c20-43e9-bc2e-ef3b529a560e?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('woff');
+  }
+  
+  @font-face {
+    font-family: Gilroy;
+    font-weight: 500;
+    src:
+    url('https://cm-marketing.directus.app/assets/7d6f602f-5c6f-4c09-8e70-1feb9ab50f49?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('woff');
+  }
+    
+  @font-face {
+    font-family: Gilroy;
+    font-weight: 700;
+    src:
+    url('https://cm-marketing.directus.app/assets/b83d2dc4-5a3d-4517-b367-fde7b500f806?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('woff');
+  }
+    
+  @font-face {
+    font-family: "Suisse Int'l";
+    font-weight: 300;
+    src:
+    url('https://cm-marketing.directus.app/assets/c1b4f252-c4ec-48b9-aca4-ce1104ec65eb?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('woff');
+  }
+      
+  @font-face {
+    font-family: "Suisse Int'l";
+    font-weight: 400;
+    src:
+    url('https://cm-marketing.directus.app/assets/db654fed-0e8c-49de-8bfb-44a608c1439a?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('woff');
+  }
+        
+  @font-face {
+    font-family: "Suisse Int'l";
+    font-weight: 500;
+    src:
+    url('https://cm-marketing.directus.app/assets/f649b245-02d8-4d3f-a9e0-67db661bc30c?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('woff');
+  }
+            
+  @font-face {
+    font-family: "Suisse Int'l";
+    font-weight: 600;
+    src:
+    url('https://cm-marketing.directus.app/assets/af841673-0e81-4887-b8a8-cf995d6d8a7f?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('woff');
+  }
+
+  @font-face {
+    font-family: "Jakarta";
+    font-weight: 200;
+    src:
+    url('https://cm-marketing.directus.app/assets/09407b76-02d2-4f3c-9e53-918c4a04f435?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('ttf');
+  }
+
+  @font-face {
+    font-family: "Jakarta";
+    font-weight: 300;
+    src:
+    url('https://cm-marketing.directus.app/assets/2b4eb66c-d4c1-4ce8-9886-068df86285b6?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('ttf');
+  }
+
+  @font-face {
+    font-family: "Jakarta";
+    font-weight: 400;
+    src:
+    url('https://cm-marketing.directus.app/assets/478d158c-55fe-4e97-abbc-853ccee06884?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('ttf');
+  }
+
+  @font-face {
+    font-family: "Jakarta";
+    font-weight: 500;
+    src:
+    url('https://cm-marketing.directus.app/assets/4c781dca-7f02-431f-a7c2-c306888dca42?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('ttf');
+  }
+
+  @font-face {
+    font-family: "Jakarta";
+    font-weight: 600;
+    src:
+    url('https://cm-marketing.directus.app/assets/68440401-cc13-4c46-96d3-7ed42cc83d2a?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('ttf');
+  }
+
+  @font-face {
+    font-family: "Jakarta";
+    font-weight: 700;
+    src:
+    url('https://cm-marketing.directus.app/assets/7072d9ca-b252-41ea-8350-59e4ef0d177f?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('ttf');
+  }
+
+  @font-face {
+    font-family: "Jakarta";
+    font-weight: 800;
+    src:
+    url('https://cm-marketing.directus.app/assets/a3c9db11-18b5-48fa-a3e8-cd7b068026bd?access_token=dWRNLjvOuHuIQ4t6NQAoB6KSSKkm5xfl') format('ttf');
+  }
+}
