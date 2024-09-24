@@ -5,11 +5,7 @@
 
 	export let item: TextContentSchema;
 
-	const {
-		translations: {
-			0: { description }
-		}
-	} = item;
+	const description = item.translations[0]?.description;
 </script>
 
 {#if description}

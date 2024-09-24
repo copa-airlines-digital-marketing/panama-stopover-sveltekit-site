@@ -18,7 +18,7 @@ const placeSchema = z.object({
   gallery: filesSchema.array(),
   translations: placeTranslationsSchema.array(),
   promo_code: z.string().nullish(),
-  promo_discount_amount: z.number().nullish(),
+  promo_discount_amount: z.string().nullish(),
   promo_discount_percent: z.number().nullish(),
   supported_languages: z.string().array().nullish(),
   experiences: textContentSchema.array().nullish(),

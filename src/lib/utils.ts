@@ -25,7 +25,7 @@ const cmTWMergeConfig = {
       spacing: Object.keys(Preset.theme.extend.spacing)
     },
     classGroups: {
-      'font-family': [{font:Object.keys(Preset.theme.extend.fontFamily)}], //this is good,
+      'font-family': [{font:[...Object.keys(Preset.theme.extend.fontFamily), 'jakarta']}], //this is good,
       'font-size': [{text:Object.keys(Preset.theme.extend.fontSize)}],
     }
   }

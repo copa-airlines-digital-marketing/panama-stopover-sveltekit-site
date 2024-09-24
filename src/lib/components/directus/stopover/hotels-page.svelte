@@ -1,17 +1,16 @@
 <script lang="ts">
 	import type { HotelSchema } from '$lib/directus/hotels';
-	import { Pre } from '$lib/components/testing';
 	import { getTypography } from '$lib/components/ui/foundations/typography';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
+	import { StopoverPromoCard } from '$lib/components/site/items/cards';
+	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
+	import { Map } from '$lib/components/site/items/maps';
 
 	export let stopover_hotels: HotelSchema;
 
 	const {
 		main_image,
-		promo_code,
-		promo_discount_amount,
-		promo_discount_percent,
 		phone_number,
 		booking_email,
 		supported_languages,
@@ -25,20 +24,22 @@
 	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
 
 	const {
-		0: { name, description, promo_name, promo_description }
+		0: { name, description, promo_name, promo_description, url }
 	} = currrentTranslation;
+
+	const item = stopover_hotels;
 </script>
 
 <Hero {main_image} {name}></Hero>
 <div class="container mx-auto h-20 bg-backgound-lightblue py-2">Galeria</div>
-<div class="container mx-auto my-8 space-y-4">
+<div class="container mx-auto my-8 space-y-8">
 	<p class={getTypography('body-large', 'body')}>
 		{description}
 	</p>
-	<div class="rounded-2xl bg-secondary shadow-sm">
-		{promo_name}
-		{@html promo_description}
-		{promo_code}
-	</div>
+	{#if promo_name && promo_description}
+		<StopoverPromoCard {item}></StopoverPromoCard>
+	{/if}
+	<MainCallToAction {item}></MainCallToAction>
+
+	<Map {item}></Map>
 </div>
-<Pre name="Hotels" value={stopover_hotels}></Pre>

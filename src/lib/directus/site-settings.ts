@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { logoQuery, logosSchema } from './logos'
+import { logoQuery, logoQueryExtended, logosSchema } from './logos'
 import { getItem, getTranslationFilter, type DirectusRequestBody } from './utils'
 import { SITE_ID } from '$env/static/private'
 import { textContentQuery, textContentSchema } from './text-content'
@@ -25,6 +25,18 @@ const pagePathSchema = z.object({
 const articleAssociationSchema = z.object({
   collection: z.string(),
   pages_id: pagePathSchema
+}) 
+
+const siteTranslations = z.object({
+  languages_code: z.string().optional(),
+  labels: z.object({
+    name: z.string(),
+    value: z.string()
+  }).array().nullable()
+})
+
+const siteUIIcons = z.object({
+  icons_id: logosSchema
 })
 
 const siteSettingSchema = z.object({
@@ -38,7 +50,9 @@ const siteSettingSchema = z.object({
   maintenance_message: z.nullable(textContentSchema),
   coming_soon_message: z.nullable(textContentSchema),
   error_messages: z.nullable(siteErrorMessages.array()),
-  articles_association: articleAssociationSchema.array().nullish()
+  articles_association: articleAssociationSchema.array().nullish(),
+  translations: siteTranslations.array().nullable(),
+  ui_icons: siteUIIcons.array().nullable()
 })
 
 type SiteSettingsSchema = z.infer<typeof siteSettingSchema>
@@ -64,7 +78,8 @@ const getSiteSettings = async (filters: DirectusRequestBody) => {
       'head_code',
       'start_of_body_code',
       'end_of_body_code',
-      {'articles_association': [
+      { 'translations': ['labels'] },
+      { 'articles_association': [
         'collection',
         { 'pages_id': [
           translationPath,
@@ -82,9 +97,15 @@ const getSiteSettings = async (filters: DirectusRequestBody) => {
           'error_code',
           { 'Text_Content_id': textContentQuery }
         ]
+      },
+      {
+        'ui_icons': [
+          { 'icons_id': logoQueryExtended }
+        ]
       }
     ],
     deep: {
+      ...translationFilter,
       'articles_association': {
         pages_id: {
           ...translationFilter,
@@ -104,8 +125,10 @@ const getSiteSettings = async (filters: DirectusRequestBody) => {
     }
   })
 
-  if(!isSiteSettings(siteSettings))
+  if(!isSiteSettings(siteSettings)){
+    say('Site settings does not match the schema', siteSettingSchema.safeParse(siteSettings).error)
     return null
+  }
   
   return siteSettings
 }

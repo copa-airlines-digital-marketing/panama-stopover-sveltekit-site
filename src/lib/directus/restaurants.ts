@@ -17,7 +17,7 @@ const restaurantSchema = z.object({
   gallery: filesSchema.array(),
   translations: restaurantTranslationsSchema.array(),
   promo_code: z.string().nullish(),
-  promo_discount_amount: z.number().nullish(),
+  promo_discount_amount: z.string().nullish(),
   promo_discount_percent: z.number().nullish(),
   whatsapp: z.string().nullish(),
   supported_languages: z.string().array(),
