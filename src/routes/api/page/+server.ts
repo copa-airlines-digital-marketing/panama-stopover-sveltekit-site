@@ -33,7 +33,7 @@ export async function GET({ url: { searchParams } }) {
   let sections: SectionSchema[] | undefined = undefined
 
   if(isPageSettings(data)) {
-    const sectionsRequest = await getData('sections', 60*60*2, { locale, storefront, page: data.id })
+    const sectionsRequest = await getData('sections', 60*60*2, { locale, storefront, page: data.id, preview })
 
     if(!isSectionSchema(sectionsRequest)) {
       return error(404)
