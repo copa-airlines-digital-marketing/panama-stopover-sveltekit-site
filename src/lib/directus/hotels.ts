@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { articleToWordString, filesSchema, getItems, locationSchema, type DirectusRequestBody } from "./utils";
+import { filesSchema, getItems, locationSchema, type DirectusRequestBody } from "./utils";
 import { say } from "$lib/utils";
-import { filter, isNil } from "ramda";
+import { isNil } from "ramda";
 
 const hotelTranslationsSchema = z.object({
   lang_code: z.string(),
@@ -68,7 +68,7 @@ const getHotel = async (filters: DirectusRequestBody) => {
         { translations: { path: { _eq: article} } }
       ]
     },
-  })
+  }, filters.preview)
 
   if(isNil(directusHotelRequest))
     return null

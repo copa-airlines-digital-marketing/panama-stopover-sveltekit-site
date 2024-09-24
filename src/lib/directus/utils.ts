@@ -1,4 +1,4 @@
-import { DIRECTUS_REST_URL, DIRECTUS_TOKEN } from "$env/static/private"
+import { DIRECTUS_REST_URL, DIRECTUS_TOKEN, PREVIEW_SECRET, DIRECTUS_PREVIEW_TOKEN } from "$env/static/private"
 import { readItem, readItems, type QueryItem } from "@directus/sdk"
 import { getClient } from "./client"
 import type { Schema } from "./schema"
@@ -7,9 +7,10 @@ import { z } from "zod"
 
 type DirectusRequestBody = Record<string, string | number | undefined | null>
 
-const getItem = async <T>(collection: keyof Schema, id: string | number, query: QueryItem<Schema, T>) => {
+const getItem = async <T>(collection: keyof Schema, id: string | number, query: QueryItem<Schema, T>, preview: string | number | null | undefined) => {
+  const token = preview === PREVIEW_SECRET ? DIRECTUS_PREVIEW_TOKEN : DIRECTUS_TOKEN
   try {
-    const client = getClient( DIRECTUS_REST_URL, DIRECTUS_TOKEN )
+    const client = getClient( DIRECTUS_REST_URL, token )
     const request = await client.request( readItem( collection, id, query ) )
     return request
   } catch (error) {
@@ -18,9 +19,10 @@ const getItem = async <T>(collection: keyof Schema, id: string | number, query: 
   }
 }
 
-const getItems = async < T >( collection: keyof Schema, query: QueryItem< Schema, T > ) => {
+const getItems = async < T >( collection: keyof Schema, query: QueryItem< Schema, T >, preview: string | number | null | undefined ) => {
+  const token = preview === PREVIEW_SECRET ? DIRECTUS_PREVIEW_TOKEN : DIRECTUS_TOKEN
   try {
-    const client = getClient( DIRECTUS_REST_URL, DIRECTUS_TOKEN )
+    const client = getClient( DIRECTUS_REST_URL, token )
     const request = await client.request( readItems( collection, query ) )
     return request
   } catch (error) {

@@ -115,7 +115,7 @@ const getSections = async (filters: DirectusRequestBody) => {
       }
     },
     sort: ['page_storefronts.sort']
-  })
+  }, filters.preview)
 
   
   if(isSectionSchema(sectionRequest)) {

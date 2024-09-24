@@ -67,7 +67,7 @@ const getRestaurant = async (filters: DirectusRequestBody) => {
         { translations: {path: { _eq: article} } }
       ]
     },
-  })
+  }, filters.preview)
 
   if(isNil(directusRestaurantRequest))
     return null
