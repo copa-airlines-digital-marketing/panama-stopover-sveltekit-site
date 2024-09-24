@@ -68,7 +68,7 @@ const getPlace = async (filters: DirectusRequestBody) => {
         { translations: {path: { _eq: article} } }
       ]
     },
-  })
+  }, filters.preview)
 
   if(isNil(directusPlaceRequest))
     return null
