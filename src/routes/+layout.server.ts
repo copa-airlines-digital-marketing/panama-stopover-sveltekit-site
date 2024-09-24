@@ -18,11 +18,13 @@ const getEnvironment = pipe(
   ifProdHostProd
 )
 
-export async function load({ fetch, locals: { locale }, url: { hostname } }) {
+export async function load({ fetch, locals: { locale }, url: { hostname, searchParams } }) {
+
+  const preview = searchParams.get('preview')
 
   const layoutDataRequest = await Promise.all([
-    fetch('/api/site-settings?locale='+locale),
-    fetch(`/api/page?locale=${locale}`)
+    fetch(`/api/site-settings?locale=${locale}${preview ? '&preview='+preview : ''}`),
+    fetch(`/api/page?locale=${locale}${preview ? '&preview='+preview : ''}`)
   ])
   const [siteSettingsRequest, layoutRequest] = layoutDataRequest
   
