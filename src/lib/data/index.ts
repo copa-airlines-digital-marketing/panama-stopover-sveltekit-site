@@ -1,24 +1,39 @@
-import { getData as getDataFromDirectus, type DirectusDataKeys } from "$lib/directus"
+import { ENVIRONMENT, PREVIEW_SECRET, PRODUCTION_ENVIRONMENT } from "$env/static/private"
+import { getData as getDataFromDirectus, keyToValidationMap, type DirectusDataKeys, type KeyToTypeMap } from "$lib/directus"
 import { getData as getDataFromRedis, setData as saveDataToRedis } from "$lib/redis"
-import { isEmpty, isNotEmpty, isNotNil } from "ramda"
+import { isNotEmpty, isNotNil } from "ramda"
 
-const getDataFromDirectusAndSaveToRedis = (key: DirectusDataKeys, id?: string) => {
-  const data = getDataFromDirectus( key, id )
+type RequestBody = Record<string, string | number | undefined | null>
 
-  saveDataToRedis( key, data, 60*60*2 )
+const getRedisKey = (key: string, body: RequestBody) => {
+  if (!body)
+    return key
+
+  const {locale, home, category, subCategory, article } = body
+
+  return `${key}${locale ? '-'+ locale : ''}${home ? '-home' : ''}${category ? '-'+category : ''}${subCategory ? '-'+subCategory : ''}${article ? '-'+article : ''}`
+}
+
+const getDataFromDirectusAndSaveToRedis = async <T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
+  const data = await getDataFromDirectus( key, body )
+
+  if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
+    saveDataToRedis( getRedisKey(key, body), data, timeToExpireInSeconds ).catch(error => console.log(error))
 
   return data
 } 
 
-const getData = async(key: DirectusDataKeys, id?: string) => {
-  const data = await getDataFromRedis(key)
+const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
+  if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
+    const data = await getDataFromRedis(getRedisKey(key, body))
 
-  if ( isNotNil(data) && isNotEmpty(data) )
-    return JSON.parse(data)
+    if (keyToValidationMap[key](data))
+      return data
+  }
 
-  if ( !data || isEmpty(data) ) 
-   return getDataFromDirectusAndSaveToRedis(key, id)
-
+  return getDataFromDirectusAndSaveToRedis(key, timeToExpireInSeconds, body)
 }
 
-exprot 
+export {
+  getData
+}

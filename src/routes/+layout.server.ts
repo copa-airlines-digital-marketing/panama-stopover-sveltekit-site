@@ -1,32 +1,46 @@
 /** @type {import('./$types').LayoutServerLoad} */
 
-import { redirect } from '@sveltejs/kit'
-import { MAX_COOKIE_SERIALIZATION } from '../lib/cookies/index.js'
+import { error } from '@sveltejs/kit'
+import { isSiteSettings } from '$lib/directus/site-settings.js'
+import { head, includes, pipe, split } from 'ramda'
+import { isPageSettings } from '$lib/directus/page.js'
+import { say } from '$lib/utils.js'
+import { isSectionSchema } from '$lib/directus/section.js'
 
-const LOCALE_COOKIE_KEY = 'locale' 
+const ifLocalHostDev = (value: string) => includes(value, ['localhost', '127.0.0.1', '192']) ? 'dev' : value
 
-export async function load({ cookies, params, request: { headers } }) {
-  console.log('layout server')
+const ifProdHostProd = (value: string) => includes(value, ['www', 'stopoverinpanama', 'panama-stopover']) ? 'prod' : value
 
-  const localeCookie = cookies.get(LOCALE_COOKIE_KEY)
+const getEnvironment = pipe(
+  split('.'), 
+  head, 
+  ifLocalHostDev, 
+  ifProdHostProd
+)
 
-  const { locale: localeParam } = params
+export async function load({ fetch, locals: { locale }, url: { hostname } }) {
 
-  if ( !localeParam ) {
+  const layoutDataRequest = await Promise.all([
+    fetch('/api/site-settings?locale='+locale),
+    fetch(`/api/page?locale=${locale}`)
+  ])
+  const [siteSettingsRequest, layoutRequest] = layoutDataRequest
+  
+  const siteSettings = await siteSettingsRequest.json()
+  const layoutPage = await layoutRequest.json()
+  
+  const { page: layout, sections: layoutSections } = layoutPage
 
-    const acceptLanguageHeader = headers.get('Accept-Language')
-
-    
-
-    const preferredLocale = 
-
-    return redirect(307, './en-US')
+  if (!isSiteSettings(siteSettings) || !isPageSettings(layout) || !isSectionSchema(layoutSections)) {
+    say('error ocurred while getting layout info', )
+    return error(500)
   }
-
-  if( localeParam !== localeCookie )
-    cookies.set(LOCALE_COOKIE_KEY, localeParam, MAX_COOKIE_SERIALIZATION)
-
+  
 	return {
-		
+    environment: getEnvironment(hostname),
+    locale,
+		siteSettings,
+    layout,
+    layoutSections,
 	};
 }
