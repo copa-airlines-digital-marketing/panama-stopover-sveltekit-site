@@ -1,5 +1,4 @@
-import { isPageSettings, pageSchema } from '$lib/directus/page.js';
-import { isSectionSchema } from '$lib/directus/section.js';
+import { isPageSettings } from '$lib/directus/page.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
 
