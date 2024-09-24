@@ -106,7 +106,7 @@ const getPage = async (filters: DirectusRequestBody) => {
       ]}
     ],
     filter: getPageFilter(filters)
-  })
+  }, filters.preview )
 
   if(isNil(pageRequest) || isEmpty(pageRequest)){
     say('request to directus returned a nil or empty item', pageRequest)
