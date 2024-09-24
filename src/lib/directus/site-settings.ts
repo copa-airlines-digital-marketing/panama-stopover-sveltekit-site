@@ -123,7 +123,7 @@ const getSiteSettings = async (filters: DirectusRequestBody) => {
         'Text_Content_id': translationFilter
       }
     }
-  })
+  }, filters.preview)
 
   if(!isSiteSettings(siteSettings)){
     say('Site settings does not match the schema', siteSettingSchema.safeParse(siteSettings).error)
