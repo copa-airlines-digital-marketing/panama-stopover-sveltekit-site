@@ -103,7 +103,7 @@
 						<div
 							in:send={{ key: 'trigger' }}
 							out:receive={{ key: 'trigger' }}
-							class="absolute inset-0 rounded bg-secondary"
+							class="absolute inset-0 rounded bg-secondary mix-blend-color"
 						></div>
 					{/if}
 				</button>

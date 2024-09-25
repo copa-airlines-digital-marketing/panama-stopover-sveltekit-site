@@ -30,27 +30,26 @@
 	const starIcon = icons?.filter((icon) => icon.name === 'star')[0];
 </script>
 
-<Hero {item}>
-	<span class={getTypography('body', 'body', 'flex items-center text-grey-100')}>
-		{#if starIcon}
-			<SVG data={starIcon?.code} class="size-8 fill-current"></SVG>
-		{:else}
-			{'Please add a "star" icon to the site'}
-		{/if}
-		<span>
-			{`${stars} ${starsLabel ? starsLabel.value : 'Please add hotels-stars label to site'}`}
-		</span>
-	</span>
-</Hero>
+<Hero {item} />
 <div class="container mx-auto my-8 space-y-huge">
-	<div class="space-y-petit">
-		<p class={getTypography('body-large', 'body')}>
+	<div>
+		<p class={getTypography('body', 'body', 'flex items-center text-grey-600')}>
+			{#if starIcon}
+				<SVG data={starIcon?.code} class="size-8 fill-current"></SVG>
+			{:else}
+				{'Please add a "star" icon to the site'}
+			{/if}
+			<span>
+				{`${stars} ${starsLabel ? starsLabel.value : 'Please add hotels-stars label to site'}`}
+			</span>
+		</p>
+		<p class={getTypography('body-large', 'body', 'mb-petit')}>
 			{description}
 		</p>
 		{#if promo_name && promo_description}
 			<StopoverPromoCard {item}></StopoverPromoCard>
 		{/if}
-		<MainCallToAction {item}></MainCallToAction>
+		<MainCallToAction {item} class="mt-petit"></MainCallToAction>
 	</div>
 	<Map {item}></Map>
 	<HotelCTAs {item}></HotelCTAs>

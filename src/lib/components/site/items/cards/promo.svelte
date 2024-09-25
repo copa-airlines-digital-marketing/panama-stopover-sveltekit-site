@@ -25,6 +25,10 @@
 	const labels = $page.data.siteSettings.translations?.[0]?.labels;
 
 	const promoCodeTitle = labels?.filter((label) => label.name === 'using-promo-code')[0];
+
+	const copySuccessLabel = labels?.filter((label) => label.name === 'promo-code-copied-success')[0];
+
+	const copyErrroLabel = labels?.filter((label) => label.name === 'promo-code-copied-error')[0];
 </script>
 
 <PromoCard let:Title let:Description let:CodeTitle let:Header let:Code theme="DEFAULT">
@@ -53,13 +57,17 @@
 			Please add a promo title to the site translations label, that matches the name:
 			using-promo-code
 		{/if}
-		<Code>
-			{#if copyIcon}
-				<SVG class="size-6 fill-current" data={copyIcon.code}></SVG>
-			{:else}
-				{'Please add a promo icon to the site, that matches the name: icon-copy'}
-			{/if}
-			<span>{promo_code}</span>
-		</Code>
+		{#if copySuccessLabel && copyErrroLabel}
+			<Code successMesage={copySuccessLabel.value} errroMesage={copyErrroLabel.value}>
+				{#if copyIcon}
+					<SVG class="size-6 fill-current" data={copyIcon.code}></SVG>
+				{:else}
+					{'Please add a promo icon to the site, that matches the name: icon-copy'}
+				{/if}
+				<span>{promo_code}</span>
+			</Code>
+		{:else}
+			{'Please include a promo-code-copied-success and promo-code-copied-error labels in the site'}
+		{/if}
 	{/if}
 </PromoCard>
