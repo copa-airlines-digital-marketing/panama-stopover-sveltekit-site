@@ -50,5 +50,10 @@
 		"vitest": "^2.0.0",
 		"zod": "^3.23.8"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"embla-carousel": "^8.3.0",
+		"embla-carousel-fade": "^8.3.0",
+		"embla-carousel-svelte": "^8.3.0"
+	}
 }
