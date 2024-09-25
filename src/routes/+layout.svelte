@@ -2,6 +2,8 @@
 	import '../app.css';
 	import { equals, filter, head, pipe, prop } from 'ramda';
 	import { Procesor } from '$lib/components/directus';
+	import { Toast } from '$lib/components/ui/master/alerts/toast';
+
 	export let data;
 
 	const { environment, siteSettings, layout, layoutSections, locale } = data;
@@ -42,3 +44,5 @@
 {:else}
 	{console.warn('no environment matched: ' + environment, environmet_status)}
 {/if}
+
+<Toast />
