@@ -15,6 +15,7 @@
 	import type { NavigationSchema } from '$lib/directus/navigation';
 	import { page } from '$app/stores';
 	import { dissoc } from 'ramda';
+	import { browser } from '$app/environment';
 
 	export let navigation: NavigationSchema;
 
@@ -25,9 +26,13 @@
 
 	const locale = $page.data.locale;
 
+	const environment = $page.data.environment;
+
 	let cannonicals = getPageCannonicals();
 
 	$: possibleTranslations = dissoc(locale, $cannonicals);
+
+	const getParams = () => (environment === 'preview' && browser ? document.location.search : '');
 </script>
 
 <ModalRoot>
@@ -48,11 +53,11 @@
 			<nav aria-label={translation.title}>
 				<ul class="space-y-4">
 					{#each translation.links as link}
-						{@const { icon, href, text, target, hreflang, rel } = link.links_id}
+						{@const { icon, text, target, hreflang, rel } = link.links_id}
 						{#if possibleTranslations[hreflang]}
 							<li>
 								<Linkbar
-									href={possibleTranslations[hreflang]}
+									href={possibleTranslations[hreflang] + getParams()}
 									{target}
 									{hreflang}
 									rel={rel?.join(' ')}
