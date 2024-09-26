@@ -20,6 +20,9 @@
 	import { say } from '$lib/utils';
 	import type { SectionSchema } from '$lib/directus/section';
 	import { ScrollArea } from 'bits-ui';
+	import type { HotelAmenity } from '$lib/directus/hotel-amenities';
+	import { getCannonicals } from '$lib/i18n/cannonicals';
+	import { setPageCannonicals } from './context';
 
 	export let locale: string;
 	export let siteSettings: SiteSettingsSchema;
@@ -27,7 +30,8 @@
 	export let layoutSections: SectionSchema[];
 	export let page: PageSchema | undefined = undefined;
 	export let pageSections: SectionSchema[] | undefined = undefined;
-	export let stopover_hotels: HotelSchema | undefined = undefined;
+	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] } | undefined =
+		undefined;
 	export let stopover_restaurants: RestaurantSchema | undefined = undefined;
 	export let stopover_place_to_visit: PlaceSchema | undefined = undefined;
 	export let single_content: TextContentSchema | null | undefined = undefined;
@@ -42,6 +46,14 @@
 			!!single_content);
 
 	const [headerSection, footerSection] = layoutSections;
+
+	let cannonicals = {};
+
+	const item = page || stopover_hotels?.hotel || stopover_restaurants || stopover_place_to_visit;
+
+	if (item) cannonicals = getCannonicals(item);
+
+	setPageCannonicals(cannonicals);
 </script>
 
 <Head

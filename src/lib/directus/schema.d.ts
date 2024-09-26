@@ -1,4 +1,5 @@
 import type { HeaderSchema } from "./header"
+import type { HotelAmenity } from "./hotel-amenities"
 import type { HotelSchema } from "./hotels"
 import type { LinkSchema } from "./links"
 import type { LogoSchema } from "./logos"
@@ -11,6 +12,8 @@ import type { SiteSettingsSchema } from "./site-settings"
 import type { TextContentSchema } from "./text-content"
 
 interface Schema {
+  //Basic
+  hotel_amenities: HotelAmenity
   //General Content
   icons: LogoSchema
   links: LinkSchema

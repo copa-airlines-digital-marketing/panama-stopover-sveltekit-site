@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { getPageCannonicals } from '$lib/components/directus/context';
 	import { buttonVariants } from '$lib/components/ui/foundations/button';
-	import Button from '$lib/components/ui/foundations/button/button.svelte';
 	import { SVG } from '$lib/components/ui/foundations/icon';
 	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
 	import { Linkbar } from '$lib/components/ui/patterns/menu/linkbar';
@@ -13,6 +13,8 @@
 		ModalTitle
 	} from '$lib/components/ui/patterns/modal';
 	import type { NavigationSchema } from '$lib/directus/navigation';
+	import { page } from '$app/stores';
+	import { dissoc } from 'ramda';
 
 	export let navigation: NavigationSchema;
 
@@ -20,6 +22,12 @@
 		icon,
 		translations: { 0: translation }
 	} = navigation;
+
+	const locale = $page.data.locale;
+
+	let cannonicals = getPageCannonicals();
+
+	$: possibleTranslations = dissoc(locale, $cannonicals);
 </script>
 
 <ModalRoot>
@@ -41,19 +49,27 @@
 				<ul class="space-y-4">
 					{#each translation.links as link}
 						{@const { icon, href, text, target, hreflang, rel } = link.links_id}
-						<li class="">
-							<Linkbar {href} {target} {hreflang} rel={rel?.join(' ')} let:children>
-								{@const { Icon, Title } = children}
-								{#if icon}
-									<Icon>
-										<SVG data={icon?.code} class="w-auto" title={text}></SVG>
-									</Icon>
-								{/if}
-								<Title>
-									{text}
-								</Title>
-							</Linkbar>
-						</li>
+						{#if possibleTranslations[hreflang]}
+							<li>
+								<Linkbar
+									href={possibleTranslations[hreflang]}
+									{target}
+									{hreflang}
+									rel={rel?.join(' ')}
+									let:children
+								>
+									{@const { Icon, Title } = children}
+									{#if icon}
+										<Icon>
+											<SVG data={icon?.code} class="w-auto" title={text}></SVG>
+										</Icon>
+									{/if}
+									<Title>
+										{text}
+									</Title>
+								</Linkbar>
+							</li>
+						{/if}
 					{/each}
 				</ul>
 			</nav>
