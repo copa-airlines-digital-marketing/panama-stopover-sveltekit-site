@@ -1,0 +1,1 @@
+export { default as SpokenLanguages } from './spoken-languages.svelte'

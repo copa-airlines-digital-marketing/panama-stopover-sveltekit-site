@@ -1,1 +1,1 @@
-export { default as ItemIncludes } from './includes.svelte'
+export { default as ItemIncludes } from './hotel-includes.svelte'

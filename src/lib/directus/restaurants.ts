@@ -9,7 +9,8 @@ const restaurantTranslationsSchema = z.object({
   description: z.string(),
   url: z.string().nullish(),
   promo_name: z.string().nullish(),
-  promo_description: z.string().nullish()
+  promo_description: z.string().nullish(),
+  path: z.string()
 })
 
 const restaurantSchema = z.object({
