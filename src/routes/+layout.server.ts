@@ -6,6 +6,7 @@ import { head, includes, pipe, split } from 'ramda'
 import { isPageSettings } from '$lib/directus/page.js'
 import { say } from '$lib/utils.js'
 import { isSectionSchema } from '$lib/directus/section.js'
+import { PREVIEW_SECRET } from '$env/static/private'
 
 const ifLocalHostDev = (value: string) => includes(value, ['localhost', '127.0.0.1', '192']) ? 'dev' : value
 
@@ -21,6 +22,8 @@ const getEnvironment = pipe(
 export async function load({ fetch, locals: { locale }, url: { hostname, searchParams } }) {
 
   const preview = searchParams.get('preview')
+
+  const previewEnv = preview === PREVIEW_SECRET ? 'preview' : null
 
   const layoutDataRequest = await Promise.all([
     fetch(`/api/site-settings?locale=${locale}${preview ? '&preview='+preview : ''}`),
@@ -39,7 +42,7 @@ export async function load({ fetch, locals: { locale }, url: { hostname, searchP
   }
   
 	return {
-    environment: getEnvironment(hostname),
+    environment: previewEnv || getEnvironment(hostname),
     locale,
 		siteSettings,
     layout,
