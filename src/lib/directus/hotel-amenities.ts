@@ -40,7 +40,7 @@ const getHotelAmenities = async (filters: DirectusRequestBody) => {
     return null
   }
 
-  const request = await getItems('hotel_amenities', hotelAmenityQuery(locale), null)
+  const request = await getItems('hotel_amenities', hotelAmenityQuery(locale), filters.preview)
 
   if (isHotelAmenitiesArray(request))
     return request
