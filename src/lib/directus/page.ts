@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getItems, getTranslationFilter, type DirectusRequestBody } from "./utils";
+import { getItems, type DirectusRequestBody } from "./utils";
 import { isEmpty, isNil } from "ramda";
 import { say } from "$lib/utils";
 
@@ -10,19 +10,60 @@ const pageTranslationsSchema = z.object({
   meta_description: z.string()
 })
 
-const pageSchema = z.object({
+type NullishID = null | number | string | undefined
+
+type PageTranslationSchema = z.infer<typeof pageTranslationsSchema>
+
+type PathSchema = {
+  translations: {
+    languages_code: string
+    path: string
+  }[],
+  parent?: PathSchema | null
+}
+
+type PageSchema = {
+  id: number,
+  share_image: string
+  translations: PageTranslationSchema[]
+  index: boolean
+  head_code: string | null
+  start_of_body_code: string | null
+  end_of_body_code: string | null
+  parent?: PathSchema | null
+}
+
+const pathSchema: z.ZodType<PathSchema> = z.lazy(() => z.object({
+  translations: z.object({ path: z.string(), languages_code: z.string() }).array(),
+  parent: pathSchema.optional().nullable()
+}))
+
+const pageSchema: z.ZodType<PageSchema> = z.lazy(() => z.object({
   id: z.number(),
   share_image: z.string(),
   translations: pageTranslationsSchema.array(),
   index: z.boolean(),
-  head_code: z.string().nullish(),
-  start_of_body_code: z.string().nullish(),
-  end_of_body_code: z.string().nullish(),
-})
+  head_code: z.string().nullable(),
+  start_of_body_code: z.string().nullable(),
+  end_of_body_code: z.string().nullable(),
+  parent: pathSchema.optional().nullable()
+}))
 
-type PageSchema = z.infer<typeof pageSchema>
 
-type NullishID = null | number | string | undefined
+const translatedPathField = { 'translations': ['path', 'languages_code']}
+
+const pagePathFields = [
+  translatedPathField,
+  {'parent': [
+    translatedPathField,
+    {'parent': [
+      translatedPathField,
+      {'parent': [
+        translatedPathField
+      ]}
+    ]}
+  ]}
+]
 
 const getTranslatedPageFilterRecursive = (locale: NullishID, path: NullishID, totalParents: number ) => {
   if (totalParents < 1) 
@@ -103,6 +144,15 @@ const getPage = async (filters: DirectusRequestBody) => {
         'path',
         'title_tag',
         'meta_description'
+      ]},
+      {'parent': [
+        translatedPathField,
+        {'parent': [
+          translatedPathField,
+          {'parent': [
+            translatedPathField
+          ]}
+        ]}
       ]}
     ],
     filter: getPageFilter(filters)
@@ -135,10 +185,13 @@ const getPage = async (filters: DirectusRequestBody) => {
 
 export {
   pageSchema,
+  pathSchema,
+  pagePathFields,
   getPage,
   isPageSettings
 }
 
 export type {
-  PageSchema
+  PageSchema,
+  PathSchema
 }

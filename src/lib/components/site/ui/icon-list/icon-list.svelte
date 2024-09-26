@@ -8,7 +8,7 @@
 </script>
 
 <ul
-	class={cn('grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] justify-center', className)}
+	class={cn('grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] justify-center gap-2', className)}
 	{...$$restProps}
 >
 	<slot {Item} />

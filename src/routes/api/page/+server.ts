@@ -41,6 +41,6 @@ export async function GET({ url: { searchParams } }) {
 
     sections = sectionsRequest
   }
-  
+
   return json( {[key]: data, sections}, { status: 200 } )
 }

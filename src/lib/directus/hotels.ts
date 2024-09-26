@@ -2,6 +2,10 @@ import { z } from "zod";
 import { filesSchema, getItems, locationSchema, type DirectusRequestBody } from "./utils";
 import { say } from "$lib/utils";
 import { isNil } from "ramda";
+import type { QueryItem } from "@directus/sdk";
+import type { Schema } from "./schema";
+import { getHotelAmenities } from "./hotel-amenities";
+import { pagePathFields, pathSchema } from "./page";
 
 const hotelTranslationsSchema = z.object({
   lang_code: z.string(),
@@ -15,8 +19,6 @@ const hotelTranslationsSchema = z.object({
 
 const hotelSchema = z.object({
   main_image: z.string(),
-  gallery: filesSchema.array(),
-  translations: hotelTranslationsSchema.array(),
   promo_code: z.string().nullish(),
   promo_discount_amount: z.string().nullish(),
   promo_discount_percent: z.number().nullish(),
@@ -25,50 +27,67 @@ const hotelSchema = z.object({
   supported_languages: z.string().array(),
   includes: z.string().array(),
   stars: z.number(),
-  location: locationSchema
+  location: locationSchema,
+  gallery: filesSchema.array(),
+  translations: hotelTranslationsSchema.array(),
+  parent_page: pathSchema.optional()
 })
 
 type HotelSchema = z.infer<typeof hotelSchema>
 
 const isHotelSchema = (value: unknown): value is HotelSchema => hotelSchema.safeParse(value).success
 
+const getHotelQuery = (article: string | number, locale: string | number): QueryItem<Schema, 'stopover_hotels'> => ({
+  fields: [
+    'main_image',
+    'promo_code',
+    'promo_discount_amount',
+    'promo_discount_percent',
+    'phone_number',
+    'booking_email',
+    'supported_languages',
+    'includes',
+    'stars',
+    'location',
+    { 'gallery': ['directus_files_id', 'sort'] },
+    { 'translations': [
+      'lang_code',
+      'name',
+      'description',
+      'url',
+      'promo_name',
+      'promo_description',
+      'path'
+    ]},
+    { 'parent_page': pagePathFields}
+  ],
+  filter: {
+    _and: [
+      { translations: { lang_code: { _eq: locale } } },
+      { translations: { path: { _eq: article} } }
+    ]
+  },
+})
+
 const getHotel = async (filters: DirectusRequestBody) => {
-  const { article } = filters
+  const { article, locale } = filters
 
   if (!article || typeof article !== 'string'){
-    say('Article is required to and a string get the hotel', article)
+    say('Article is required to and a string get the hotel', filters)
     return null
   }
 
-  const directusHotelRequest = await getItems('stopover_hotels', {
-    fields: [
-      'main_image',
-      'promo_code',
-      'promo_discount_amount',
-      'promo_discount_percent',
-      'phone_number',
-      'booking_email',
-      'supported_languages',
-      'includes',
-      'stars',
-      'location',
-      { 'gallery': ['directus_files_id', 'sort'] },
-      { 'translations': [
-        'lang_code',
-        'name',
-        'description',
-        'url',
-        'promo_name',
-        'promo_description'
-      ]}
-    ],
-    filter: {
-      _and: [
-        { translations: { lang_code: { _eq: filters.locale } } },
-        { translations: { path: { _eq: article} } }
-      ]
-    },
-  }, filters.preview)
+  if (!locale){
+    say('Locale is required', filters)
+    return null
+  }
+
+  const requests = await Promise.all([
+    getItems('stopover_hotels', getHotelQuery(article, locale), filters.preview),
+    getHotelAmenities(filters)
+  ])
+  
+  const [directusHotelRequest, amenities ] = requests
 
   if(isNil(directusHotelRequest))
     return null
@@ -85,7 +104,7 @@ const getHotel = async (filters: DirectusRequestBody) => {
     return null
   }
 
-  return hotel
+  return {hotel, amenities}
 }
 
 export {

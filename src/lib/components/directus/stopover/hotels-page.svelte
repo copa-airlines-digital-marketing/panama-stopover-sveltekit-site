@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { HotelSchema } from '$lib/directus/hotels';
-	import { getTypography } from '$lib/components/ui/foundations/typography';
+	import { getTypography, getTypographyVariant } from '$lib/components/ui/foundations/typography';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
@@ -8,10 +8,13 @@
 	import { Map } from '$lib/components/site/items/maps';
 	import { HotelCTAs } from '$lib/components/site/items/iconned-cta';
 	import { SVG } from '$lib/components/ui/foundations/icon';
+	import { ItemIncludes } from '$lib/components/site/items/includes';
+	import type { HotelAmenity } from '$lib/directus/hotel-amenities';
+	import { SpokenLanguages } from '$lib/components/site/items/languages';
 
-	export let stopover_hotels: HotelSchema;
+	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] };
 
-	const { supported_languages, includes, stars, translations } = stopover_hotels;
+	const { supported_languages, stars, translations } = stopover_hotels.hotel;
 
 	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
 
@@ -19,11 +22,13 @@
 		0: { description, promo_name, promo_description }
 	} = currrentTranslation;
 
-	const item = stopover_hotels;
+	const item = stopover_hotels.hotel;
 
 	const labels = $page.data.siteSettings.translations?.[0]?.labels;
 
 	const starsLabel = labels?.filter((label) => label.name === 'hotel-stars')[0];
+
+	const hotelIncludesLabel = labels?.filter((label) => label.name === 'hotel-includes')[0];
 
 	const icons = $page.data.siteSettings.ui_icons?.map((icon) => icon.icons_id);
 
@@ -51,6 +56,17 @@
 		{/if}
 		<MainCallToAction {item} class="mt-petit"></MainCallToAction>
 	</div>
+	<div class="space-y-4">
+		<h2 class={getTypographyVariant('h2')}>
+			{#if hotelIncludesLabel}
+				{hotelIncludesLabel.value}
+			{:else}
+				{'Plase include a hotel-includes label to the site'}
+			{/if}
+		</h2>
+		<ItemIncludes {item} amenites={stopover_hotels.amenities}></ItemIncludes>
+	</div>
+	<SpokenLanguages {item}></SpokenLanguages>
 	<Map {item}></Map>
 	<HotelCTAs {item}></HotelCTAs>
 </div>
