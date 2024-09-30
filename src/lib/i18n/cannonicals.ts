@@ -6,10 +6,28 @@ import { curry, filter, isNotNil, map, mergeWith, replace } from "ramda";
 
 type DirectusItem = PageSchema | HotelSchema | RestaurantSchema | PlaceSchema
 
-
 const concatWithSlash = curry((a: string, b: string) => `${a}/${b}`)
 
-const isValidTranslation = (value: string) => value.includes('/') && !value.includes('null') && !value.includes('underline')
+const isValidTranslation = (value: string) => value.includes('/') && !value.includes('null') && !value.includes('undefined')
+
+const getPageNameRecursive = (item: PathSchema) =>  {
+  let parentPath: Record<string, string> = {}
+  if(isNotNil(item.parent))
+    parentPath = getPageNameRecursive(item.parent)
+
+  const translatedPath = item.translations.reduce((a,c) => ({ ...a, [c.languages_code]: c.title_tag }), <Record<string,string>>{})
+
+  return mergeWith(concatWithSlash, parentPath, translatedPath)
+}
+
+
+const getBreadcrumNames = (item: DirectusItem) => {
+  const currentName = item.translations.reduce((a, c) => ({...a, [c.languages_code || c.lang_code]: c.name || c.title_tag }), {})
+
+  const parentNames = getPageNameRecursive(item.parent_page || item.parent)
+
+  return filter(isValidTranslation,mergeWith(concatWithSlash, parentNames, currentName))
+}
 
 const getPathRecursive = (item: PathSchema ) => {
   let parentPath: Record<string, string> = {}
@@ -32,5 +50,6 @@ const getCannonicals = (item: DirectusItem ) => {
 }
 
 export {
-  getCannonicals
+  getCannonicals,
+  getBreadcrumNames
 }
