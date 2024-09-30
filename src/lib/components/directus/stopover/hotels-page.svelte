@@ -11,10 +11,12 @@
 	import { ItemIncludes } from '$lib/components/site/items/includes';
 	import type { HotelAmenity } from '$lib/directus/hotel-amenities';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
+	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
+	import { getDirectusImage } from './utils';
 
 	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] };
 
-	const { supported_languages, stars, translations } = stopover_hotels.hotel;
+	const { main_image, stars, translations } = stopover_hotels.hotel;
 
 	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
 
@@ -35,9 +37,20 @@
 	const starIcon = icons?.filter((icon) => icon.name === 'star')[0];
 </script>
 
+<svelte:head>
+	<title>{currrentTranslation[0].name}</title>
+	<meta name="description" content={currrentTranslation[0].description} />
+	<meta property="og:title" content={currrentTranslation[0].name} />
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content={$page.url.href} />
+	<meta property="og:image" content={getDirectusImage(main_image)} />
+	<meta name="twitter:card" content="summary_large_image" />
+</svelte:head>
+
 <Hero {item} />
 <div class="container mx-auto my-8 space-y-huge">
 	<div>
+		<Breadcrum {item} />
 		<p class={getTypography('body', 'body', 'flex items-center text-grey-600')}>
 			{#if starIcon}
 				<SVG data={starIcon?.code} class="size-8 fill-current"></SVG>
