@@ -4,7 +4,9 @@ import { NavigationHome } from '$lib/components/site/navigation/home'
 import { LegalNavigation } from '$lib/components/site/navigation/legal'
 import { SocialNavigation } from '$lib/components/site/navigation/social'
 import { Copyright } from '$lib/components/site/text-content/copyright'
+import { Hero as HeroA } from '$lib/components/site/text-content/hero-a'
 import { isKeyOfObject } from '$lib/utils'
+import { BaseTextContent } from '$lib/components/site/text-content/base'
 
 const componentNameToComponentMap = (name: string | null) => {
   if(!name) 
@@ -31,11 +33,12 @@ const componentNameToComponentMap = (name: string | null) => {
 const textContentToComponentMap = ( name: string | null ) => {
   
   const map = {
-    'copyrights': Copyright
+    'copyrights': Copyright,
+    'hero-a': HeroA
   }
 
   if (!name || !isKeyOfObject(name, map))
-    return null
+    return BaseTextContent
 
   return map[name]
 }
