@@ -85,7 +85,7 @@
 					{#if isNotNil(single_content)}
 						<SingleContentPage {layout} {single_content} {locale} />
 					{:else if isNotNil(page)}
-						<Page {siteSettings} {layout} {page} {pageSections} />
+						<Page pageItem={page} {pageSections} {layout} />
 					{:else if isNotNil(stopover_hotels)}
 						<HotelPage {stopover_hotels} />
 					{:else if isNotNil(stopover_restaurants)}
