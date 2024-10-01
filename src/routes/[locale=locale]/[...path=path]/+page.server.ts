@@ -47,18 +47,20 @@ export async function load(event) {
 
   const pageRequest = await fetch(`/api/page${ queryParams.size > 1 ? '?' + queryParams.toString() : '' }`)
   const parentData = await parent()
-  const page = await pageRequest.json()
+  const pageData = await pageRequest.json()
+
+  const { sections: pageSections } = pageData
 
   const finalData: DataTypeMap = {
     page: undefined,
-    pageSections: undefined,
     stopover_hotels: undefined,
     stopover_restaurants: undefined,
     stopover_place_to_visit: undefined,
-    ...page
+    ...pageData,
+    pageSections
   }
 
-  if(isNotFoundSchema(page)) {
+  if(isNotFoundSchema(pageData)) {
     say('Page requested not found', route)
     return error(404)
   }
