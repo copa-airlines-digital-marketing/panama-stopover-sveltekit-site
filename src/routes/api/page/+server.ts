@@ -34,13 +34,13 @@ export async function GET({ url: { searchParams } }) {
 
   if(isPageSettings(data)) {
     const sectionsRequest = await getData('sections', 60*60*2, { locale, storefront, page: data.id, preview })
-
+    
     if(!isSectionSchema(sectionsRequest)) {
       return error(404)
     }
-
+    
     sections = sectionsRequest
   }
-
+  
   return json( {[key]: data, sections}, { status: 200 } )
 }
