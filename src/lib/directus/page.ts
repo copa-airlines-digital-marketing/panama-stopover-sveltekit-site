@@ -18,6 +18,7 @@ type PathSchema = {
   translations: {
     languages_code: string
     path: string
+    title_tag: string
   }[],
   parent?: PathSchema | null
 }
@@ -34,7 +35,7 @@ type PageSchema = {
 }
 
 const pathSchema: z.ZodType<PathSchema> = z.lazy(() => z.object({
-  translations: z.object({ path: z.string(), languages_code: z.string() }).array(),
+  translations: z.object({ path: z.string(), languages_code: z.string(), title_tag: z.string() }).array(),
   parent: pathSchema.optional().nullable()
 }))
 
@@ -50,7 +51,7 @@ const pageSchema: z.ZodType<PageSchema> = z.lazy(() => z.object({
 }))
 
 
-const translatedPathField = { 'translations': ['path', 'languages_code']}
+const translatedPathField = { 'translations': ['path', 'languages_code', 'title_tag']}
 
 const pagePathFields = [
   translatedPathField,

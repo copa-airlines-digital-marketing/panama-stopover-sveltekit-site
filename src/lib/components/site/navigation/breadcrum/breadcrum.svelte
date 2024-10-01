@@ -1,0 +1,56 @@
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { getPageCannonicals } from '$lib/components/directus/context';
+	import { Button } from '$lib/components/ui/foundations/button';
+	import { KeyBoardArrowRight } from '$lib/components/ui/foundations/icon';
+	import { Breadcrum } from '$lib/components/ui/master/breadcrum';
+	import type { HotelSchema } from '$lib/directus/hotels';
+	import type { PageSchema } from '$lib/directus/page';
+	import type { PlaceSchema } from '$lib/directus/place-to-visit';
+	import type { RestaurantSchema } from '$lib/directus/restaurants';
+	import { getBreadcrumNames } from '$lib/i18n/cannonicals';
+	import { isNotEmpty, mapAccum } from 'ramda';
+
+	export let item: PageSchema | HotelSchema | RestaurantSchema | PlaceSchema;
+
+	let locale = $page.data.locale;
+
+	let cannonicals = getPageCannonicals();
+
+	const appender = (a: string, b: string) => [`${a}/${b}`, `${a}/${b}`];
+
+	$: [, breadcrumLinks] = mapAccum(
+		appender,
+		$page.url.host,
+		$cannonicals[locale].split('/').filter(isNotEmpty)
+	);
+
+	const breadcrumNames = getBreadcrumNames(item)[locale].split('/').slice(1);
+</script>
+
+{#if Array.isArray(breadcrumLinks) && isNotEmpty(breadcrumLinks) && Array.isArray(breadcrumNames) && isNotEmpty(breadcrumNames)}
+	<Breadcrum let:List class="mb-6">
+		<List let:Item>
+			{#each breadcrumLinks as bclink, i}
+				{#if i > 0}
+					<Item let:Separator>
+						<Separator>
+							<KeyBoardArrowRight class="size-4 fill-grey-400 lg:size-6"></KeyBoardArrowRight>
+						</Separator>
+					</Item>
+				{/if}
+				<Item let:Page>
+					{#if i === breadcrumLinks.length - 1}
+						<Page class="my-0">
+							{breadcrumNames[i]}
+						</Page>
+					{:else}
+						<Button href={bclink} size="link" variant="link">
+							{breadcrumNames[i]}
+						</Button>
+					{/if}
+				</Item>
+			{/each}
+		</List>
+	</Breadcrum>
+{/if}
