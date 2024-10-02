@@ -7,15 +7,18 @@
 	export let item: TextContentSchema;
 
 	const {
+		image,
 		translations: {
 			0: { media, title, description, call_to_actions }
 		}
 	} = item;
+
+	const mainImage = image || media;
 </script>
 
-{#if media}
+{#if mainImage}
 	<picture>
-		<img src="{getDirectusImage(media)}&key=4-1x600" alt="" class="mb-6 h-auto w-full" />
+		<img src="{getDirectusImage(mainImage)}&key=4-1x600" alt="" class="mb-6 h-auto w-full" />
 	</picture>
 {/if}
 {#if title}

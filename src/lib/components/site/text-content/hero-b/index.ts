@@ -1,0 +1,1 @@
+export { default as HeroB } from './hero-b.svelte'

@@ -15,7 +15,6 @@
 		background_color,
 		vertical_spacing,
 		horizontal_behaviour,
-		component,
 		content_spacing,
 		content_horizontal_alignment,
 		content_horizontal_distribution,
