@@ -9,9 +9,11 @@
 	import type { PlaceSchema } from '$lib/directus/place-to-visit';
 	import type { RestaurantSchema } from '$lib/directus/restaurants';
 	import { getBreadcrumNames } from '$lib/i18n/cannonicals';
+	import { cn } from '$lib/utils';
 	import { isNotEmpty, mapAccum } from 'ramda';
 
 	export let item: PageSchema | HotelSchema | RestaurantSchema | PlaceSchema;
+	export let variant: 'primary' | 'invert' = 'primary';
 
 	let locale = $page.data.locale;
 
@@ -28,24 +30,32 @@
 	const breadcrumNames = getBreadcrumNames(item)[locale].split('/').slice(1);
 </script>
 
-{#if Array.isArray(breadcrumLinks) && isNotEmpty(breadcrumLinks) && Array.isArray(breadcrumNames) && isNotEmpty(breadcrumNames)}
+{#if Array.isArray(breadcrumLinks) && isNotEmpty(breadcrumLinks) && Array.isArray(breadcrumNames) && isNotEmpty(breadcrumNames) && breadcrumLinks.length > 1}
 	<Breadcrum let:List class="mb-6">
 		<List let:Item>
 			{#each breadcrumLinks as bclink, i}
 				{#if i > 0}
 					<Item let:Separator>
 						<Separator>
-							<KeyBoardArrowRight class="size-4 fill-grey-400 lg:size-6"></KeyBoardArrowRight>
+							<KeyBoardArrowRight
+								class={cn('size-4 fill-grey-400 lg:size-6', {
+									'fill-green-100': variant === 'invert'
+								})}
+							/>
 						</Separator>
 					</Item>
 				{/if}
 				<Item let:Page>
 					{#if i === breadcrumLinks.length - 1}
-						<Page class="my-0">
+						<Page class={cn('my-0', { 'text-grey-50': variant === 'invert' })}>
 							{breadcrumNames[i]}
 						</Page>
 					{:else}
-						<Button href={bclink} size="link" variant="link">
+						<Button
+							href={bclink}
+							size="link"
+							variant={variant === 'primary' ? 'link' : 'link-invert'}
+						>
 							{breadcrumNames[i]}
 						</Button>
 					{/if}

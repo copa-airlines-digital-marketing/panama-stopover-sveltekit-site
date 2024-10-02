@@ -5,6 +5,7 @@ import { LegalNavigation } from '$lib/components/site/navigation/legal'
 import { SocialNavigation } from '$lib/components/site/navigation/social'
 import { Copyright } from '$lib/components/site/text-content/copyright'
 import { Hero as HeroA } from '$lib/components/site/text-content/hero-a'
+import { HeroB } from '$lib/components/site/text-content/hero-b'
 import { isKeyOfObject } from '$lib/utils'
 import { BaseTextContent } from '$lib/components/site/text-content/base'
 
@@ -34,7 +35,8 @@ const textContentToComponentMap = ( name: string | null ) => {
   
   const map = {
     'copyrights': Copyright,
-    'hero-a': HeroA
+    'hero-a': HeroA,
+    'hero-b': HeroB
   }
 
   if (!name || !isKeyOfObject(name, map))

@@ -21,6 +21,7 @@ const buttonVariants = cmTailwindVariants({
       'outline-invert': 'text-common-white border-common-white',
       'transparent-primary-main': 'text-primary border-transparent hover:bg-backgound-lightblue active:bg-backgound-lightblue focus:bg-backgound-lightblue active:outline-primary-faded focus:outline-primary-faded',
       'link': 'text-primary hover:text-primary-light focus:text-primary-light active:text-primary-light',
+      'link-invert': 'text-grey-50 hover:text-grey-50 focus:text-grey-50 active:text-grey-50'
 		},
 	},
 	defaultVariants: {
