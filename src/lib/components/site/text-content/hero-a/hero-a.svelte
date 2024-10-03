@@ -33,7 +33,7 @@
 		{/if}
 	</div>
 	{#if icon}
-		<SVG data={icon.code} class="col-start-2 row-start-2 size-28 fill-black"></SVG>
+		<SVG data={icon.code} class="col-start-2 row-start-2 size-28" />
 	{/if}
 	<div
 		class="col-span-1 col-start-2 row-span-2 row-start-3 my-8 space-y-5 rounded-2xl bg-primary p-4 shadow-lg"

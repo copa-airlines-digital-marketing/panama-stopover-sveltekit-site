@@ -37,7 +37,7 @@ type HotelSchema = z.infer<typeof hotelSchema>
 
 const isHotelSchema = (value: unknown): value is HotelSchema => hotelSchema.safeParse(value).success
 
-const getHotelQuery = (article: string | number, locale: string | number): QueryItem<Schema, 'stopover_hotels'> => ({
+const getHotelQuery = ({locale, category, subCategory, article}: DirectusRequestBody): QueryItem<Schema, 'stopover_hotels'> => ({
   fields: [
     'main_image',
     'promo_code',
@@ -64,7 +64,13 @@ const getHotelQuery = (article: string | number, locale: string | number): Query
   filter: {
     _and: [
       { translations: { lang_code: { _eq: locale } } },
-      { translations: { path: { _eq: article} } }
+      { translations: { path: { _eq: article} } },
+      { parent_page: { translations: { languages_code: { _eq: locale } } } },
+      { parent_page: { translations: { path: { _eq: subCategory } } } },
+      { parent_page: { parent: { translations: { languages_code: { _eq: locale } } } } },
+      { parent_page: { parent: { translations: { path: { _eq: category } } } } },
+      { parent_page: { parent: { parent: {translations: { languages_code: { _eq: locale } } } } } },
+      { parent_page: { parent: { parent: {translations: { path: { _eq: locale } } } } } },
     ]
   },
 })
@@ -83,7 +89,7 @@ const getHotel = async (filters: DirectusRequestBody) => {
   }
 
   const requests = await Promise.all([
-    getItems('stopover_hotels', getHotelQuery(article, locale), filters.preview),
+    getItems('stopover_hotels', getHotelQuery(filters), filters.preview),
     getHotelAmenities(filters)
   ])
   
