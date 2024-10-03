@@ -7,6 +7,7 @@
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { SVG } from '$lib/components/ui/foundations/icon';
 	import { Button } from '$lib/components/ui/foundations/button';
+	import { nth } from 'ramda';
 
 	export let item: TextContentSchema;
 
@@ -20,6 +21,12 @@
 	const pageSettings = $page.data.page;
 
 	const mainImage = media || image;
+
+	const classToChild = (value: string, selector: string) =>
+		value
+			.split(' ')
+			.map((v) => selector + v)
+			.join(' ');
 </script>
 
 <div class="container-grid auto-rows-auto">
@@ -49,7 +56,13 @@
 		<SVG data={icon.code} class="col-start-2 row-span-2 row-start-4 size-28 fill-black py-2"></SVG>
 	{/if}
 	{#if description}
-		<div class={getTypography('body', 'body', 'col-start-2 row-start-6 mb-spacious mt-6')}>
+		<div
+			class={getTypography(
+				'body',
+				'body',
+				`col-start-2 row-start-6 mb-spacious mt-6 [&_a]:text-primary-light [&_a]:hover:underline [&_h2]:mt-8 [&_h2]:text-u2 [&_h2]:font-bold [&_h2]:text-primary-dark [&_h3]:mt-6 [&_h3]:text-u1 [&_h3]:font-bold [&_h3]:text-grey-700 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-3`
+			)}
+		>
 			{@html description}
 		</div>
 	{/if}
