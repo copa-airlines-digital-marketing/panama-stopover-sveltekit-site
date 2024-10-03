@@ -41,7 +41,7 @@ const pathSchema: z.ZodType<PathSchema> = z.lazy(() => z.object({
 
 const pageSchema: z.ZodType<PageSchema> = z.lazy(() => z.object({
   id: z.number(),
-  share_image: z.string(),
+  share_image: z.string().nullable(),
   translations: pageTranslationsSchema.array(),
   index: z.boolean(),
   head_code: z.string().nullable(),
