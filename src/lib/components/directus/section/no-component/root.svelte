@@ -37,7 +37,8 @@
 	this={landmarkToTag(landmark)}
 	id={section_id || undefined}
 	class={cn(containerVariant({ horizontal_behaviour }))}
-	style="background-color:{background_color || 'transparent'};"
+	style="--section-color:{background_color || 'transparent'};background-color:{background_color ||
+		'transparent'};"
 >
 	{#if isNotNil(section_content)}
 		<div
