@@ -43,7 +43,7 @@
 	<h1 class={getTypographyVariant('display-big', 'col-start-2 row-start-3 text-grey-50')}>
 		{title}
 	</h1>
-	<div class="col-start-2 row-start-4">
-		<TextContentCallToActions {call_to_actions} />
+	<div class="col-start-2 row-start-4 mb-4 self-end *:grow-0">
+		<TextContentCallToActions {call_to_actions} stretch={false} />
 	</div>
 </div>
