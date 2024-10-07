@@ -8,6 +8,7 @@ import { Hero as HeroA } from '$lib/components/site/text-content/hero-a'
 import { HeroB } from '$lib/components/site/text-content/hero-b'
 import { isKeyOfObject } from '$lib/utils'
 import { BaseTextContent } from '$lib/components/site/text-content/base'
+import { BottomContent } from '$lib/components/site/text-content/bottom-content'
 
 const componentNameToComponentMap = (name: string | null) => {
   if(!name) 
@@ -36,7 +37,8 @@ const textContentToComponentMap = ( name: string | null ) => {
   const map = {
     'copyrights': Copyright,
     'hero-a': HeroA,
-    'hero-b': HeroB
+    'hero-b': HeroB,
+    'bottom-content': BottomContent
   }
 
   if (!name || !isKeyOfObject(name, map))
