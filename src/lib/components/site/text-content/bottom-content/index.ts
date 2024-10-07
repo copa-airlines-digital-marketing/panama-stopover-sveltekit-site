@@ -1,0 +1,1 @@
+export { default as BottomContent } from './bottom-content.svelte'
