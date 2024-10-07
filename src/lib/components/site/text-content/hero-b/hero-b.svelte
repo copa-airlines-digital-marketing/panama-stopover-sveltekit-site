@@ -7,7 +7,6 @@
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { SVG } from '$lib/components/ui/foundations/icon';
 	import { Button } from '$lib/components/ui/foundations/button';
-	import { nth } from 'ramda';
 
 	export let item: TextContentSchema;
 
