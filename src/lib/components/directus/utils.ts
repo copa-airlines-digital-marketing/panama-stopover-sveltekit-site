@@ -4,11 +4,13 @@ import { isNavigationSchema, type NavigationSchema } from "$lib/directus/navigat
 import type { SectionContentSchema, SectionSchema } from "$lib/directus/section";
 import { isTextContentSchema, type TextContentSchema } from "$lib/directus/text-content";
 import { Header } from "./blocks/header";
+import { ContentGroup } from "./general-components/content-group";
 import Logo from "./general-components/logo.svelte";
 import Navigation from "./general-components/navigation.svelte";
 import TextContent from "./general-components/text-content.svelte";
 import { FooterPrimary } from "./section/footer-primary";
 import { NoComponentSection } from "./section/no-component";
+import { SectionAsTab } from "./section/tabs";
 
 type DirectusCollectionItems = SectionContentSchema['collection']
 
@@ -58,12 +60,19 @@ const collectionToComponent = (collection: SectionContentSchema['collection']) =
   if (collection === 'header')
     return Header
 
+  if (collection === 'content_group')
+    return ContentGroup
+
   return null
 }
 
 const sectionToComponentMap = (component: SectionSchema['component']) => {
+
   if(component === 'footer-primary')
     return FooterPrimary
+
+  if(component === 'tabs')
+    return SectionAsTab
 
   return NoComponentSection
 

@@ -31,36 +31,39 @@
 </script>
 
 {#if Array.isArray(breadcrumLinks) && isNotEmpty(breadcrumLinks) && Array.isArray(breadcrumNames) && isNotEmpty(breadcrumNames) && breadcrumLinks.length > 1}
-	<Breadcrum let:List class="mb-6">
-		<List let:Item>
-			{#each breadcrumLinks as bclink, i}
-				{#if i > 0}
-					<Item let:Separator>
-						<Separator>
-							<KeyBoardArrowRight
-								class={cn('size-4 fill-grey-400 lg:size-6', {
-									'fill-green-100': variant === 'invert'
-								})}
-							/>
-						</Separator>
-					</Item>
-				{/if}
-				<Item let:Page>
-					{#if i === breadcrumLinks.length - 1}
-						<Page class={cn('my-0', { 'text-grey-50': variant === 'invert' })}>
-							{breadcrumNames[i]}
-						</Page>
-					{:else}
-						<Button
-							href={bclink}
-							size="link"
-							variant={variant === 'primary' ? 'link' : 'link-invert'}
-						>
-							{breadcrumNames[i]}
-						</Button>
+	<div class="container mx-auto mt-8">
+		<Breadcrum let:List class="mb-6">
+			fren
+			<List let:Item>
+				{#each breadcrumLinks as bclink, i}
+					{#if i > 0}
+						<Item let:Separator>
+							<Separator>
+								<KeyBoardArrowRight
+									class={cn('size-4 fill-grey-400 lg:size-6', {
+										'fill-green-100': variant === 'invert'
+									})}
+								/>
+							</Separator>
+						</Item>
 					{/if}
-				</Item>
-			{/each}
-		</List>
-	</Breadcrum>
+					<Item let:Page>
+						{#if i === breadcrumLinks.length - 1}
+							<Page class={cn('my-0', { 'text-grey-50': variant === 'invert' })}>
+								{breadcrumNames[i]}
+							</Page>
+						{:else}
+							<Button
+								href={bclink}
+								size="link"
+								variant={variant === 'primary' ? 'link' : 'link-invert'}
+							>
+								{breadcrumNames[i]}
+							</Button>
+						{/if}
+					</Item>
+				{/each}
+			</List>
+		</Breadcrum>
+	</div>
 {/if}

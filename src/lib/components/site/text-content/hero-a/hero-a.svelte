@@ -56,7 +56,5 @@
 	</div>
 </div>
 {#if pageSettings}
-	<div class="container mx-auto mt-8">
-		<Breadcrum item={pageSettings}></Breadcrum>
-	</div>
+	<Breadcrum item={pageSettings}></Breadcrum>
 {/if}

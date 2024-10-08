@@ -6,7 +6,7 @@ const descriptionVariants = cmTailwindVariants({
   variants: {
     theme: {
       light: '[&_h2]:text-primary-dark [&_h3]:text-grey-700 [&_a]:text-primary-light',
-      dark: 'text-grey-200 [&_h2]:text-grey-50 [&_h3]:text-grey-50 [&_a]:text-grey-50'
+      dark: 'text-grey-100 [&_h2]:text-grey-50 [&_h3]:text-grey-50 [&_a]:text-grey-50'
     }
   },
   defaultVariants: {

@@ -40,9 +40,18 @@ const pageStorefrontSectionsSchema = z.object({
   sort: z.number()
 })
 
+const sectionComponentNames = z.union([
+  z.literal('accordion'),
+  z.literal('accordion-tabs'),
+  z.literal('footer-primary'),
+  z.literal('header-primary'),
+  z.literal('hero-primary'),
+  z.literal('tabs')
+])
+
 const sectionSchema = z.object({
   id: z.union([z.string(), z.number()]),
-  component: z.union([z.literal('header-primary'), z.literal('hero-primary'), z.literal('footer-primary')]).nullable(),
+  component: sectionComponentNames.nullable(),
   landmark: z.union([z.literal('aside'), z.literal('footer'), z.literal('header'), z.literal('hero'), z.literal('loading'), z.literal('modal'), z.literal('regular'), z.literal('section')]),
   section_id: z.string().nullable(),
   horizontal_behaviour: z.union([z.literal('full'), z.literal('contained'), z.literal('container-grid')]),
@@ -128,9 +137,6 @@ const getSections = async (filters: DirectusRequestBody) => {
   }
 
   const sectionRequest = await getItems('sections', sectionQuery(storefront, page, locale), filters.preview)
-
-  console.log(sectionRequest)
-
   
   if(isSectionSchema(sectionRequest)) {
     return sectionRequest
