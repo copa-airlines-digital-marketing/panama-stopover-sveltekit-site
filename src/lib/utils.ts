@@ -1,6 +1,6 @@
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
-import { cubicOut } from "svelte/easing";
+import { quintOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
 import { extendTailwindMerge } from "tailwind-merge";
 import { default as Preset } from 'cmds-tailwind-styles';
@@ -89,7 +89,7 @@ function flyAndScale(
 				opacity: t,
 			});
 		},
-		easing: cubicOut,
+		easing: quintOut,
 	};
 }
 

@@ -19,10 +19,11 @@ const getEnvironment = pipe(
   ifProdHostProd
 )
 
-export async function load({ fetch, locals: { locale }, url: { hostname, searchParams } }) {
+export async function load({ fetch, locals: { locale }, url: { hostname, searchParams }, request: { headers } }) {
 
   const preview = searchParams.get('preview')
 
+  const isMobile = /mobile|android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(headers.get('user-agent') || '')
   const previewEnv = preview === PREVIEW_SECRET ? 'preview' : null
 
   const layoutDataRequest = await Promise.all([
@@ -47,5 +48,6 @@ export async function load({ fetch, locals: { locale }, url: { hostname, searchP
 		siteSettings,
     layout,
     layoutSections,
+    isMobile
 	};
 }

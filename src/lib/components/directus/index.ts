@@ -9,6 +9,7 @@ import { default as Procesor } from './procesor.svelte'
 import { default as RestaurantPage } from './stopover/restaurant-page.svelte'
 import { default as Section } from './sites/section.svelte'
 import { default as SectionContent } from './sites/section-content.svelte'
+import { default as PlainSectionCotent } from './sites/section-content-plain.svelte'
 import { default as SingleContentPage } from './sites/single-content-page.svelte'
 import { default as StartOfPage } from './sites/start-of-page.svelte'
 import { default as TextContent } from './general-components/text-content.svelte'
@@ -23,6 +24,7 @@ export {
   Navigation,
   Page,
   PlacePage,
+  PlainSectionCotent,
   Procesor,
   RestaurantPage,
   StartOfPage,

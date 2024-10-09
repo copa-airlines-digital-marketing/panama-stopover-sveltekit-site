@@ -10,6 +10,8 @@ import { isKeyOfObject } from '$lib/utils'
 import { BaseTextContent } from '$lib/components/site/text-content/base'
 import { BottomContent } from '$lib/components/site/text-content/bottom-content'
 import { HeroC } from '$lib/components/site/text-content/hero-c'
+import { BasicNavigation } from '$lib/components/site/navigation/basic-navigation'
+import { PillardCard } from '$lib/components/site/text-content/pillar-card'
 
 const componentNameToComponentMap = (name: string | null) => {
   if(!name) 
@@ -30,6 +32,9 @@ const componentNameToComponentMap = (name: string | null) => {
   if(name === 'social-navigation')
     return SocialNavigation
 
+  if(name === 'basic-navigation')
+    return BasicNavigation
+
   return null
 }
 
@@ -40,7 +45,8 @@ const textContentToComponentMap = ( name: string | null ) => {
     'hero-a': HeroA,
     'hero-b': HeroB,
     'hero-c': HeroC,
-    'bottom-content': BottomContent
+    'bottom-content': BottomContent,
+    'pillar-card': PillardCard
   }
 
   if (!name || !isKeyOfObject(name, map))
