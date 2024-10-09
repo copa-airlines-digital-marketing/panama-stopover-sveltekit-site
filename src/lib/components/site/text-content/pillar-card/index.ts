@@ -1,0 +1,1 @@
+export { default as PillardCard } from './pillard-card.svelte'

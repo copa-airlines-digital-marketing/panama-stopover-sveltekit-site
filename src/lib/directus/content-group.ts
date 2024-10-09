@@ -21,6 +21,7 @@ const contentGroupItems = z.union([navigationSchema, textContentSchema, stopover
 
 const contentGroupContentSchema = z.object({
   item: contentGroupItems,
+  component: z.string().nullable(),
   collection: contentGroupCollectionName
 })
 
@@ -36,6 +37,7 @@ const contentGroupQueryFields = [
   {
     'content': [
       'collection',
+      'component',
       {
         'item': {
           'navigation': navigationQuery,
@@ -50,11 +52,17 @@ const contentGroupQueryFields = [
 
 type ContentGroupSchema = z.infer<typeof contentGroupSchema>
 
+type ContentGroupContent = z.infer<typeof contentGroupContentSchema>
+
+type ContentGroupItems = z.infer<typeof contentGroupItems>
+
 export {
   contentGroupSchema,
   contentGroupQueryFields
 }
 
 export type {
-  ContentGroupSchema
+  ContentGroupSchema,
+  ContentGroupContent,
+  ContentGroupItems
 }

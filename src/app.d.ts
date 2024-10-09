@@ -16,6 +16,7 @@ declare global {
     }
 
 		interface PageData {
+      isMobile: boolean,
       environment: string,
       siteSettings: SiteSettingsSchema,
       layout: PageSchema,
