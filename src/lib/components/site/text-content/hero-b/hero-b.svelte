@@ -44,7 +44,7 @@
 		<div class="col-start-2 row-span-2 row-start-4">
 			<picture>
 				<img
-					src="{getDirectusImage(mainImage)}&key=3-4x600"
+					src="{getDirectusImage(mainImage)}&key=4-3x600"
 					alt=""
 					class="h-auto w-full rounded-2xl shadow-lg"
 				/>

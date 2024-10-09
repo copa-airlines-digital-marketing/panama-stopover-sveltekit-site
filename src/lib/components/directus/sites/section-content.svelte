@@ -13,6 +13,7 @@
 		horizontal_alignment,
 		item,
 		vertical_alignment,
+		theme,
 		area
 	} = section_content;
 
@@ -22,7 +23,12 @@
 </script>
 
 {#if collectionComponent}
-	<div class={cn(contentVariant(variant))} style={area ? `grid-area:${area};` : ''}>
+	<div
+		class={cn(contentVariant(variant))}
+		style="--theme:{theme === 'light' ? '#000000' : '#FFFFFF'};--theme-contrast:{theme === 'light'
+			? '#FFFFFF'
+			: '#000000'};{area ? `grid-area:${area};` : ''}"
+	>
 		<svelte:component this={collectionComponent} {item} component={component_name} />
 	</div>
 {:else}

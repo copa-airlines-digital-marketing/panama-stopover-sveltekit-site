@@ -33,7 +33,12 @@
 		{/if}
 	</div>
 	{#if icon}
-		<SVG data={icon.code} class="col-start-2 row-start-2 size-28" />
+		<div
+			class="col-start-2 row-start-2 size-32"
+			style="background-image: radial-gradient(var(--theme-contrast), transparent 75%);"
+		>
+			<SVG data={icon.code} class="w-full" style="fill:var(--theme)" />
+		</div>
 	{/if}
 	<div
 		class="col-span-1 col-start-2 row-span-2 row-start-3 my-8 space-y-5 rounded-2xl bg-primary p-4 shadow-lg"
@@ -56,5 +61,7 @@
 	</div>
 </div>
 {#if pageSettings}
-	<Breadcrum item={pageSettings}></Breadcrum>
+	<div class="container mx-auto">
+		<Breadcrum item={pageSettings}></Breadcrum>
+	</div>
 {/if}
