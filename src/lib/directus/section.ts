@@ -5,10 +5,10 @@ import { logoQuery, logosSchema } from "./logos";
 import { headerQuery, headerSchema } from "./header";
 import { getItems, getTranslationFilter, type DirectusRequestBody } from "./utils";
 import { say } from "$lib/utils";
-import { groupSchemaQueryFields, groupsSchema } from "./groups";
+import { groupsSchema } from "./groups";
 import { contentGroupQueryFields, contentGroupSchema } from "./content-group";
 import { stopoverHotelModuleSchema } from "./stopover_hotel_module";
-import { formQueryFields, formSchema } from "./forms";
+import { formSchema } from "./forms";
 
 const horizontal_alignment = z.union([z.literal('left'), z.literal('center'), z.literal('right')])
 const vertical_alignment = z.union([z.literal('top'), z.literal('center'), z.literal('bottom'), z.literal('baseline'), z.literal('stretch')])
@@ -117,9 +117,25 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
     section_content: {
       "item:Text_Content": getTranslationFilter(locale),
       "item:navigation": getTranslationFilter(locale),
+      "item:form": getTranslationFilter(locale),
+      "item:stopover_hotel_module": {
+        filters: getTranslationFilter(locale)
+      },
       "item:header": {
         navigations: {
           navigation_id: getTranslationFilter(locale)
+        }
+      },
+      "item:content_group": {
+        ...getTranslationFilter(locale),
+        content: {
+          "item:navigation": getTranslationFilter(locale),
+          "item:Text_Content": getTranslationFilter(locale),
+          "item:form": getTranslationFilter(locale),
+          "item:stopover_hotel_module": {
+            filters: getTranslationFilter(locale)
+          },
+          "_sort": ["order"]
         }
       }
     }

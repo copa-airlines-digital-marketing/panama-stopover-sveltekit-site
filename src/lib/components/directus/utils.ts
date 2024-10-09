@@ -5,6 +5,7 @@ import type { SectionContentSchema, SectionSchema } from "$lib/directus/section"
 import { isTextContentSchema, type TextContentSchema } from "$lib/directus/text-content";
 import { Header } from "./blocks/header";
 import { ContentGroup } from "./general-components/content-group";
+import { HotelModule } from "./general-components/hotel-module";
 import Logo from "./general-components/logo.svelte";
 import Navigation from "./general-components/navigation.svelte";
 import TextContent from "./general-components/text-content.svelte";
@@ -62,6 +63,9 @@ const collectionToComponent = (collection: SectionContentSchema['collection']) =
 
   if (collection === 'content_group')
     return ContentGroup
+
+  if (collection === 'stopover_hotel_module')
+    return HotelModule
 
   return null
 }
