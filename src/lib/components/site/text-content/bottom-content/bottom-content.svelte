@@ -17,22 +17,22 @@
 	const mainImage = media || image;
 </script>
 
-<div class="container-grid grid">
-	<div class="col-span-full col-start-1 row-start-1">
-		{#if mainImage}
-			<picture>
-				<img src="{getDirectusImage(mainImage)}&key=3-4x600" alt="" class="h-auto w-full" />
-			</picture>
-		{/if}
-	</div>
+<div class="container-grid grid bg-backgound-paper">
 	<div
-		class="col-start-2 row-start-1 my-8 self-start rounded-2xl p-4"
+		class="col-start-2 row-start-1 my-8 self-start overflow-hidden rounded-2xl"
 		style="background-color:var(--section-color);"
 	>
-		{#if title}
-			<h2 class={getTypographyVariant('h2', 'mb-2 text-grey-50')}>{title}</h2>
+		<div class="px-4 py-6">
+			{#if title}
+				<h2 class={getTypographyVariant('h2', 'mb-2 text-grey-50')}>{title}</h2>
+			{/if}
+			<TextContentDescription {description} theme="dark" />
+			<TextContentCallToActions {call_to_actions} theme="dark" />
+		</div>
+		{#if mainImage}
+			<picture>
+				<img src="{getDirectusImage(mainImage)}&key=2-1x600" alt="" class="h-auto w-full" />
+			</picture>
 		{/if}
-		<TextContentDescription {description} theme="dark" />
-		<TextContentCallToActions {call_to_actions} theme="dark" />
 	</div>
 </div>

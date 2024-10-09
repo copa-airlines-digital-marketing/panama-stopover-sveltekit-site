@@ -1,0 +1,1 @@
+export { default as SectionAsTab } from './tabs.svelte'

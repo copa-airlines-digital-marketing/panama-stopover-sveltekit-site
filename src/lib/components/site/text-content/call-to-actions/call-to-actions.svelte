@@ -3,7 +3,7 @@
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { cn } from '$lib/utils';
 
-	let className: string | null | undefined;
+	let className: string | null | undefined = undefined;
 	export let call_to_actions: TextContentSchema['translations'][0]['call_to_actions'];
 	export let stretch = true;
 	export let theme: 'light' | 'dark' = 'light';

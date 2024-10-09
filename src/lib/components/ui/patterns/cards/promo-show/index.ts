@@ -1,0 +1,5 @@
+export { default as PromoShow } from './promo-show.svelte'
+export { default as Title } from './title.svelte'
+export { default as Image } from './image.svelte'
+export { default as Discount } from './discount.svelte'
+export { default as CallToAction } from './cta.svelte'

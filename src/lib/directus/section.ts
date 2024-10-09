@@ -5,10 +5,10 @@ import { logoQuery, logosSchema } from "./logos";
 import { headerQuery, headerSchema } from "./header";
 import { getItems, getTranslationFilter, type DirectusRequestBody } from "./utils";
 import { say } from "$lib/utils";
-import { groupSchemaQueryFields, groupsSchema } from "./groups";
+import { groupsSchema } from "./groups";
 import { contentGroupQueryFields, contentGroupSchema } from "./content-group";
 import { stopoverHotelModuleSchema } from "./stopover_hotel_module";
-import { formQueryFields, formSchema } from "./forms";
+import { formSchema } from "./forms";
 
 const horizontal_alignment = z.union([z.literal('left'), z.literal('center'), z.literal('right')])
 const vertical_alignment = z.union([z.literal('top'), z.literal('center'), z.literal('bottom'), z.literal('baseline'), z.literal('stretch')])
@@ -40,9 +40,18 @@ const pageStorefrontSectionsSchema = z.object({
   sort: z.number()
 })
 
+const sectionComponentNames = z.union([
+  z.literal('accordion'),
+  z.literal('accordion-tabs'),
+  z.literal('footer-primary'),
+  z.literal('header-primary'),
+  z.literal('hero-primary'),
+  z.literal('tabs')
+])
+
 const sectionSchema = z.object({
   id: z.union([z.string(), z.number()]),
-  component: z.union([z.literal('header-primary'), z.literal('hero-primary'), z.literal('footer-primary')]).nullable(),
+  component: sectionComponentNames.nullable(),
   landmark: z.union([z.literal('aside'), z.literal('footer'), z.literal('header'), z.literal('hero'), z.literal('loading'), z.literal('modal'), z.literal('regular'), z.literal('section')]),
   section_id: z.string().nullable(),
   horizontal_behaviour: z.union([z.literal('full'), z.literal('contained'), z.literal('container-grid')]),
@@ -108,9 +117,25 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
     section_content: {
       "item:Text_Content": getTranslationFilter(locale),
       "item:navigation": getTranslationFilter(locale),
+      "item:form": getTranslationFilter(locale),
+      "item:stopover_hotel_module": {
+        filters: getTranslationFilter(locale)
+      },
       "item:header": {
         navigations: {
           navigation_id: getTranslationFilter(locale)
+        }
+      },
+      "item:content_group": {
+        ...getTranslationFilter(locale),
+        content: {
+          "item:navigation": getTranslationFilter(locale),
+          "item:Text_Content": getTranslationFilter(locale),
+          "item:form": getTranslationFilter(locale),
+          "item:stopover_hotel_module": {
+            filters: getTranslationFilter(locale)
+          },
+          "_sort": ["order"]
         }
       }
     }
@@ -128,9 +153,6 @@ const getSections = async (filters: DirectusRequestBody) => {
   }
 
   const sectionRequest = await getItems('sections', sectionQuery(storefront, page, locale), filters.preview)
-
-  console.log(sectionRequest)
-
   
   if(isSectionSchema(sectionRequest)) {
     return sectionRequest

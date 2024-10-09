@@ -18,12 +18,6 @@
 	const pageSettings = $page.data.page;
 
 	const mainImage = media || image;
-
-	const classToChild = (value: string, selector: string) =>
-		value
-			.split(' ')
-			.map((v) => selector + v)
-			.join(' ');
 </script>
 
 <div class="container-grid grid-rows-[112px_auto_auto_1fr]">
