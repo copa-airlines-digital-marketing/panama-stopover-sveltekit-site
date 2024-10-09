@@ -52,7 +52,12 @@
 		</div>
 	{/if}
 	{#if icon}
-		<SVG data={icon.code} class="col-start-2 row-span-2 row-start-4 size-28 fill-black py-2"></SVG>
+		<div
+			class="col-start-2 row-span-2 row-start-4 my-2 ml-2 size-32"
+			style="background-image: radial-gradient(var(--theme-contrast), transparent 75%);"
+		>
+			<SVG data={icon.code} style="fill:var(--theme)"></SVG>
+		</div>
 	{/if}
 	{#if description}
 		<div
