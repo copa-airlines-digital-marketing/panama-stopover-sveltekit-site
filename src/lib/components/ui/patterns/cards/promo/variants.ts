@@ -6,7 +6,11 @@ const promoCardVariants = cmTailwindVariants({
   base: 'p-4 rounded-2xl',
   variants: {
     theme: {
-      DEFAULT: 'bg-secondary text-sky-100'
+      DEFAULT: 'bg-secondary text-sky-100',
+      gastro: 'bg-stopover-gastronomy text-orange-50',
+      culture: 'bg-stopover-culture text-red-50',
+      canal: 'bg-stopover-canal text-blue-50',
+      nature: 'bg-stopover-nature text-green-50',
     } 
   },
   defaultVariants: {

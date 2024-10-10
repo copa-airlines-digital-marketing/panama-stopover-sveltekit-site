@@ -16,7 +16,11 @@ function flatObject(entry: [string, string | object]) {
   return Object.entries(value).flatMap(flatObject).map(v => key + ( v ? '-'+v : '') )
 }
 
-const colors = Object.entries(Preset.theme.extend.colors).flatMap(flatObject)
+const colors = Object.entries(Preset.theme.extend.colors).flatMap(flatObject).concat(['stopover-gastronomy',
+        'stopover-canal',
+        'stopover-nature',
+        'stopover-accent',
+        'stopover-culture'])
 
 const cmTWMergeConfig = {
   extend: {

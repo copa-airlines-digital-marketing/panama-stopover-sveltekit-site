@@ -1,14 +1,18 @@
 import type { ZodObject, ZodRawShape } from "zod"
-import { getHotel, hotelSchema, isHotelSchema, type HotelSchema } from "./hotels"
-import { getPage, isPageSettings, pageSchema, type PageSchema } from "./page"
-import { getPlace, isPlaceSchema, placeSchema, type PlaceSchema } from "./place-to-visit"
-import { getRestaurant, isRestaurantSchema, restaurantSchema, type RestaurantSchema } from "./restaurants"
+import { hotelSchema, isHotelSchema, type HotelSchema } from "./hotels"
+import { isPageSettings, pageSchema, type PageSchema } from "./page"
+import { isPlaceSchema, placeSchema, type PlaceSchema } from "./place-to-visit"
+import { isRestaurantSchema, restaurantSchema, type RestaurantSchema } from "./restaurants"
 import { getSiteSettings, isSiteSettings, siteSettingSchema, type SiteSettingsSchema } from "./site-settings"
 import type { DirectusRequestBody } from "./utils"
 import { filter, head, includes, isNil, keys, pipe } from "ramda"
 import { CATEGORIES_MAP } from "$env/static/private"
 import { say } from "$lib/utils"
 import { getSections, isSectionSchema, sectionSchema, type SectionSchema } from "./section"
+import { getPage } from "./pageRequest"
+import { getHotel } from "./hotelRequests"
+import { getRestaurant } from "./restaurantRequest"
+import { getPlace } from "./placeRequest"
 
 type KeyToTypeMap = {
   'site-settings': SiteSettingsSchema,
