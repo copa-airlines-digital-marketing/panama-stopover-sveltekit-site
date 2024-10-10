@@ -17,19 +17,19 @@ const getRedisKey = (key: string, body: RequestBody) => {
 const getDataFromDirectusAndSaveToRedis = async <T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
   const data = await getDataFromDirectus( key, body )
 
-  if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
-    saveDataToRedis( getRedisKey(key, body), data, timeToExpireInSeconds ).catch(error => console.log(error))
+  /* if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
+    saveDataToRedis( getRedisKey(key, body), data, timeToExpireInSeconds ).catch(error => console.log(error)) */
 
   return data
 } 
 
 const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
-  if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
+  /* if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
     const data = await getDataFromRedis(getRedisKey(key, body))
 
     if (keyToValidationMap[key](data))
       return data
-  }
+  } */
 
   return getDataFromDirectusAndSaveToRedis(key, timeToExpireInSeconds, body)
 }
