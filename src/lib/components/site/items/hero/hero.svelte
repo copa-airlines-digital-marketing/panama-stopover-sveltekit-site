@@ -10,6 +10,8 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
 
+	let className: string | null | undefined = undefined;
+	export { className as class };
 	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
 
 	const { main_image, gallery, translations } = item;
@@ -103,7 +105,7 @@
 						<div
 							in:send={{ key: 'trigger' }}
 							out:receive={{ key: 'trigger' }}
-							class="absolute inset-0 rounded bg-secondary mix-blend-color"
+							class={cn('absolute inset-0 rounded mix-blend-color', className)}
 						></div>
 					{/if}
 				</button>

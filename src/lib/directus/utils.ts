@@ -43,23 +43,11 @@ const getTranslationFilter = (locale: string | number) =>  ({
 
 const articleToWordString = (article: string) => replace(/-/g, ' ', article)
 
-const locationSchema = z.object({
-  type: z.string(),
-  coordinates: z.number().array()
-})
-
-const filesSchema = z.object({
-  directus_files_id: z.string(),
-  sort: z.number()
-})
-
 export {
   articleToWordString,
-  filesSchema,
   getItem,
   getItems,
   getTranslationFilter,
-  locationSchema
 }
 
 export type {
