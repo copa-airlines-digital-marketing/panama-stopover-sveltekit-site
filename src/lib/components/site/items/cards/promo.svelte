@@ -2,9 +2,9 @@
 	import { PromoCard } from '$lib/components/ui/patterns/cards/promo';
 	import { SVG } from '$lib/components/ui/foundations/icon';
 	import { page } from '$app/stores';
-	import type { HotelSchema } from '$lib/directus/hotels';
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
+	import { isHotelSchema, type HotelSchema } from '$lib/directus/hotels';
+	import { isRestaurantSchema, type RestaurantSchema } from '$lib/directus/restaurants';
+	import { type PlaceSchema } from '$lib/directus/place-to-visit';
 
 	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
 
@@ -29,9 +29,23 @@
 	const copySuccessLabel = labels?.filter((label) => label.name === 'promo-code-copied-success')[0];
 
 	const copyErrroLabel = labels?.filter((label) => label.name === 'promo-code-copied-error')[0];
+
+	const category = /* isPlaceSchema(item) && item.pilar */ 'panama-canal';
+
+	const theme = isHotelSchema(item)
+		? 'DEFAULT'
+		: isRestaurantSchema(item)
+			? 'gastro'
+			: category === 'panama-canal'
+				? 'canal'
+				: category === 'shopping'
+					? 'gastro'
+					: category === 'nature' || category === 'beach'
+						? 'nature'
+						: 'culture';
 </script>
 
-<PromoCard let:Title let:Description let:CodeTitle let:Header let:Code theme="DEFAULT">
+<PromoCard let:Title let:Description let:CodeTitle let:Header let:Code {theme}>
 	<Header let:Icon let:Discount>
 		{#if promoIcon}
 			<Icon>

@@ -6,6 +6,14 @@ export default {
 		extend: {
       fontFamily: {
         jakarta: ['Jakarta', 'ui-sans-serif', 'system-ui']
+      },
+      colors: {
+        'stopover-gastronomy': '#FF8400',
+        'stopover-canal': '#282DFF',
+        'stopover-nature': '#4A9A00',
+        'stopover-accent': '#FFDC00',
+        'stopover-culture': '#FF0019',
+        
       }
     }
 	},
