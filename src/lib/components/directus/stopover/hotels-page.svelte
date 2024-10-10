@@ -47,7 +47,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
-<Hero {item} />
+<Hero {item} class="bg-secondary" />
 <div class="container mx-auto my-8 space-y-huge">
 	<div>
 		<Breadcrum {item} />
