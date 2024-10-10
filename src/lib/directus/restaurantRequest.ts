@@ -3,8 +3,10 @@ import { pagePathFields } from "./page"
 import { getItems, type DirectusRequestBody } from "./utils"
 import { say } from "$lib/utils"
 import { isRestaurantSchema, restaurantSchema } from "./restaurants"
+import type { Query } from "@directus/sdk"
+import type { Schema } from "./schema"
 
-const getRestaurantQuery = ({locale, category, subCategory, article}: DirectusRequestBody): QueryItem<Schema, 'stopover_restaurants'> => ({
+const getRestaurantQuery = ({locale, category, subCategory, article}: DirectusRequestBody): Query<Schema, 'stopover_restaurants'> => ({
   fields: [
     'main_image',
     'promo_code',
