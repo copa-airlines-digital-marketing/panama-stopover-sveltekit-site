@@ -8,7 +8,7 @@
 
 	const { max_items, highlight_only, sort } = item;
 
-	const requestURL = new URL(`${$page.url.host}/api/modules/hotels`);
+	const requestURL = new URL('/api/modules/hotels', $page.url.href);
 	requestURL.searchParams.append('max-items', toString(max_items));
 	requestURL.searchParams.append('highlights', toString(highlight_only));
 	const sorts = (sort && sort.map((v) => (v.order === 'asc' ? v.by : '-' + v.by))) || [];
