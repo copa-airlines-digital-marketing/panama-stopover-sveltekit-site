@@ -24,6 +24,10 @@ const placesPilar = z.union([
   z.literal("city")
 ])
 
+const textContentPlace = z.object({
+  Text_Content_id: textContentSchema
+})
+
 const placeSchema = z.object({
   main_image: z.string(),
   gallery: filesSchema.array(),
@@ -32,7 +36,7 @@ const placeSchema = z.object({
   promo_discount_amount: z.string().nullish(),
   promo_discount_percent: z.number().nullish(),
   supported_languages: z.string().array().nullish(),
-  experiences: textContentSchema.array().nullish(),
+  experiences: textContentPlace.array().nullish(),
   duration: z.string(),
   pilar: placesPilar.nullable(),
   category: z.string().array(),

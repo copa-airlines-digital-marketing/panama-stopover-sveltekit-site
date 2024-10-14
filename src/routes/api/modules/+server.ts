@@ -3,6 +3,7 @@ import { error, json } from '@sveltejs/kit'
 import { buildQuery } from './utils.js'
 import type { Schema } from '$lib/directus/schema.js'
 import type { ModuleQueryParams } from './index.js'
+import { isEmpty } from 'ramda'
 
 export async function GET({ url : { searchParams } }) {
     const locale = searchParams.get('locale')
@@ -22,14 +23,15 @@ export async function GET({ url : { searchParams } }) {
     const promoOnly = JSON.parse(searchParams.get('promo-only')?.toLocaleLowerCase() || 'false' )
     const highlights = JSON.parse(searchParams.get('highlights')?.toLocaleLowerCase() || 'false' )
     const sorts = searchParams.getAll('sort')
+    const pilar = isEmpty(searchParams.getAll('pilar')) ? null : searchParams.getAll('pilar')
 
-    
     const params: ModuleQueryParams = {
       maxItems,
       promoOnly,
       highlights,
       sorts,
-      locale
+      locale,
+      pilar
     }
     
     const items = await getItems( collectionMap[collection], buildQuery(params),  preview )

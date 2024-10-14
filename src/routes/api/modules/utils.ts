@@ -18,7 +18,7 @@ const promoOnlyFilter = { _or: [
 ]}
 
 
-function buildQuery({maxItems, highlights, sorts, locale, promoOnly}: ModuleQueryParams): QueryItem<Schema, 'stopover_hotels'> {
+function buildQuery({maxItems, highlights, sorts, locale, promoOnly, pilar}: ModuleQueryParams): QueryItem<Schema, 'stopover_hotels'> {
     return {
         fields: [
             'main_image',
@@ -30,7 +30,8 @@ function buildQuery({maxItems, highlights, sorts, locale, promoOnly}: ModuleQuer
         filter: {
             _and: [
               promoOnly ? promoOnlyFilter : undefined,
-              highlights ? { highlight: {_eq: true } } : undefined
+              highlights ? { highlight: {_eq: true } } : undefined,
+              pilar ? { pilar: { _in: pilar } } : undefined,
             ].filter(v => isNotNil(v))
         },
         deep: {

@@ -15,6 +15,7 @@ type ModuleQueryParams = {
   highlights: boolean,
   promoOnly: boolean,
   sorts: string[]
+  pilar?: string[] | null
 }
 
 export {
