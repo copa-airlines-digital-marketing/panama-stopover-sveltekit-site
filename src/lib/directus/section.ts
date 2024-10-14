@@ -7,7 +7,7 @@ import { getItems, getTranslationFilter, type DirectusRequestBody } from "./util
 import { say } from "$lib/utils";
 import { groupsSchema } from "./groups";
 import { contentGroupQueryFields, contentGroupSchema } from "./content-group";
-import { stopoverHotelModuleSchema } from "./stopover_hotel_module";
+import { stopoverHotelModuleQueryFields, stopoverHotelModuleSchema } from "./stopover_hotel_module";
 import { formSchema } from "./forms";
 
 const horizontal_alignment = z.union([z.literal('left'), z.literal('center'), z.literal('right')])
@@ -103,6 +103,7 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
           'icons': logoQuery,
           'header': headerQuery,
           'content_group': contentGroupQueryFields,
+          'stopover_hotel_module': stopoverHotelModuleQueryFields
         } 
       }
     ]}

@@ -2,8 +2,8 @@ import { z } from "zod";
 
 const sortSchema = z.object({
   by: z.union([
-    z.literal('discount_amount'),
-    z.literal('discount_percent'), 
+    z.literal('promo_discount_amount'),
+    z.literal('promo_discount_percent'), 
     z.literal('distance_from_city'),
     z.literal('priority'),
     z.literal('stars'),
