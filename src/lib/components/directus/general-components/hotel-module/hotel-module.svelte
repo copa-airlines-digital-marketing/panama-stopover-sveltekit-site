@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { PromoShow } from '$lib/components/ui/patterns/cards/promo-show';
 	import type { StopoverHotelModuleSchema } from '$lib/directus/stopover_hotel_module';
-	import { toString } from 'ramda';
+	import { toString, map, replace } from 'ramda';
 	import { page } from '$app/stores';
+	import { getDirectusImage } from '../../stopover/utils';
+	import KeyboardArrowRight from '$lib/components/ui/foundations/icon/keyboard-arrow-right.svelte';
+	import { getPathRecursive } from '$lib/i18n/cannonicals';
+	import type { PathSchema } from '$lib/directus/page';
 
 	export let item: StopoverHotelModuleSchema;
 
@@ -11,21 +15,64 @@
 	const requestURL = new URL('/api/modules/hotels', $page.url.href);
 	requestURL.searchParams.append('max-items', toString(max_items));
 	requestURL.searchParams.append('highlights', toString(highlight_only));
+	requestURL.searchParams.append('locale', $page.data.locale);
 	const sorts = (sort && sort.map((v) => (v.order === 'asc' ? v.by : '-' + v.by))) || [];
 	sorts.forEach((v) => requestURL.searchParams.append('sort', v));
+
+	const cta = $page.data.siteSettings.translations?.[0]?.labels?.filter(v => v.name === 'view-more')?.[0] || 'Add view more label' 
+
+	async function getItems() {
+		const request = await fetch(requestURL, { method: 'GET' });
+		const response = await request.json();
+		return response;
+	}
+
+	function calculatePath(schema: PathSchema) {
+		const path = map(replace(/\/\//g, '/'), getPathRecursive(schema))
+		return path[$page.data.locale]
+	}
 </script>
 
-{requestURL}
-<div class="item-show-grid my-6 grid gap-2">
-	{#each new Array(4) as skeli}
-		<PromoShow let:Children>
-			<Children.Image class="aspect-video bg-grey-100" />
-			<Children.Discount class="h-4 w-10 animate-pulse justify-self-end bg-grey-300" />
-			<Children.Title class="h-5 animate-pulse rounded bg-grey-300" />
-			<Children.CallToAction class="h-3 w-10 animate-pulse justify-self-end rounded bg-grey-300" />
-		</PromoShow>
-	{/each}
-</div>
+{#await getItems()}
+	<div class="item-show-grid my-6 grid gap-2">
+		{#each new Array(4) as skeli}
+			<PromoShow let:Children>
+				<Children.Image class="aspect-video bg-grey-100" />
+				<Children.Discount class="h-4 w-10 animate-pulse justify-self-end bg-grey-300" />
+				<Children.Title class="h-5 animate-pulse rounded bg-grey-300" />
+				<Children.CallToAction
+					class="h-3 w-10 animate-pulse justify-self-end rounded bg-grey-300"
+				/>
+			</PromoShow>
+		{/each}
+	</div>
+{:then value}
+	<ul class="item-show-grid my-6 grid gap-2 items-stretch">
+		{#each value as promo}
+		<li>
+			<PromoShow let:Children href='{calculatePath(promo.parent_page)}/{promo.translations[0].path}'>
+				<Children.Image>
+					<img src='{getDirectusImage(promo.main_image)}&key=2-1x600' alt="" class="w-full h-auto">
+				</Children.Image>
+				{#if promo.promo_discount_percent || promo.promo_dicount_amount}
+					<Children.Discount>
+						-{promo.promo_discount_percent || promo.promo_dicount_amount}{promo.promo_discount_percent ? '%' : 'USD'}
+					</Children.Discount>
+				{/if}
+				<Children.Title>
+					{promo.translations[0].name}
+				</Children.Title>
+				<Children.CallToAction>
+					{cta.value}
+					<KeyboardArrowRight class='size-4 fill-current' />
+				</Children.CallToAction>
+			</PromoShow>
+		</li>
+		{/each}
+	</ul>
+{:catch error}
+	An error ocurred {error}
+{/await}
 
 <style lang="postcss">
 	.item-show-grid {
