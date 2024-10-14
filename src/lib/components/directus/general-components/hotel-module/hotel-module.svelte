@@ -10,16 +10,20 @@
 
 	export let item: StopoverHotelModuleSchema;
 
-	const { max_items, highlight_only, sort } = item;
+	const { max_items, highlight_only, promo_only, sort, collection } = item;
 
-	const requestURL = new URL('/api/modules/hotels', $page.url.href);
+	const requestURL = new URL(`/api/modules`, $page.url.href);
+	requestURL.searchParams.append('collection', collection);
 	requestURL.searchParams.append('max-items', toString(max_items));
 	requestURL.searchParams.append('highlights', toString(highlight_only));
+	requestURL.searchParams.append('promo-only', toString(promo_only));
 	requestURL.searchParams.append('locale', $page.data.locale);
 	const sorts = (sort && sort.map((v) => (v.order === 'asc' ? v.by : '-' + v.by))) || [];
 	sorts.forEach((v) => requestURL.searchParams.append('sort', v));
 
-	const cta = $page.data.siteSettings.translations?.[0]?.labels?.filter(v => v.name === 'view-more')?.[0] || 'Add view more label' 
+	const cta =
+		$page.data.siteSettings.translations?.[0]?.labels?.filter((v) => v.name === 'view-more')?.[0] ||
+		'Add view more label';
 
 	async function getItems() {
 		const request = await fetch(requestURL, { method: 'GET' });
@@ -28,8 +32,8 @@
 	}
 
 	function calculatePath(schema: PathSchema) {
-		const path = map(replace(/\/\//g, '/'), getPathRecursive(schema))
-		return path[$page.data.locale]
+		const path = map(replace(/\/\//g, '/'), getPathRecursive(schema));
+		return path[$page.data.locale];
 	}
 </script>
 
@@ -47,27 +51,37 @@
 		{/each}
 	</div>
 {:then value}
-	<ul class="item-show-grid my-6 grid gap-2 items-stretch">
+	<ul class="item-show-grid my-6 grid items-stretch gap-2">
 		{#each value as promo}
-		<li>
-			<PromoShow let:Children href='{calculatePath(promo.parent_page)}/{promo.translations[0].path}'>
-				<Children.Image>
-					<img src='{getDirectusImage(promo.main_image)}&key=2-1x600' alt="" class="w-full h-auto">
-				</Children.Image>
-				{#if promo.promo_discount_percent || promo.promo_dicount_amount}
-					<Children.Discount>
-						-{promo.promo_discount_percent || promo.promo_dicount_amount}{promo.promo_discount_percent ? '%' : 'USD'}
-					</Children.Discount>
-				{/if}
-				<Children.Title>
-					{promo.translations[0].name}
-				</Children.Title>
-				<Children.CallToAction>
-					{cta.value}
-					<KeyboardArrowRight class='size-4 fill-current' />
-				</Children.CallToAction>
-			</PromoShow>
-		</li>
+			<li>
+				<PromoShow
+					let:Children
+					href="{calculatePath(promo.parent_page)}/{promo.translations[0].path}"
+				>
+					<Children.Image>
+						<img
+							src="{getDirectusImage(promo.main_image)}&key=2-1x600"
+							alt=""
+							class="h-auto w-full"
+						/>
+					</Children.Image>
+					{#if promo.promo_discount_percent || promo.promo_discount_amount}
+						<Children.Discount>
+							-{promo.promo_discount_percent ||
+								Math.round(promo.promo_discount_amount)}{promo.promo_discount_percent
+								? '%'
+								: ' USD'}
+						</Children.Discount>
+					{/if}
+					<Children.Title>
+						{promo.translations[0].name}
+					</Children.Title>
+					<Children.CallToAction>
+						{cta.value}
+						<KeyboardArrowRight class="size-3 fill-current" />
+					</Children.CallToAction>
+				</PromoShow>
+			</li>
 		{/each}
 	</ul>
 {:catch error}

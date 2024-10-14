@@ -1,8 +1,24 @@
 import { pagePathFields } from "$lib/directus/page";
 import type { Schema } from "$lib/directus/schema";
 import type { QueryItem } from "@directus/sdk";
+import type { ModuleQueryParams } from ".";
+import { isNotNil } from "ramda";
 
-function buildQuery(maxItems: number, highlights: boolean, sorts: string[], locale: string): QueryItem<Schema, 'stopover_hotels'> {
+const promoOnlyFilter = { _or: [
+    {
+        promo_discount_amount: {
+            _nnull: true
+        }
+    },
+    {
+        promo_discount_percent: {
+            _nnull: true
+        }
+    }
+]}
+
+
+function buildQuery({maxItems, highlights, sorts, locale, promoOnly}: ModuleQueryParams): QueryItem<Schema, 'stopover_hotels'> {
     return {
         fields: [
             'main_image',
@@ -13,19 +29,9 @@ function buildQuery(maxItems: number, highlights: boolean, sorts: string[], loca
         ],
         filter: {
             _and: [
-                { _or: [
-                    {
-                        promo_discount_amount: {
-                            _nnull: true
-                        }
-                    },
-                    {
-                        promo_discount_percent: {
-                            _nnull: true
-                        }
-                    }
-                ]},
-            ].concat( [highlights ? { highlight: {_eq: true } } : {}] )
+              promoOnly ? promoOnlyFilter : undefined,
+              highlights ? { highlight: {_eq: true } } : undefined
+            ].filter(v => isNotNil(v))
         },
         deep: {
             translations: {

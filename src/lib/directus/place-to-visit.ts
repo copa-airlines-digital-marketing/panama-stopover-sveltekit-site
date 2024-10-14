@@ -13,6 +13,17 @@ const placeTranslationsSchema = z.object({
   path: z.string()
 })
 
+const placesPilar = z.union([
+  z.literal("panama-canal"),
+  z.literal("gastronomy"),
+  z.literal("shopping"),
+  z.literal("culture"),
+  z.literal("history"),
+  z.literal("nature"),
+  z.literal("beach"),
+  z.literal("city")
+])
+
 const placeSchema = z.object({
   main_image: z.string(),
   gallery: filesSchema.array(),
@@ -23,20 +34,24 @@ const placeSchema = z.object({
   supported_languages: z.string().array().nullish(),
   experiences: textContentSchema.array().nullish(),
   duration: z.string(),
-  pilar: z.string(),
+  pilar: placesPilar.nullable(),
   category: z.string().array(),
   location: locationSchema
 })
 
 type PlaceSchema = z.infer<typeof placeSchema>
 
+type PlacesPilar = z.infer<typeof placesPilar>
+
 const isPlaceSchema = (value: unknown): value is PlaceSchema => placeSchema.safeParse(value).success
 
 export {
   placeSchema,
+  placesPilar,
   isPlaceSchema,
 }
 
 export type { 
-  PlaceSchema
+  PlaceSchema,
+  PlacesPilar
 }
