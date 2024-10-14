@@ -23,7 +23,7 @@ const getPlace = async (filters: DirectusRequestBody) => {
       'pilar',
       'category',
       'location',
-      { 'experiences': textContentQuery },
+      { 'experiences': [{ 'Text_Content_id': textContentQuery}] },
       { 'gallery': ['directus_files_id', 'sort'] },
       { 'translations': [
         'lang_code',

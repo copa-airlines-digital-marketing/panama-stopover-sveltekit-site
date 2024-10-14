@@ -11,8 +11,8 @@
 
 <span
 	class={cn(
-		getTypography('body-small'),
-		'col-start-2 row-start-2 mb-2 flex items-end rounded bg-primary text-grey-50 justify-self-end px-2',
+		getTypography('caption-tiny', 'caption'),
+		'col-start-2 row-start-2 mb-2 flex items-end justify-self-end rounded bg-primary px-1.5 py-0.5 text-grey-50',
 		className
 	)}
 >

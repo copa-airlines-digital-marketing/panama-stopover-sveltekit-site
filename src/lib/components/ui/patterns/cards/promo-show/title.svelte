@@ -12,7 +12,7 @@
 <span
 	class={cn(
 		getTypography('body'),
-		'col-start-2 row-start-3 mb-3 mt-3 flex items-end font-bold text-primary self-start',
+		'col-start-2 row-start-3 mb-3 mt-3 flex items-end self-start font-bold text-primary-dark',
 		className
 	)}
 >
