@@ -32,14 +32,10 @@ export async function GET({ url : { searchParams } }) {
       locale
     }
     
-    const hotels = await getItems( collectionMap[collection], buildQuery(params),  preview )
+    const items = await getItems( collectionMap[collection], buildQuery(params),  preview )
     
-    console.log('collection', collection)
-
-    if(collection === 'activities') console.log(hotels)
-    
-    if (!hotels)
+    if (!items)
         return error(404, { message: 'not found'})
-
-    return json(hotels)
+    
+    return json(items)
 }
