@@ -9,6 +9,16 @@ type HotelPromo = {
     translations: HotelPromoTranslation[]
 }
 
+type ModuleQueryParams = {
+  locale: string,
+  maxItems: number,
+  highlights: boolean,
+  promoOnly: boolean,
+  sorts: string[]
+  pilar?: string[] | null
+}
+
 export {
-    HotelPromo
+    HotelPromo,
+    ModuleQueryParams
 }

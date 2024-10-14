@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { placesPilar } from "./place-to-visit";
 
 const sortSchema = z.object({
   by: z.union([
@@ -11,16 +12,28 @@ const sortSchema = z.object({
   order: z.union([z.literal('asc'), z.literal('desc')])
 })
 
+const stopoverItemsCollections = z.union([
+  z.literal('hotels'),
+  z.literal('restaurants'),
+  z.literal('activities')
+]) 
+
 const stopoverHotelModuleSchema = z.object({
+  collection: stopoverItemsCollections,
   sort: sortSchema.array().nullable(),
   max_items: z.number(),
   highlight_only: z.boolean(),
+  promo_only: z.boolean(),
+  pilar: placesPilar.array().nullable(),
 })
 
 const stopoverHotelModuleQueryFields = [
-  'sort',
+  'collection',
+  'highlight_only',
   'max_items',
-  'highlight_only'
+  'pilar',
+  'promo_only',
+  'sort',
 ]
 
 type StopoverHotelModuleSchema = z.infer<typeof stopoverHotelModuleSchema>
