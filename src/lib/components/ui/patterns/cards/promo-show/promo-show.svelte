@@ -20,9 +20,15 @@
 <a
 	{href}
 	class={cn(
-		'grid auto-rows-auto grid-cols-[8px_1fr_8px] overflow-hidden rounded-lg border border-grey-100 bg-common-white shadow-md',
+		'grid promo-rows grid-cols-[8px_1fr_8px] overflow-hidden rounded-lg border border-grey-100 bg-common-white shadow-md h-full',
 		className
 	)}
 >
 	<slot {Children}></slot>
 </a>
+
+<style class="postcss">
+	.promo-rows {
+		grid-template-rows: auto auto 1fr auto;
+	}
+</style>

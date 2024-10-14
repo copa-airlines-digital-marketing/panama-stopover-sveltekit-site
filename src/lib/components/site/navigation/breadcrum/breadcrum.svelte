@@ -23,7 +23,7 @@
 
 	$: [, breadcrumLinks] = mapAccum(
 		appender,
-		$page.url.host,
+		'',
 		$cannonicals[locale].split('/').filter(isNotEmpty)
 	);
 
