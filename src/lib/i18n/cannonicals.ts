@@ -50,6 +50,7 @@ const getCannonicals = (item: DirectusItem ) => {
 }
 
 export {
+  getPathRecursive,
   getCannonicals,
   getBreadcrumNames
 }
