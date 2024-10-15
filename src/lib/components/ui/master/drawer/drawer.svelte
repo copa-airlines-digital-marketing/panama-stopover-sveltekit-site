@@ -9,5 +9,5 @@
 </script>
 
 <DrawerPrimitive.Root {shouldScaleBackground} bind:open bind:activeSnapPoint {...$$restProps}>
-	<slot {Content} Trigger={DrawerPrimitive.Trigger} />
+	<slot {Content} Trigger={DrawerPrimitive.Trigger} Close={DrawerPrimitive.Close} />
 </DrawerPrimitive.Root>
