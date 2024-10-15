@@ -31,7 +31,7 @@
 	{/if}
 
 	<iframe
-		class="mb-6 mt-2 aspect-[4/3] w-full rounded-2xl shadow-md"
+		class="mb-6 mt-2 aspect-[4/3] md:aspect-[3/1] w-full rounded-2xl shadow-md"
 		title="Mapa"
 		style="border:0"
 		loading="lazy"
@@ -42,18 +42,20 @@
 	>
 	</iframe>
 
-	<Button
+	<div class="md:flex md:justify-center">
+		<Button
 		href="https://www.google.com/maps/search/?api=1&query={encodeURIComponent(name).replaceAll(
 			'%20',
 			'+'
 		)}"
 		target="_blank"
 		rel="noreferrer nofollow"
-	>
+		>
 		{#if locationNavigate}
-			{locationNavigate.value}
+		{locationNavigate.value}
 		{:else}
-			{`Please add a location-navigate label to the site`}
+		{`Please add a location-navigate label to the site`}
 		{/if}
 	</Button>
+</div>
 </div>

@@ -1,12 +1,65 @@
 <script lang="ts">
-	import type { PageSchema } from '$lib/directus/page';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
-	import type { SiteSettingsSchema } from '$lib/directus/site-settings';
-	import { Pre } from '$lib/components/testing';
+	import { page } from '$app/stores';
+	import { getDirectusImage } from './utils';
+	import { Hero } from '$lib/components/site/items';
+	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
+	import { getTypography } from '$lib/components/ui/foundations/typography';
+	import { StopoverPromoCard } from '$lib/components/site/items/cards';
+	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
+	import { SpokenLanguages } from '$lib/components/site/items/languages';
+	import { Map } from '$lib/components/site/items/maps';
+	import type { PlaceSchema, PlacesPilar } from '$lib/directus/place-to-visit';
 
-	export let siteSettings: SiteSettingsSchema;
-	export let layout: PageSchema;
 	export let stopover_place_to_visit: PlaceSchema;
+
+	const { main_image, translations, pilar } = stopover_place_to_visit;
+
+	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
+
+	const {
+		0: { description, promo_name, promo_description }
+	} = currrentTranslation;
+
+	const item = stopover_place_to_visit;
+
+	const bgClassname: Record<PlacesPilar, string> = {
+		'beach': 'bg-stopover-nature',
+		'city': 'bg-stopover-culture',
+		'culture': 'bg-stopover-culture',
+		'gastronomy': 'bg-stopover-gastronomy',
+		'history': 'bg-stopover-culture',
+		'nature': 'bg-stopover-nature',
+		'panama-canal': 'bg-stopover-canal',
+		'shopping': 'bg-stopover-gastronomy'
+	}
 </script>
 
-<Pre name="Place to Visit" value={stopover_place_to_visit}></Pre>
+<svelte:head>
+	<title>{currrentTranslation[0].name}</title>
+	<meta name="description" content={currrentTranslation[0].description} />
+	<meta property="og:title" content={currrentTranslation[0].name} />
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content={$page.url.href} />
+	<meta property="og:image" content={getDirectusImage(main_image)} />
+	<meta name="twitter:card" content="summary_large_image" />
+</svelte:head>
+
+<Hero {item} class='{pilar ? bgClassname[pilar]: "bg-secondary"}'/>
+<div class="container mx-auto my-8 space-y-normal">
+	<div>
+		<Breadcrum {item} />
+		<p class={getTypography('body-large', 'body', 'mb-petit')}>
+			{description}
+		</p>
+		{#if promo_name && promo_description}
+			<StopoverPromoCard {item}></StopoverPromoCard>
+		{/if}
+		<div class="md:flex md:justify-center">
+			<MainCallToAction {item} class="mt-petit"></MainCallToAction>
+		</div>
+	</div>
+	<div class="space-y-8">
+		<SpokenLanguages {item}></SpokenLanguages>
+	</div>
+	<Map {item}></Map>
+</div>

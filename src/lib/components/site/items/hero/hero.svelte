@@ -9,6 +9,7 @@
 	import ItemGallery from '$lib/components/site/items/carousel/carousel.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
+	import { mediaQueryLG, mediaQueryMD } from '$lib/constants';
 
 	let className: string | null | undefined = undefined;
 	export { className as class };
@@ -51,6 +52,8 @@
 			{#each [main_image].concat(galleryImages) as img}
 				<Slide class="shrink-0 grow-0 basis-full">
 					<picture>
+						<source srcset="{getDirectusImage(img)}&key=3-1x1920" media={mediaQueryLG}>
+						<source srcset="{getDirectusImage(img)}&key=3-1x1368" media={mediaQueryMD}>
 						<img
 							src="{getDirectusImage(img)}&key=stopover-item-sm"
 							alt={name}
@@ -71,18 +74,18 @@
 	</div>
 	<h1
 		class={cn(
-			getTypographyVariant('display-big'),
+			getTypographyVariant('display'),
 			'col-start-2 row-start-3 mb-8 self-end text-grey-50 mix-blend-screen'
 		)}
 	>
 		{name}
 	</h1>
 </div>
-<div class="my-3">
+<div class="my-3 md:container md:mx-auto">
 	<ItemGallery
 		bind:selected={selectedImage}
 		let:Slide
-		class="mx-4 flex gap-2"
+		class="mx-4 flex gap-2 md:mx-0"
 		options={{ containScroll: 'keepSnaps', dragFree: true }}
 		on:select={changeSelectionElswere}
 	>

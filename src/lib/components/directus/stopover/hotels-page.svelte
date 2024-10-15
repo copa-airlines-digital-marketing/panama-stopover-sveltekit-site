@@ -48,7 +48,7 @@
 </svelte:head>
 
 <Hero {item} class="bg-secondary" />
-<div class="container mx-auto my-8 space-y-huge">
+<div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum {item} />
 		<p class={getTypography('body', 'body', 'flex items-center text-grey-600')}>
@@ -67,7 +67,9 @@
 		{#if promo_name && promo_description}
 			<StopoverPromoCard {item}></StopoverPromoCard>
 		{/if}
-		<MainCallToAction {item} class="mt-petit"></MainCallToAction>
+		<div class="md:flex md:justify-center">
+			<MainCallToAction {item} class="mt-petit"></MainCallToAction>
+		</div>
 	</div>
 	<div class="space-y-4">
 		<h2 class={getTypographyVariant('h2')}>

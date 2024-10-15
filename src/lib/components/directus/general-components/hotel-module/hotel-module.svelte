@@ -52,7 +52,7 @@
 		{/each}
 	</div>
 {:then value}
-	<ul class="item-show-grid my-6 grid items-stretch gap-2">
+	<ul class="item-show-grid my-6 grid items-stretch gap-2 md:gap-4">
 		{#each value as promo}
 			<li>
 				<PromoShow
@@ -79,7 +79,7 @@
 					</Children.Title>
 					<Children.CallToAction>
 						{cta.value}
-						<KeyboardArrowRight class="size-3 fill-current" />
+						<KeyboardArrowRight class="size-3 fill-current md:size-4" />
 					</Children.CallToAction>
 				</PromoShow>
 			</li>
@@ -91,6 +91,6 @@
 
 <style lang="postcss">
 	.item-show-grid {
-		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+		@apply grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))];
 	}
 </style>

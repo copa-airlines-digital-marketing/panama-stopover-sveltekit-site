@@ -10,7 +10,11 @@
 </script>
 
 <span
-	class={cn(getTypographyVariant('h4'), 'mt-4 text-center font-bold text-grey-50', className)}
+	class={cn(
+		getTypographyVariant('h4'),
+		'mt-4 text-center font-bold text-grey-50 md:text-u2',
+		className
+	)}
 	style="grid-area: title;"
 >
 	<slot />

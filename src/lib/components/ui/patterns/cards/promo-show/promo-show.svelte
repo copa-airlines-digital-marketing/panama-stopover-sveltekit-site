@@ -20,7 +20,7 @@
 <a
 	{href}
 	class={cn(
-		'promo-rows grid h-full grid-cols-[8px_1fr_8px] overflow-hidden rounded-lg bg-common-white shadow-md shadow-grey-800/30',
+		'promo-rows grid h-full grid-cols-[8px_1fr_8px] overflow-hidden rounded-lg bg-common-white shadow-md shadow-grey-800/30 md:grid-cols-[16px_1fr_16px]',
 		className
 	)}
 >

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { textContentSchema } from "./text-content";
 import { filesSchema } from "./files";
 import { locationSchema } from "./location";
+import { pathSchema } from "./page";
 
 const placeTranslationsSchema = z.object({
   lang_code: z.string(),
@@ -40,7 +41,8 @@ const placeSchema = z.object({
   duration: z.string(),
   pilar: placesPilar.nullable(),
   category: z.string().array(),
-  location: locationSchema
+  location: locationSchema,
+  parent_page: pathSchema.optional()
 })
 
 type PlaceSchema = z.infer<typeof placeSchema>

@@ -15,23 +15,23 @@
 	export let item: PageSchema | HotelSchema | RestaurantSchema | PlaceSchema;
 	export let variant: 'primary' | 'invert' = 'primary';
 
-	let locale = $page.data.locale;
+	$: locale = $page.data.locale;
 
 	let cannonicals = getPageCannonicals();
 
 	const appender = (a: string, b: string) => [`${a}/${b}`, `${a}/${b}`];
 
-	$: [, breadcrumLinks] = mapAccum(
+	$: [, breadcrumLinks] = $cannonicals && mapAccum(
 		appender,
 		'',
 		$cannonicals[locale].split('/').filter(isNotEmpty)
 	);
 
-	const breadcrumNames = getBreadcrumNames(item)[locale].split('/').slice(1);
+	$: breadcrumNames = locale && item && getBreadcrumNames(item)[locale].split('/').slice(1);
 </script>
 
 {#if Array.isArray(breadcrumLinks) && isNotEmpty(breadcrumLinks) && Array.isArray(breadcrumNames) && isNotEmpty(breadcrumNames) && breadcrumLinks.length > 1}
-	<Breadcrum let:List class="mb-6">
+	<Breadcrum let:List class="mb-6 md:mt-6">
 		<List let:Item>
 			{#each breadcrumLinks as bclink, i}
 				{#if i > 0}
