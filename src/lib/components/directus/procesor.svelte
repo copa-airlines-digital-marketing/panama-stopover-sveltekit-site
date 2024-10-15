@@ -12,22 +12,25 @@
 		StartOfPage,
 		SingleContentPage
 	} from '$lib/components/directus';
-	import { say } from '$lib/utils';
+	import { getCookie, say, setCookie } from '$lib/utils';
 	import { ScrollArea } from 'bits-ui';
 	import { getCannonicals } from '$lib/i18n/cannonicals';
 	import { setPageCannonicals } from './context';
-	import { page } from '$app/stores'
+	import { page } from '$app/stores';
+	import { Drawer } from '../ui/master/drawer';
+	import { onMount } from 'svelte';
+	import { CloseIcon } from '../ui/foundations/icon';
 
-	$: environment = $page.data.environment
-	$: siteSettings = $page.data.siteSettings
-	$: layout = $page.data.layout
-	$: layoutSections = $page.data.layoutSections
-	$: locale = $page.data.locale
-	$: pageInfo = $page.data.page
-	$: pageSections = $page.data.pageSections
-	$: stopover_hotels = $page.data.stopover_hotels
-	$: stopover_place_to_visit = $page.data.stopover_place_to_visit
-	$: stopover_restaurants = $page.data.stopover_restaurants
+	$: environment = $page.data.environment;
+	$: siteSettings = $page.data.siteSettings;
+	$: layout = $page.data.layout;
+	$: layoutSections = $page.data.layoutSections;
+	$: locale = $page.data.locale;
+	$: pageInfo = $page.data.page;
+	$: pageSections = $page.data.pageSections;
+	$: stopover_hotels = $page.data.stopover_hotels;
+	$: stopover_place_to_visit = $page.data.stopover_place_to_visit;
+	$: stopover_restaurants = $page.data.stopover_restaurants;
 
 	export let single_content: TextContentSchema | null | undefined = undefined;
 
@@ -40,13 +43,26 @@
 			!!single_content);
 
 	$: headerSection = layoutSections[0];
-	$: footerSection = layoutSections[1]
+	$: footerSection = layoutSections[1];
+	$: cookieBanner = layoutSections[2];
 
 	$: item = pageInfo || stopover_hotels?.hotel || stopover_restaurants || stopover_place_to_visit;
 
 	$: cannonicals = item && getCannonicals(item);
 
 	$: cannonicals && setPageCannonicals(cannonicals);
+
+	let bannerTrigger = false;
+
+	function onOpenChangeCookieBanner(open: boolean) {
+		if (!open) setCookie('gdpr', 'accept', 14 * 30);
+	}
+
+	onMount(() => {
+		const cookie = JSON.parse(getCookie('gdpr') || 'false');
+
+		if (!cookie) bannerTrigger = true;
+	});
 </script>
 
 <Head
@@ -88,13 +104,30 @@
 					{/if}
 				</main>
 
-				<div class="col-start-1 row-start-3">
-					{#if footerSection}
+				{#if footerSection}
+					<div class="col-start-1 row-start-3">
 						<Section section={footerSection}></Section>
-					{:else}
-						{say('footer section in layout is required', footerSection)}
-					{/if}
-				</div>
+					</div>
+				{:else}
+					{say('footer section in layout is required', footerSection)}
+				{/if}
+				{#if cookieBanner}
+					<Drawer
+						let:Content
+						let:Close
+						bind:open={bannerTrigger}
+						onOpenChange={onOpenChangeCookieBanner}
+					>
+						<Content>
+							<div class="container mx-auto flex items-start">
+								<Section section={cookieBanner}></Section>
+								<Close>
+									<CloseIcon class="size-6 fill-primary-light"></CloseIcon>
+								</Close>
+							</div>
+						</Content>
+					</Drawer>
+				{/if}
 			</div>
 		</ScrollArea.Content>
 	</ScrollArea.Viewport>
