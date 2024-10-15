@@ -9,6 +9,7 @@
 	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
 	import { Map } from '$lib/components/site/items/maps';
+	import { BaseTextContent } from '$lib/components/site/text-content/base';
 
 	export let stopover_restaurants: RestaurantSchema;
 
@@ -21,6 +22,8 @@
 	} = currrentTranslation;
 
 	const item = stopover_restaurants;
+
+	const disclaimer = $page.data.siteSettings.error_messages?.filter((v) => v.error_code === 600)[0];
 </script>
 
 <svelte:head>
@@ -46,6 +49,9 @@
 		<div class="md:flex md:justify-center">
 			<MainCallToAction {item} class="mt-petit"></MainCallToAction>
 		</div>
+		{#if disclaimer && promo_name}
+			<BaseTextContent item={disclaimer.Text_Content_id}></BaseTextContent>
+		{/if}
 	</div>
 	<div class="space-y-8">
 		<SpokenLanguages {item}></SpokenLanguages>
