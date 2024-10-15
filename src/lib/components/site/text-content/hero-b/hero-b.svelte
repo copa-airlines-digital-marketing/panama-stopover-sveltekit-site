@@ -7,6 +7,7 @@
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { SVG } from '$lib/components/ui/foundations/icon';
 	import { Button } from '$lib/components/ui/foundations/button';
+	import { mediaQueryMD } from '$lib/constants';
 
 	export let item: TextContentSchema;
 
@@ -35,7 +36,7 @@
 			<Breadcrum item={pageSettings} variant="invert"></Breadcrum>
 		</div>
 	{/if}
-	<h1 class={getTypographyVariant('display-big', 'col-start-2 row-start-3 mb-6 text-grey-50')}>
+	<h1 class={getTypographyVariant('display', 'col-start-2 row-start-3 mb-6 text-grey-50')}>
 		{title}
 	</h1>
 	<div class="col-span-full col-start-1 row-span-3 row-start-5 bg-backgound-paper"></div>
@@ -43,6 +44,7 @@
 	{#if mainImage}
 		<div class="col-start-2 row-span-2 row-start-4">
 			<picture>
+				<source srcset="{getDirectusImage(mainImage)}&key=3-1x1368" media={mediaQueryMD}>
 				<img
 					src="{getDirectusImage(mainImage)}&key=4-3x600"
 					alt=""
@@ -53,7 +55,7 @@
 	{/if}
 	{#if icon}
 		<div
-			class="col-start-2 row-span-2 row-start-4 my-2 ml-2 size-32"
+			class="col-start-2 row-span-2 row-start-4 my-2 ml-2 size-32 md:my-6 md:ml-6"
 			style="background-image: radial-gradient(var(--theme-contrast), transparent 75%);"
 		>
 			<SVG data={icon.code} style="fill:var(--theme)"></SVG>
