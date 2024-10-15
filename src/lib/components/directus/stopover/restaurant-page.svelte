@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { RestaurantSchema } from '$lib/directus/restaurants';
 	import { page } from '$app/stores';
-	import { Pre } from '$lib/components/testing';
 	import { getDirectusImage } from './utils';
 	import { Hero } from '$lib/components/site/items';
 	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';

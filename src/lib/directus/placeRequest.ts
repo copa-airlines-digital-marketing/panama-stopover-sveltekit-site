@@ -3,9 +3,9 @@ import { isNil } from "ramda"
 import { textContentQuery } from "./text-content"
 import { getItems, type DirectusRequestBody } from "./utils"
 import { isPlaceSchema, placeSchema } from "./place-to-visit"
+import { pagePathFields } from "./page"
 
-const getPlace = async (filters: DirectusRequestBody) => {
-  const { article } = filters
+const getPlace = async ({locale, category, subCategory, article, preview }: DirectusRequestBody) => {
 
   if (!article || typeof article !== 'string'){
     say('Article is required to and a string get the place to visit', article)
@@ -31,16 +31,24 @@ const getPlace = async (filters: DirectusRequestBody) => {
         'description',
         'url',
         'promo_name',
-        'promo_description'
-      ]}
+        'promo_description',
+        'path'
+      ]},
+      { 'parent_page': pagePathFields }
     ],
     filter: {
       _and: [
-        { translations: { lang_code: { _eq: filters.locale } } },
-        { translations: {path: { _eq: article} } }
+        { translations: { lang_code: { _eq: locale } } },
+        { translations: { path: { _eq: article} } },
+        { parent_page: { translations: { languages_code: { _eq: locale } } } },
+        { parent_page: { translations: { path: { _eq: subCategory } } } },
+        { parent_page: { parent: { translations: { languages_code: { _eq: locale } } } } },
+        { parent_page: { parent: { translations: { path: { _eq: category } } } } },
+        { parent_page: { parent: { parent: {translations: { languages_code: { _eq: locale } } } } } },
+        { parent_page: { parent: { parent: {translations: { path: { _eq: locale } } } } } },
       ]
     },
-  }, filters.preview)
+  }, preview)
 
   if(isNil(directusPlaceRequest))
     return null
