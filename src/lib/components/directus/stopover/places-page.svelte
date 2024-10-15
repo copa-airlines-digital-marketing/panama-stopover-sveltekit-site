@@ -9,6 +9,7 @@
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
 	import { Map } from '$lib/components/site/items/maps';
 	import type { PlaceSchema, PlacesPilar } from '$lib/directus/place-to-visit';
+	import { BaseTextContent } from '$lib/components/site/text-content/base';
 
 	export let stopover_place_to_visit: PlaceSchema;
 
@@ -23,15 +24,17 @@
 	const item = stopover_place_to_visit;
 
 	const bgClassname: Record<PlacesPilar, string> = {
-		'beach': 'bg-stopover-nature',
-		'city': 'bg-stopover-culture',
-		'culture': 'bg-stopover-culture',
-		'gastronomy': 'bg-stopover-gastronomy',
-		'history': 'bg-stopover-culture',
-		'nature': 'bg-stopover-nature',
+		beach: 'bg-stopover-nature',
+		city: 'bg-stopover-culture',
+		culture: 'bg-stopover-culture',
+		gastronomy: 'bg-stopover-gastronomy',
+		history: 'bg-stopover-culture',
+		nature: 'bg-stopover-nature',
 		'panama-canal': 'bg-stopover-canal',
-		'shopping': 'bg-stopover-gastronomy'
-	}
+		shopping: 'bg-stopover-gastronomy'
+	};
+
+	const disclaimer = $page.data.siteSettings.error_messages?.filter((v) => v.error_code === 600)[0];
 </script>
 
 <svelte:head>
@@ -44,7 +47,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
-<Hero {item} class='{pilar ? bgClassname[pilar]: "bg-secondary"}'/>
+<Hero {item} class={pilar ? bgClassname[pilar] : 'bg-secondary'} />
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum {item} />
@@ -57,6 +60,9 @@
 		<div class="md:flex md:justify-center">
 			<MainCallToAction {item} class="mt-petit"></MainCallToAction>
 		</div>
+		{#if disclaimer && promo_name}
+			<BaseTextContent item={disclaimer.Text_Content_id}></BaseTextContent>
+		{/if}
 	</div>
 	<div class="space-y-8">
 		<SpokenLanguages {item}></SpokenLanguages>
