@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import type { HTMLAnchorAttributes } from 'svelte/elements';
-	import { CallToAction, Discount, Image, Title } from '.';
+	import { CallToAction, Discount, Image, Title, Name } from '.';
 
 	type $$Props = HTMLAnchorAttributes;
 
@@ -13,6 +13,7 @@
 		CallToAction,
 		Discount,
 		Image,
+		Name,
 		Title
 	};
 </script>
@@ -29,6 +30,6 @@
 
 <style class="postcss">
 	.promo-rows {
-		grid-template-rows: auto auto 1fr auto;
+		grid-template-rows: auto auto auto auto 1fr;
 	}
 </style>
