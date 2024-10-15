@@ -1,31 +1,9 @@
 <script>
 	import { Procesor } from '$lib/components/directus';
+	import { page } from '$app/stores'
 
-	export let data;
-
-	const {
-		environment,
-		siteSettings,
-		layout,
-		layoutSections,
-		locale,
-		page,
-		pageSections,
-		stopover_hotels,
-		stopover_place_to_visit,
-		stopover_restaurants
-	} = data;
 </script>
 
-<Procesor
-	{siteSettings}
-	{layout}
-	{layoutSections}
-	{locale}
-	{page}
-	{pageSections}
-	{stopover_hotels}
-	{stopover_place_to_visit}
-	{stopover_restaurants}
-	{environment}
-></Procesor>
+{#key $page}
+<Procesor></Procesor>
+{/key}

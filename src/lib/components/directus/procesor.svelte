@@ -1,9 +1,4 @@
 <script lang="ts">
-	import type { PageSchema } from '$lib/directus/page';
-	import type { SiteSettingsSchema } from '$lib/directus/site-settings';
-	import type { HotelSchema } from '$lib/directus/hotels';
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { isNotNil } from 'ramda';
 	import {
@@ -18,55 +13,53 @@
 		SingleContentPage
 	} from '$lib/components/directus';
 	import { say } from '$lib/utils';
-	import type { SectionSchema } from '$lib/directus/section';
 	import { ScrollArea } from 'bits-ui';
-	import type { HotelAmenity } from '$lib/directus/hotel-amenities';
 	import { getCannonicals } from '$lib/i18n/cannonicals';
 	import { setPageCannonicals } from './context';
+	import { page } from '$app/stores'
 
-	export let locale: string;
-	export let siteSettings: SiteSettingsSchema;
-	export let layout: PageSchema;
-	export let layoutSections: SectionSchema[];
-	export let page: PageSchema | undefined = undefined;
-	export let pageSections: SectionSchema[] | undefined = undefined;
-	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] } | undefined =
-		undefined;
-	export let stopover_restaurants: RestaurantSchema | undefined = undefined;
-	export let stopover_place_to_visit: PlaceSchema | undefined = undefined;
+	$: environment = $page.data.environment
+	$: siteSettings = $page.data.siteSettings
+	$: layout = $page.data.layout
+	$: layoutSections = $page.data.layoutSections
+	$: locale = $page.data.locale
+	$: pageInfo = $page.data.page
+	$: pageSections = $page.data.pageSections
+	$: stopover_hotels = $page.data.stopover_hotels
+	$: stopover_place_to_visit = $page.data.stopover_place_to_visit
+	$: stopover_restaurants = $page.data.stopover_restaurants
+
 	export let single_content: TextContentSchema | null | undefined = undefined;
-	export let environment: string;
 
-	const indexPage =
+	$: indexPage =
 		environment === 'prod' &&
-		(page?.index ||
+		(pageInfo?.index ||
 			!!stopover_hotels ||
 			!!stopover_restaurants ||
 			!!stopover_place_to_visit ||
 			!!single_content);
 
-	const [headerSection, footerSection] = layoutSections;
+	$: headerSection = layoutSections[0];
+	$: footerSection = layoutSections[1]
 
-	let cannonicals = {};
+	$: item = pageInfo || stopover_hotels?.hotel || stopover_restaurants || stopover_place_to_visit;
 
-	const item = page || stopover_hotels?.hotel || stopover_restaurants || stopover_place_to_visit;
+	$: cannonicals = item && getCannonicals(item);
 
-	if (item) cannonicals = getCannonicals(item);
-
-	setPageCannonicals(cannonicals);
+	$: cannonicals && setPageCannonicals(cannonicals);
 </script>
 
 <Head
 	site_head_code={siteSettings.head_code}
 	layout_head_code={layout.head_code}
-	page_head_code={page?.head_code}
+	page_head_code={pageInfo?.head_code}
 	{indexPage}
 />
 
 <StartOfPage
 	site_start_of_page_code={siteSettings.start_of_body_code}
 	layout_start_of_page_code={layout.start_of_body_code}
-	page_start_of_page_code={page?.start_of_body_code}
+	page_start_of_page_code={pageInfo?.start_of_body_code}
 />
 
 <ScrollArea.Root class="relative">
@@ -84,8 +77,8 @@
 				<main class="col-start-1 row-span-2 row-start-1">
 					{#if isNotNil(single_content)}
 						<SingleContentPage {layout} {single_content} {locale} />
-					{:else if isNotNil(page)}
-						<Page pageItem={page} {pageSections} {layout} />
+					{:else if isNotNil(pageInfo)}
+						<Page pageItem={pageInfo} {pageSections} {layout} />
 					{:else if isNotNil(stopover_hotels)}
 						<HotelPage {stopover_hotels} />
 					{:else if isNotNil(stopover_restaurants)}
@@ -113,5 +106,5 @@
 <EndOfPage
 	site_end_of_page_code={siteSettings.end_of_body_code}
 	layout_end_of_page_code={layout.end_of_body_code}
-	page_end_of_page_code={page?.end_of_body_code}
+	page_end_of_page_code={pageInfo?.end_of_body_code}
 />
