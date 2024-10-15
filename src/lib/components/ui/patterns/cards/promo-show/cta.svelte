@@ -12,7 +12,7 @@
 <span
 	class={cn(
 		getTypography('caption-tiny'),
-		'col-start-2 row-start-4 mb-3 mt-1 flex items-end justify-self-end md:text-d1',
+		'col-start-2 row-start-5 mb-3 mt-1 flex items-end justify-self-end md:text-d1',
 		className
 	)}
 >
