@@ -3,7 +3,7 @@ import type { Button as ButtonPrimitive } from "bits-ui";
 import { cmTailwindVariants } from "$lib/utils";
 
 const buttonVariants = cmTailwindVariants({
-  base: "font-suisse font-medium min-w-16 max-h-20 flex items-center justify-center text-center outline-offset-4 outline-2 active:outline focus:outline disabled:cursor-not-allowed disabled:outline-0 transition-colors",
+  base: "font-jakarta font-medium min-w-16 max-h-20 flex items-center justify-center text-center outline-offset-4 outline-2 active:outline focus:outline disabled:cursor-not-allowed disabled:outline-0 transition-colors",
 	variants: {
     size: {
       slim: 'px-4 py-2 gap-1 rounded-3xl text-d3 border *:max-h-4', 

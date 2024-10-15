@@ -10,7 +10,7 @@
 </script>
 
 <span
-	class={cn(buttonVariants({ size: 'slim' }), 'mb-2 self-end', className)}
+	class={cn(buttonVariants({ size: 'slim' }), 'mb-2 self-end md:justify-self-center', className)}
 	style="grid-area: cta;"
 >
 	<slot />

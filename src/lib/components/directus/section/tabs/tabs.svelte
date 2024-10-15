@@ -59,7 +59,7 @@
 			class={cn(sectionVariants(variantObject), 'relative')}
 			class:col-start-2={horizontal_behaviour === 'container-grid'}
 		>
-			<Tabs.Root class="col-span-full mb-spacious" bind:value>
+			<Tabs.Root class="col-span-full mb-normal" bind:value>
 				<Tabs.List class="flex content-start justify-around gap-2">
 					{#each $tabNames as tabName, i}
 						<Tabs.Trigger

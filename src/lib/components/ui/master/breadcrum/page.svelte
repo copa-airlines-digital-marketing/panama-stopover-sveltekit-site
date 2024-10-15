@@ -18,7 +18,7 @@
 	aria-disabled="true"
 	aria-current="page"
 	class={cn(
-		'max-w-28 overflow-hidden text-ellipsis whitespace-nowrap border-b border-b-transparent text-d3 text-grey-600 lg:text-b',
+		'overflow-hidden whitespace-nowrap border-b border-b-transparent text-d3 text-grey-600 xs:max-w-28 xs:text-ellipsis lg:text-b',
 		className
 	)}
 	{...$$restProps}

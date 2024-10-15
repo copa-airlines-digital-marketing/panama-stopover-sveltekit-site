@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
+	import { mediaQueryLG, mediaQueryMD } from '$lib/constants';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { Breadcrum } from '../../navigation/breadcrum';
 	import { TextContentCallToActions } from '../call-to-actions';
@@ -22,7 +23,9 @@
 
 <div class="container-grid grid-rows-[112px_auto_auto_1fr]">
 	{#if mainImage}
-		<div class="col-span-full col-start-1 row-span-4 row-start-1">
+		<div
+			class="col-span-full col-start-1 row-span-4 row-start-1 md:col-span-1 md:col-start-2 md:max-w-lg md:self-end md:justify-self-end"
+		>
 			<picture>
 				<img src="{getDirectusImage(mainImage)}&key=square-600" alt="" class="h-auto w-full" />
 			</picture>
@@ -37,7 +40,7 @@
 	<h1 class={getTypographyVariant('display-big', 'col-start-2 row-start-3 text-grey-50')}>
 		{title}
 	</h1>
-	<div class="col-start-2 row-start-4 mb-4 self-end *:grow-0">
+	<div class="col-start-2 row-start-4 mb-4 self-end *:grow-0 md:self-start">
 		<TextContentCallToActions {call_to_actions} stretch={false} />
 	</div>
 </div>
