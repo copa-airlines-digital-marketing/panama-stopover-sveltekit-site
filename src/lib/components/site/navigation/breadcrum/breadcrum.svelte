@@ -31,7 +31,7 @@
 </script>
 
 {#if Array.isArray(breadcrumLinks) && isNotEmpty(breadcrumLinks) && Array.isArray(breadcrumNames) && isNotEmpty(breadcrumNames) && breadcrumLinks.length > 1}
-	<Breadcrum let:List class="mb-6">
+	<Breadcrum let:List class="mb-6 md:mt-6">
 		<List let:Item>
 			{#each breadcrumLinks as bclink, i}
 				{#if i > 0}
