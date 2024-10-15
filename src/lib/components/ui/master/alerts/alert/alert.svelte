@@ -11,8 +11,8 @@
 
 <div
 	class={cn(
-		getTypography('caption', 'caption'),
-		'rounded-lg bg-stopover-accent text-grey-700 shadow-md',
+		getTypography('body-small', 'body'),
+		'mb-6 rounded-lg bg-system-warning px-2 py-3 text-common-black shadow-md md:px-6',
 		className
 	)}
 >

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PromoShow } from '$lib/components/ui/patterns/cards/promo-show';
 	import type { StopoverHotelModuleSchema } from '$lib/directus/stopover_hotel_module';
-	import { toString, map, replace } from 'ramda';
+	import { toString, map, replace, isNotNil } from 'ramda';
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '../../stopover/utils';
 	import KeyboardArrowRight from '$lib/components/ui/foundations/icon/keyboard-arrow-right.svelte';
@@ -77,7 +77,7 @@
 					<Children.Title>
 						{promo.translations[0].name}
 					</Children.Title>
-					{#if promo.promo_name}
+					{#if isNotNil(promo.translations[0].promo_name)}
 						<Children.Name>{promo.translations[0].promo_name}</Children.Name>
 					{/if}
 					<Children.CallToAction>
