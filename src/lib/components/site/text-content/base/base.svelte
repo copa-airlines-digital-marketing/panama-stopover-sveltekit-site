@@ -3,6 +3,7 @@
 	import { Button } from '$lib/components/ui/foundations/button';
 	import { getTypography, getTypographyVariant } from '$lib/components/ui/foundations/typography';
 	import type { TextContentSchema } from '$lib/directus/text-content';
+	import Description from '../description/description.svelte';
 
 	export let item: TextContentSchema;
 
@@ -24,11 +25,7 @@
 {#if title}
 	<h2 class={getTypographyVariant('h2', 'mb-4 mt-6 max-w-full')}>{title}</h2>
 {/if}
-{#if description}
-	<div class={getTypography('body', 'body', 'mb-6 mt-4 max-w-full')}>
-		{@html description}
-	</div>
-{/if}
+<Description {description} />
 {#if call_to_actions}
 	<ul class="mt-6 flex gap-2">
 		<li class="flex-grow">
