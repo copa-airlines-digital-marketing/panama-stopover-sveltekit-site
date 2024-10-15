@@ -10,6 +10,7 @@
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
 	import { Map } from '$lib/components/site/items/maps';
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
+	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
 
 	export let stopover_restaurants: RestaurantSchema;
 
@@ -24,6 +25,10 @@
 	const item = stopover_restaurants;
 
 	const disclaimer = $page.data.siteSettings.error_messages?.filter((v) => v.error_code === 600)[0];
+
+	const redeemDisclaimer = $page.data.siteSettings.error_messages?.filter(
+		(v) => v.error_code === 700
+	)[0];
 </script>
 
 <svelte:head>
@@ -46,9 +51,12 @@
 		{#if promo_name && promo_description}
 			<StopoverPromoCard {item}></StopoverPromoCard>
 		{/if}
-		<div class="md:flex md:justify-center">
+		<div class="mb-4 md:flex md:justify-center">
 			<MainCallToAction {item} class="mt-petit"></MainCallToAction>
 		</div>
+		{#if redeemDisclaimer && promo_name}
+			<BannerAlert item={redeemDisclaimer.Text_Content_id}></BannerAlert>
+		{/if}
 		{#if disclaimer && promo_name}
 			<BaseTextContent item={disclaimer.Text_Content_id}></BaseTextContent>
 		{/if}
