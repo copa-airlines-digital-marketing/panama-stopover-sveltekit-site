@@ -77,6 +77,7 @@
 					<Children.Title>
 						{promo.translations[0].name}
 					</Children.Title>
+					<Children.Name>{promo.translations[0].promo_name}</Children.Name>
 					<Children.CallToAction>
 						{cta.value}
 						<KeyboardArrowRight class="size-3 fill-current md:size-4" />

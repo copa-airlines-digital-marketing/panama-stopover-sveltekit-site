@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
+	import { getTypography, getTypographyVariant } from '$lib/components/ui/foundations/typography';
 	import { cn } from '$lib/utils';
 	import type { HTMLAttributes } from 'svelte/elements';
 
@@ -10,11 +10,7 @@
 </script>
 
 <span
-	class={cn(
-		getTypographyVariant('body'),
-		'sm:text- col-start-2 row-start-3 mb-1 mt-3 flex items-end self-start text-d1 font-bold text-primary-dark sm:text-b',
-		className
-	)}
+	class={cn(getTypography('body-small', 'body'), 'col-start-2 row-start-4 mb-6 text-d1', className)}
 >
 	<slot />
 </span>
