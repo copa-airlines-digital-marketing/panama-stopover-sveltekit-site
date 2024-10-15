@@ -24,7 +24,7 @@ function buildQuery({maxItems, highlights, sorts, locale, promoOnly, pilar}: Mod
             'main_image',
             'promo_discount_percent',
             'promo_discount_amount',
-            { 'translations': ['name', 'path'] },
+            { 'translations': ['name', 'path', 'promo_name'] },
             { 'parent_page': pagePathFields},
         ],
         filter: {

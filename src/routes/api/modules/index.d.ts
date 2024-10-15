@@ -1,5 +1,6 @@
 type HotelPromoTranslation = {
     name: string
+    promo_name: string
 }
 
 type HotelPromo = {
