@@ -13,6 +13,7 @@
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
 	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
 	import { getDirectusImage } from './utils';
+	import { BaseTextContent } from '$lib/components/site/text-content/base';
 
 	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] };
 
@@ -35,6 +36,8 @@
 	const icons = $page.data.siteSettings.ui_icons?.map((icon) => icon.icons_id);
 
 	const starIcon = icons?.filter((icon) => icon.name === 'star')[0];
+
+	const disclaimer = $page.data.siteSettings.error_messages?.filter((v) => v.error_code === 600)[0];
 </script>
 
 <svelte:head>
@@ -70,6 +73,9 @@
 		<div class="md:flex md:justify-center">
 			<MainCallToAction {item} class="mt-petit"></MainCallToAction>
 		</div>
+		{#if disclaimer && promo_name}
+			<BaseTextContent item={disclaimer.Text_Content_id}></BaseTextContent>
+		{/if}
 	</div>
 	<div class="space-y-4">
 		<h2 class={getTypographyVariant('h2')}>
