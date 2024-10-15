@@ -12,6 +12,7 @@ import { BottomContent } from '$lib/components/site/text-content/bottom-content'
 import { HeroC } from '$lib/components/site/text-content/hero-c'
 import { BasicNavigation } from '$lib/components/site/navigation/basic-navigation'
 import { PillardCard } from '$lib/components/site/text-content/pillar-card'
+import { BannerAlert } from '$lib/components/site/text-content/banner-alert'
 
 const componentNameToComponentMap = (name: string | null) => {
   if(!name) 
@@ -46,7 +47,8 @@ const textContentToComponentMap = ( name: string | null ) => {
     'hero-b': HeroB,
     'hero-c': HeroC,
     'bottom-content': BottomContent,
-    'pillar-card': PillardCard
+    'pillar-card': PillardCard,
+    'banner-alert': BannerAlert
   }
 
   if (!name || !isKeyOfObject(name, map))
