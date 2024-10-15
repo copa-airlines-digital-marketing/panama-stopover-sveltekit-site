@@ -13,7 +13,6 @@ export default {
         'stopover-nature': '#4A9A00',
         'stopover-accent': '#FFDC00',
         'stopover-culture': '#FF0019',
-        
       }
     }
 	},

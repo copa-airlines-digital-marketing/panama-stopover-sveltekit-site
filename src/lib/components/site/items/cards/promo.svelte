@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import { isHotelSchema, type HotelSchema } from '$lib/directus/hotels';
 	import { isRestaurantSchema, type RestaurantSchema } from '$lib/directus/restaurants';
-	import { type PlaceSchema } from '$lib/directus/place-to-visit';
+	import { isPlaceSchema, type PlaceSchema } from '$lib/directus/place-to-visit';
 
 	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
 
@@ -30,7 +30,7 @@
 
 	const copyErrroLabel = labels?.filter((label) => label.name === 'promo-code-copied-error')[0];
 
-	const category = /* isPlaceSchema(item) && item.pilar */ 'panama-canal';
+	const category = isPlaceSchema(item) && item.pilar;
 
 	const theme = isHotelSchema(item)
 		? 'DEFAULT'

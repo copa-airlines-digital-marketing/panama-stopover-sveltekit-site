@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { PillardCard } from '$lib/components/ui/patterns/cards/pillard';
+	import { mediaQueryMD } from '$lib/constants';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 
 	export let item: TextContentSchema;
@@ -26,7 +27,10 @@
 >
 	{#if mainImage}
 		<Image>
-			<img src="{getDirectusImage(mainImage)}&key=square-600" class="h-auto w-full" alt="" />
+			<picture>
+				<source srcset="{getDirectusImage(mainImage)}&key=3-2x600" media={mediaQueryMD} />
+				<img src="{getDirectusImage(mainImage)}&key=square-600" class="h-auto w-full" alt="" />
+			</picture>
 		</Image>
 	{/if}
 	<Title>

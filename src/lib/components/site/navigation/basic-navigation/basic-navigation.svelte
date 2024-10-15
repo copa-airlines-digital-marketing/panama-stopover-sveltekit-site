@@ -16,10 +16,10 @@
 	const buttonVariant: ButtonProps['variant'][] = ['solid-primary-main', 'outline-primary-main'];
 </script>
 
-<ul class="flex gap-4">
+<ul class="flex gap-4 md:justify-center">
 	{#each links as link, i}
 		{@const { href, text, target, rel, icon } = link.links_id}
-		<li class="grow">
+		<li class="grow md:grow-0">
 			<Button {href} {target} rel={rel?.join(' ')} variant={buttonVariant[i]} title={text}>
 				{#if icon}
 					<SVG data={icon.code} title={text} class="w-auto fill-current"></SVG>

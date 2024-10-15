@@ -9,9 +9,9 @@
 	export let page_head_code: string | null | undefined = undefined;
 	export let indexPage: boolean;
 
-	const locale = $page.data.locale;
+	$: locale = $page.data.locale;
 
-	const cannonicals = getPageCannonicals();
+	let cannonicals = getPageCannonicals();
 </script>
 
 <svelte:head>
@@ -21,7 +21,7 @@
 	{#if any(isNotNil, [site_head_code, layout_head_code, page_head_code])}
 		{@html page_head_code || layout_head_code || site_head_code}
 	{/if}
-	{#if isNotEmpty($cannonicals)}
+	{#if isNotNil($cannonicals) && isNotEmpty($cannonicals)}
 		{#each Object.keys($cannonicals) as lang}
 			{@const hreflang = lang !== locale ? lang : undefined}
 			<link

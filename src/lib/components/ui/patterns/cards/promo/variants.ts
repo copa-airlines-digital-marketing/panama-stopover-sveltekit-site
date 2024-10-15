@@ -3,7 +3,7 @@ import type { HTMLAttributes } from "svelte/elements";
 import type { VariantProps } from "tailwind-variants";
 
 const promoCardVariants = cmTailwindVariants({
-  base: 'p-4 rounded-2xl',
+  base: 'p-4 rounded-2xl md:p-8',
   variants: {
     theme: {
       DEFAULT: 'bg-secondary text-sky-100',
