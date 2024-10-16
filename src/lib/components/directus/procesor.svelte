@@ -60,7 +60,7 @@
 
 	onMount(() => {
 		const gdprCookie = getCookie('gdpr');
-		const cookie = gdprCookie === 'accept' || 'false';
+		const cookie = gdprCookie === 'accept';
 		if (!cookie) bannerTrigger = true;
 	});
 </script>
