@@ -14,7 +14,12 @@ const promoOnlyFilter = { _or: [
         promo_discount_percent: {
             _nnull: true
         }
-    }
+    },
+    {
+      promo_code: {
+          _nnull: true
+      }
+  },
 ]}
 
 

@@ -54,38 +54,40 @@
 {:then value}
 	<ul class="item-show-grid my-6 grid items-stretch gap-2 md:gap-4">
 		{#each value as promo}
-			<li>
-				<PromoShow
-					let:Children
-					href="{calculatePath(promo.parent_page)}/{promo.translations[0].path}"
-				>
-					<Children.Image>
-						<img
-							src="{getDirectusImage(promo.main_image)}&key=2-1x600"
-							alt=""
-							class="h-auto w-full"
-						/>
-					</Children.Image>
-					{#if promo.promo_discount_percent || promo.promo_discount_amount}
-						<Children.Discount>
-							-{promo.promo_discount_percent ||
-								Math.round(promo.promo_discount_amount)}{promo.promo_discount_percent
-								? '%'
-								: ' USD'}
-						</Children.Discount>
-					{/if}
-					<Children.Title>
-						{promo.translations[0].name}
-					</Children.Title>
-					{#if isNotNil(promo.translations[0].promo_name)}
-						<Children.Name>{promo.translations[0].promo_name}</Children.Name>
-					{/if}
-					<Children.CallToAction>
-						{cta.value}
-						<KeyboardArrowRight class="size-3 fill-current md:size-4" />
-					</Children.CallToAction>
-				</PromoShow>
-			</li>
+			{#if promo.parent_page}
+				<li>
+					<PromoShow
+						let:Children
+						href="{calculatePath(promo.parent_page)}/{promo.translations[0].path}"
+					>
+						<Children.Image>
+							<img
+								src="{getDirectusImage(promo.main_image)}&key=2-1x600"
+								alt=""
+								class="h-auto w-full"
+							/>
+						</Children.Image>
+						{#if promo.promo_discount_percent || promo.promo_discount_amount}
+							<Children.Discount>
+								-{promo.promo_discount_percent ||
+									Math.round(promo.promo_discount_amount)}{promo.promo_discount_percent
+									? '%'
+									: ' USD'}
+							</Children.Discount>
+						{/if}
+						<Children.Title>
+							{promo.translations[0].name}
+						</Children.Title>
+						{#if isNotNil(promo.translations[0].promo_name)}
+							<Children.Name>{promo.translations[0].promo_name}</Children.Name>
+						{/if}
+						<Children.CallToAction>
+							{cta.value}
+							<KeyboardArrowRight class="size-3 fill-current md:size-4" />
+						</Children.CallToAction>
+					</PromoShow>
+				</li>
+			{/if}
 		{/each}
 	</ul>
 {:catch error}
