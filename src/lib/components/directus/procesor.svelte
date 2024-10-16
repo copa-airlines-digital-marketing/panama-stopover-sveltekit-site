@@ -59,8 +59,8 @@
 	}
 
 	onMount(() => {
-		const cookie = JSON.parse(getCookie('gdpr') || 'false');
-
+		const gdprCookie = getCookie('gdpr');
+		const cookie = gdprCookie === 'accept' || 'false';
 		if (!cookie) bannerTrigger = true;
 	});
 </script>
