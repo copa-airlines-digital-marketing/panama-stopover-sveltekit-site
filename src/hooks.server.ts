@@ -69,7 +69,7 @@ export async function handle({ event, resolve }) {
 
   if(!langFromPath) {
     const locale = langCookie || getPreferredLocale(event)
-    throw redirect(307, `${base}/${locale}`)
+    throw redirect(307, `${base}/${locale}${searchParams.size > 0 ? '?' + searchParams.toString() : ''}`)
   }
 
   const pageLocale = isSupportedLocale(langFromPath) ? langFromPath : getPreferredLocale(event) 
