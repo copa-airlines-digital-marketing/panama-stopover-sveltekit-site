@@ -15,7 +15,10 @@ export async function GET({ url : { searchParams } }) {
     const collectionMap: Record<string, keyof Schema> = {
       hotels: 'stopover_hotels',
       restaurants: 'stopover_restaurants',
-      activities: 'stopover_place_to_visit'
+      activities: 'stopover_place_to_visit',
+      tours: 'stopover_tours',
+      packages: 'stopover_package',
+      transportation: 'stopover_transportation'
     }
 
     const preview = searchParams.get('preview')
