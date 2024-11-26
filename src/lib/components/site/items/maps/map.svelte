@@ -4,7 +4,7 @@
 	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
 	import type { HotelSchema } from '$lib/directus/hotels';
 	import type { PlaceSchema } from '$lib/directus/place-to-visit';
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
+	import { isRestaurantSchema, type RestaurantSchema } from '$lib/directus/restaurants';
 
 	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
 
@@ -15,6 +15,10 @@
 	const {
 		0: { name }
 	} = currrentTranslation;
+
+	const latLong = item.location;
+
+	const helper = isRestaurantSchema(item) ? 'restaurant' : '';
 
 	const labels = $page.data.siteSettings.translations?.[0]?.labels;
 
@@ -31,7 +35,7 @@
 	{/if}
 
 	<iframe
-		class="mb-6 mt-2 aspect-[4/3] md:aspect-[3/1] w-full rounded-2xl shadow-md"
+		class="mb-6 mt-2 aspect-[4/3] w-full rounded-2xl shadow-md md:aspect-[3/1]"
 		title="Mapa"
 		style="border:0"
 		loading="lazy"
@@ -44,18 +48,20 @@
 
 	<div class="md:flex md:justify-center">
 		<Button
-		href="https://www.google.com/maps/search/?api=1&query={encodeURIComponent(name).replaceAll(
-			'%20',
-			'+'
-		)}"
-		target="_blank"
-		rel="noreferrer nofollow"
+			href="https://www.google.com/maps/search/?api=1&query={encodeURIComponent(name).replaceAll(
+				'%20',
+				'+'
+			) + helper
+				? '%20' + helper
+				: '' + '%20Panama'}&center={latLong.coordinates.reverse.toString()}"
+			target="_blank"
+			rel="noreferrer nofollow"
 		>
-		{#if locationNavigate}
-		{locationNavigate.value}
-		{:else}
-		{`Please add a location-navigate label to the site`}
-		{/if}
-	</Button>
-</div>
+			{#if locationNavigate}
+				{locationNavigate.value}
+			{:else}
+				{`Please add a location-navigate label to the site`}
+			{/if}
+		</Button>
+	</div>
 </div>
