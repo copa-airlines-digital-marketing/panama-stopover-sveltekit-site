@@ -7,6 +7,10 @@ import type { NavigationSchema } from "./navigation"
 import type { PageSchema } from "./page"
 import type { PlaceSchema } from "./place-to-visit"
 import type { RestaurantSchema } from "./restaurants"
+import type { PackageSchema } from "./schemas/packages"
+import type { TourOperatorSchema } from "./schemas/tour_operators"
+import type { TourSchema } from "./schemas/tours"
+import type { TransportationSchema } from "./schemas/transportation"
 import type { SectionContentSchema, SectionSchema } from "./section"
 import type { SiteSettingsSchema } from "./site-settings"
 import type { TextContentSchema } from "./text-content"
@@ -32,6 +36,10 @@ interface Schema {
   stopover_hotels: HotelSchema
   stopover_restaurants: RestaurantSchema
   stopover_place_to_visit: PlaceSchema
+  stopover_tours: TourSchema
+  stopover_tour_operator: TourOperatorSchema
+  stopover_package: PackageSchema
+  stopover_transportation: TransportationSchema
 }
 
 export type {
