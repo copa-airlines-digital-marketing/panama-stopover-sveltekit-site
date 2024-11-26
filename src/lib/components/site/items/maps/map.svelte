@@ -42,18 +42,15 @@
 		allowfullscreen
 		referrerpolicy="no-referrer-when-downgrade"
 		src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAIeomrDWZ0BM3eTZFMJyvAzx7NfE4-64o
-  &q={encodeURIComponent(name).replaceAll('%20', '+')}"
+  &q={encodeURIComponent(`${name}${helper ? ' ' + helper : ''} Panama`).replaceAll('%20', '+')}"
 	>
 	</iframe>
 
 	<div class="md:flex md:justify-center">
 		<Button
-			href="https://www.google.com/maps/search/?api=1&query={encodeURIComponent(name).replaceAll(
-				'%20',
-				'+'
-			) + helper
-				? '%20' + helper
-				: '' + '%20Panama'}&center={latLong.coordinates.reverse.toString()}"
+			href="https://www.google.com/maps/search/?api=1&query={encodeURIComponent(
+				`${name}${helper ? ' ' + helper : ''} Panama`
+			).replaceAll('%20', '+')}&center={latLong.coordinates.reverse.toString()}"
 			target="_blank"
 			rel="noreferrer nofollow"
 		>
