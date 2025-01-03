@@ -7,6 +7,8 @@ import { isPageSettings } from '$lib/directus/page.js'
 import { say } from '$lib/utils.js'
 import { isSectionSchema } from '$lib/directus/section.js'
 import { PREVIEW_SECRET } from '$env/static/private'
+import { getPageData } from '$lib/data/page.js'
+import { getSiteSettings } from '$lib/data/site-settings.js'
 
 const ifLocalHostDev = (value: string) => includes(value, ['localhost', '127.0.0.1', '192']) ? 'dev' : value
 
@@ -19,7 +21,7 @@ const getEnvironment = pipe(
   ifProdHostProd
 )
 
-export async function load({ fetch, locals: { locale }, url: { hostname, searchParams }, request: { headers } }) {
+export async function load({ locals: { locale }, url: { hostname, searchParams }, request: { headers } }) {
 
   const preview = searchParams.get('preview')
 
@@ -27,14 +29,12 @@ export async function load({ fetch, locals: { locale }, url: { hostname, searchP
   const previewEnv = preview === PREVIEW_SECRET ? 'preview' : null
 
   const layoutDataRequest = await Promise.all([
-    fetch(`/api/site-settings?locale=${locale}${preview ? '&preview='+preview : ''}`),
-    fetch(`/api/page?locale=${locale}${preview ? '&preview='+preview : ''}`)
+    getSiteSettings(locale, preview),
+    getPageData({locale, preview})
   ])
-  const [siteSettingsRequest, layoutRequest] = layoutDataRequest
-  
-  const siteSettings = await siteSettingsRequest.json()
-  const layoutPage = await layoutRequest.json()
-  
+
+  const [siteSettings, layoutPage] = layoutDataRequest
+    
   const { page: layout, sections: layoutSections } = layoutPage
 
   if (!isSiteSettings(siteSettings) || !isPageSettings(layout) || !isSectionSchema(layoutSections)) {

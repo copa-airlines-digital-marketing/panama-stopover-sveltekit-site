@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { PromoShow } from '$lib/components/ui/patterns/cards/promo-show';
 	import type { StopoverHotelModuleSchema } from '$lib/directus/stopover_hotel_module';
-	import { toString, map, replace, isNotNil } from 'ramda';
+	import { toString, map, replace, isNotNil, isNil } from 'ramda';
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '../../stopover/utils';
 	import KeyboardArrowRight from '$lib/components/ui/foundations/icon/keyboard-arrow-right.svelte';
 	import { getPathRecursive } from '$lib/i18n/cannonicals';
 	import type { PathSchema } from '$lib/directus/page';
+	import { onMount } from 'svelte';
 
 	export let item: StopoverHotelModuleSchema;
 
@@ -26,19 +27,20 @@
 		$page.data.siteSettings.translations?.[0]?.labels?.filter((v) => v.name === 'view-more')?.[0] ||
 		'Add view more label';
 
-	async function getItems() {
-		const request = await fetch(requestURL, { method: 'GET' });
-		const response = await request.json();
-		return response;
-	}
-
 	function calculatePath(schema: PathSchema) {
 		const path = map(replace(/\/\//g, '/'), getPathRecursive(schema));
 		return path[$page.data.locale];
 	}
+
+	let moduleItems: unknown;
+
+	onMount(async () => {
+		const request = await fetch(requestURL, { method: 'GET' });
+		moduleItems = await request.json();
+	});
 </script>
 
-{#await getItems()}
+{#if isNil(moduleItems)}
 	<div class="item-show-grid my-6 grid gap-2">
 		{#each new Array(4) as skeli}
 			<PromoShow let:Children>
@@ -51,9 +53,9 @@
 			</PromoShow>
 		{/each}
 	</div>
-{:then value}
+{:else}
 	<ul class="item-show-grid my-6 grid items-stretch gap-2 md:gap-4">
-		{#each value as promo}
+		{#each moduleItems as promo}
 			{#if promo.parent_page}
 				<li>
 					<PromoShow
@@ -90,9 +92,7 @@
 			{/if}
 		{/each}
 	</ul>
-{:catch error}
-	An error ocurred {error}
-{/await}
+{/if}
 
 <style lang="postcss">
 	.item-show-grid {
