@@ -64,9 +64,9 @@
 					>
 						<Children.Image>
 							<img
-								src="{getDirectusImage(promo.main_image)}&key=2-1x600"
+								src={getDirectusImage(promo.main_image)}
 								alt=""
-								class="h-auto w-full"
+								class="aspect-[2/1] h-auto w-full object-cover"
 							/>
 						</Children.Image>
 						{#if promo.promo_discount_percent || promo.promo_discount_amount}
