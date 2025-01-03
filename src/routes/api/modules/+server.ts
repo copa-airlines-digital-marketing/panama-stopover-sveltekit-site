@@ -48,12 +48,12 @@ export async function GET({ url : { searchParams } }) {
       const data = await getDataFromRedis(redisKey)
   
       if (isNotNil(data) && !isEmpty(data)){
-        console.warn('using data from Upstash', 'module', collection)
+        console.log('using data from Upstash', 'module', collection)
         return json(data)
       }
     }
 
-    console.warn('getting data from directus', 'module', collection)
+    console.log('getting data from directus', 'module', collection)
     
     const items = await getItems( collectionMap[collection], buildQuery(params),  preview )
 
