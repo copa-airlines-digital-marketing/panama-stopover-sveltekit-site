@@ -40,7 +40,7 @@ const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds:
       return data
     }
   }
-  
+
   console.log('getting data from directus', key, JSON.stringify(body))
 
   return getDataFromDirectusAndSaveToRedis(key, timeToExpireInSeconds, body)
