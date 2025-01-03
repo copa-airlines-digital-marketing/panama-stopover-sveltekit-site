@@ -15,25 +15,32 @@ const getRedisKey = (environment: string,key: string, body: RequestBody) => {
 const getDataFromDirectusAndSaveToRedis = async <T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
   const data = await getDataFromDirectus( key, body )
 
-/*   if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
-    saveDataToRedis( getRedisKey(ENVIRONMENT,key, body), data, timeToExpireInSeconds ).catch(error => console.log(error)) */
+  console.log('data', JSON.stringify(data))
+
+  console.log('condition to save to redis', isNotNil(data), isNotEmpty(data), ENVIRONMENT === PRODUCTION_ENVIRONMENT, !(body?.preview === PREVIEW_SECRET))
+
+  if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
+    saveDataToRedis( getRedisKey(ENVIRONMENT,key, body), data, timeToExpireInSeconds )
+      .then(() => console.log('saved to redis'))
+      .catch(error => console.log(error))
  
   return data
 } 
 
 const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
- console.warn('view first condition', ENVIRONMENT === PRODUCTION_ENVIRONMENT, !(body?.preview === PREVIEW_SECRET))
+  console.log('view first condition', ENVIRONMENT === PRODUCTION_ENVIRONMENT, !(body?.preview === PREVIEW_SECRET))
 
   if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
     const data = await getDataFromRedis(getRedisKey(ENVIRONMENT,key, body))
 
-    console.warn('view second condition', keyToValidationMap[key](data), key)
+    console.log('view second condition', keyToValidationMap[key](data), key, JSON.stringify(data))
 
     if (keyToValidationMap[key](data)){
       console.warn('using data from Upstash', key, JSON.stringify(body))
       return data
     }
   }
+
   console.log('getting data from directus', key, JSON.stringify(body))
 
   return getDataFromDirectusAndSaveToRedis(key, timeToExpireInSeconds, body)
