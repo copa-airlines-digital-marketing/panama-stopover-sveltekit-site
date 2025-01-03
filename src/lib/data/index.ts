@@ -1,7 +1,7 @@
 import { ENVIRONMENT, PREVIEW_SECRET, PRODUCTION_ENVIRONMENT } from "$env/static/private"
 import { getData as getDataFromDirectus, keyToValidationMap, type DirectusDataKeys, type KeyToTypeMap } from "$lib/directus"
 import { getData as getDataFromRedis, setData as saveDataToRedis } from "$lib/redis"
-import { isNotEmpty, isNotNil, join } from "ramda"
+import { isNotEmpty, isNotNil, join, keysIn } from "ramda"
 
 type RequestBody = Record<string, string | number | boolean | undefined | null>
 
@@ -22,8 +22,12 @@ const getDataFromDirectusAndSaveToRedis = async <T extends DirectusDataKeys>(key
 } 
 
 const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
+  console.warn('view first condition', ENVIRONMENT === PRODUCTION_ENVIRONMENT, !(body?.preview === PREVIEW_SECRET))
+
   if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
     const data = await getDataFromRedis(getRedisKey(ENVIRONMENT,key, body))
+
+    console.warn('view second condition', keyToValidationMap[key](data), key)
 
     if (keyToValidationMap[key](data)){
       console.warn('using data from Upstash', key, JSON.stringify(body))
