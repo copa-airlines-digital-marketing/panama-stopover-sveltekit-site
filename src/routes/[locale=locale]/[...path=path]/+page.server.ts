@@ -1,3 +1,4 @@
+import { getPageData } from '$lib/data/page.js';
 import type { HotelSchema } from '$lib/directus/hotels.js';
 import { isNotFoundSchema } from '$lib/directus/not-found.js';
 import type { PageSchema } from '$lib/directus/page.js';
@@ -6,19 +7,6 @@ import type { RestaurantSchema } from '$lib/directus/restaurants.js';
 import type { SectionSchema } from '$lib/directus/section.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
-import { filter, isNotNil } from 'ramda';
-
-const valueToSeachParams = (locale: string, path: string, preview: string | null) => {
-  const [category, subcategory, article] = path.split('/')
-  const preliminarObject = {
-    locale,
-    category,
-    subcategory,
-    article,
-    preview
-  }
-  return filter(isNotNil, preliminarObject)
-}
 
 type DataTypeMap = {
   page: PageSchema | undefined,
@@ -29,7 +17,7 @@ type DataTypeMap = {
 }
 
 export async function load(event) {
-  const { fetch, locals: { locale }, parent, params: { path } , route, url: { searchParams } }  = event
+  const { locals: { locale }, parent, params: { path } , route, url: { searchParams } }  = event
 
   if(!path) {
     say('Path param is required', event)
@@ -43,11 +31,9 @@ export async function load(event) {
 
   const preview = searchParams.get('preview')
 
-  const queryParams = new URLSearchParams(valueToSeachParams(locale, path, preview)) 
+  const [category, subCategory, article] = path.split('/')
 
-  const pageRequest = await fetch(`/api/page${ queryParams.size > 1 ? '?' + queryParams.toString() : '' }`)
-  const parentData = await parent()
-  const pageData = await pageRequest.json()
+  const [pageData, parentData] = await Promise.all([getPageData({locale, preview, category, subCategory, article}), parent()])
 
   const { sections: pageSections } = pageData
 
