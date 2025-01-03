@@ -8,6 +8,8 @@ import { z } from "zod"
 type DirectusRequestBody = Record<string, string | number | undefined | null>
 
 const getItem = async <T>(collection: keyof Schema, id: string | number, query: QueryItem<Schema, T>, preview: string | number | null | undefined) => {
+  console.log('getting directus item', collection)
+
   const token = preview === PREVIEW_SECRET ? DIRECTUS_PREVIEW_TOKEN : DIRECTUS_TOKEN
   try {
     const client = getClient( DIRECTUS_REST_URL, token )
@@ -20,6 +22,7 @@ const getItem = async <T>(collection: keyof Schema, id: string | number, query: 
 }
 
 const getItems = async < T >( collection: keyof Schema, query: QueryItem< Schema, T >, preview: string | number | null | undefined ) => {
+  console.log('getting directus items', collection)
   const token = preview === PREVIEW_SECRET ? DIRECTUS_PREVIEW_TOKEN : DIRECTUS_TOKEN
   try {
     const client = getClient( DIRECTUS_REST_URL, token )
