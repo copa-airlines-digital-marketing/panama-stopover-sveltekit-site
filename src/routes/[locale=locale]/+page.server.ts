@@ -1,9 +1,10 @@
+import { getPageData } from '$lib/data/page.js';
 import { isPageSettings } from '$lib/directus/page.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
 
 export async function load(event) {
-  const { fetch, locals: { locale }, parent, url: { searchParams } }  = event
+  const { locals: { locale }, parent, url: { searchParams } }  = event
 
   const preview = searchParams.get('preview')
 
@@ -12,9 +13,7 @@ export async function load(event) {
     return error(500)
   }
 
-  const pageRequest = await fetch(`/api/page?locale=${locale}&home=home${preview ? '&preview='+preview : ''}`)
-  const parentData = await parent()
-  const pageData = await pageRequest.json()
+  const [pageData, parentData] = await Promise.all([getPageData({locale, home:'home', preview}), parent()])
   const { page, sections: pageSections } = pageData
 
   if(!isPageSettings(page)) {
