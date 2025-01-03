@@ -15,23 +15,23 @@ const getRedisKey = (environment: string,key: string, body: RequestBody) => {
 const getDataFromDirectusAndSaveToRedis = async <T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
   const data = await getDataFromDirectus( key, body )
 
-/*   if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
-    saveDataToRedis( getRedisKey(ENVIRONMENT,key, body), data, timeToExpireInSeconds ).catch(error => console.log(error)) */
+  if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
+    saveDataToRedis( getRedisKey(ENVIRONMENT,key, body), data, timeToExpireInSeconds ).catch(error => console.log(error))
  
   return data
 } 
 
 const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
-/*   if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
+  if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
     const data = await getDataFromRedis(getRedisKey(ENVIRONMENT,key, body))
 
     if (keyToValidationMap[key](data)){
-      console.log('using data from Upstash', key, JSON.stringify(body))
+      console.warn('using data from Upstash', key, JSON.stringify(body))
       return data
     }
   }
- */
-  console.log('getting data from directus', key, JSON.stringify(body))
+
+  console.warn('getting data from directus', key, JSON.stringify(body))
 
   return getDataFromDirectusAndSaveToRedis(key, timeToExpireInSeconds, body)
 }
