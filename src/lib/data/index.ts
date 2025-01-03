@@ -15,8 +15,8 @@ const getRedisKey = (environment: string,key: string, body: RequestBody) => {
 const getDataFromDirectusAndSaveToRedis = async <T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
   const data = await getDataFromDirectus( key, body )
 
-  if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
-    saveDataToRedis( getRedisKey(ENVIRONMENT,key, body), data, timeToExpireInSeconds ).catch(error => console.log(error))
+/*   if(isNotNil(data) && isNotEmpty(data) && ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET))
+    saveDataToRedis( getRedisKey(ENVIRONMENT,key, body), data, timeToExpireInSeconds ).catch(error => console.log(error)) */
  
   return data
 } 
