@@ -26,12 +26,12 @@ const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds:
     const data = await getDataFromRedis(getRedisKey(ENVIRONMENT,key, body))
 
     if (keyToValidationMap[key](data)){
-      console.log('using data from Upstash', key, JSON.stringify(body))
+      console.warn('using data from Upstash', key, JSON.stringify(body))
       return data
     }
   }
 
-  console.log('getting data from directus', key, JSON.stringify(body))
+  console.warn('getting data from directus', key, JSON.stringify(body))
 
   return getDataFromDirectusAndSaveToRedis(key, timeToExpireInSeconds, body)
 }
