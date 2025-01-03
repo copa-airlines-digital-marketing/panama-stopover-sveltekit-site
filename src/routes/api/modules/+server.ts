@@ -41,13 +41,14 @@ export async function GET({ url : { searchParams } }) {
       locale,
       pilar
     }
+
     const redisKey = getRedisKey(ENVIRONMENT,'module', {collection: collection, maxItems, promoOnly, highlights, locale, pilar: pilar?.join('')})
 
     if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(preview === PREVIEW_SECRET)) {
       const data = await getDataFromRedis(redisKey)
   
       if (isNotNil(data) && !isEmpty(data)){
-        console.log('using data from Upstash', 'module', collection)
+        console.warn('using data from Upstash', 'module', collection)
         return json(data)
       }
     }

@@ -36,7 +36,7 @@ const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds:
     console.log('view second condition', keyToValidationMap[key](data), key, JSON.stringify(data))
 
     if (keyToValidationMap[key](data)){
-      console.log('using data from Upstash', key, JSON.stringify(body))
+      console.warn('using data from Upstash', key, JSON.stringify(body))
       return data
     }
   }
