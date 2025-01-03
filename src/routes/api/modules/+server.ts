@@ -41,7 +41,6 @@ export async function GET({ url : { searchParams } }) {
       locale,
       pilar
     }
-
     const redisKey = getRedisKey(ENVIRONMENT,'module', {collection: collection, maxItems, promoOnly, highlights, locale, pilar: pilar?.join('')})
 
     if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(preview === PREVIEW_SECRET)) {
