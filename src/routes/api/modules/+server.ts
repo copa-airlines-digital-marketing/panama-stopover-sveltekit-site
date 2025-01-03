@@ -48,7 +48,7 @@ export async function GET({ url : { searchParams } }) {
       const data = await getDataFromRedis(redisKey)
   
       if (isNotNil(data) && !isEmpty(data)){
-        console.warn('using data from Upstash', 'module', collection)
+        console.log('using data from Upstash', 'module', collection)
         return json(data)
       }
     }

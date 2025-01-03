@@ -15,7 +15,7 @@ const getRedisKey = (environment: string,key: string, body: RequestBody) => {
 const getDataFromDirectusAndSaveToRedis = async <T extends DirectusDataKeys>(key: T, timeToExpireInSeconds: number, body: RequestBody): Promise<KeyToTypeMap[T] | null> => {
   const data = await getDataFromDirectus( key, body )
 
-  console.log('data', JSON.stringify(data))
+  console.log('data', key, JSON.stringify(body))
 
   console.log('condition to save to redis', isNotNil(data), isNotEmpty(data), ENVIRONMENT === PRODUCTION_ENVIRONMENT, !(body?.preview === PREVIEW_SECRET))
 
@@ -33,7 +33,7 @@ const getData = async<T extends DirectusDataKeys>(key: T, timeToExpireInSeconds:
   if(ENVIRONMENT === PRODUCTION_ENVIRONMENT && !(body?.preview === PREVIEW_SECRET)) {
     const data = await getDataFromRedis(getRedisKey(ENVIRONMENT,key, body))
 
-    console.log('view second condition', keyToValidationMap[key](data), key, JSON.stringify(data))
+    console.log('view second condition', keyToValidationMap[key](data), key, isNotNil(data), isNotEmpty(data))
 
     if (keyToValidationMap[key](data)){
       console.warn('using data from Upstash', key, JSON.stringify(body))
