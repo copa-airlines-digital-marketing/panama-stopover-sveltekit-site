@@ -29,9 +29,9 @@
 	<div class="col-span-full col-start-1 row-span-3 row-start-1">
 		{#if mainImage}
 			<picture>
-				<source srcset="{getDirectusImage(mainImage)}&key=3-1x1920" media={mediaQueryLG} />
-				<source srcset="{getDirectusImage(mainImage)}&key=3-1x1368" media={mediaQueryMD} />
-				<img src="{getDirectusImage(mainImage)}&key=square-600" alt="" class="h-auto w-full" />
+				<source srcset="{getDirectusImage(mainImage)}" media={mediaQueryLG} />
+				<source srcset="{getDirectusImage(mainImage)}" media={mediaQueryMD} />
+				<img src="{getDirectusImage(mainImage)}" alt="" class="h-auto w-full max-w-[600px] object-cover aspect-square md:max-w-[1368px] md:aspect-[3_/_1] lg:max-w-[1920px]" />
 			</picture>
 		{/if}
 	</div>
