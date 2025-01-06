@@ -44,11 +44,11 @@
 	{#if mainImage}
 		<div class="col-start-2 row-span-2 row-start-4">
 			<picture>
-				<source srcset="{getDirectusImage(mainImage)}&key=3-1x1368" media={mediaQueryMD}>
+				<source srcset="{getDirectusImage(mainImage)}" media={mediaQueryMD}>
 				<img
-					src="{getDirectusImage(mainImage)}&key=4-3x600"
+					src="{getDirectusImage(mainImage)}"
 					alt=""
-					class="h-auto w-full rounded-2xl shadow-lg"
+					class="h-auto w-full rounded-2xl shadow-lg aspect-[4_/_3] max-w-[600px] md:max-w-[1368px] md:aspect-[3_/_1] object-cover"
 				/>
 			</picture>
 		</div>
