@@ -19,7 +19,7 @@
 
 {#if mainImage}
 	<picture>
-		<img src="{getDirectusImage(mainImage)}&key=4-1x600" alt="" class="mb-6 h-auto w-full" />
+		<img src="{getDirectusImage(mainImage)}" alt="" class="mb-6 h-auto w-full max-w-[600px] object-cover aspect-[4_/_1]" loading="lazy" />
 	</picture>
 {/if}
 {#if title}
