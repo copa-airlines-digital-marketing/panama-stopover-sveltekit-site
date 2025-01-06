@@ -32,7 +32,7 @@
 		</div>
 		{#if mainImage}
 			<picture class="md:shrink-0">
-				<img src="{getDirectusImage(mainImage)}&key=2-1x600" alt="" class="h-auto w-full " />
+				<img src="{getDirectusImage(mainImage)}" alt="" class="h-auto w-full max-w-[600px] object-cover aspect-[2_/_1]" loading="lazy" />
 			</picture>
 		{/if}
 	</div>

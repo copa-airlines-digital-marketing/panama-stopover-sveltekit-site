@@ -52,12 +52,12 @@
 			{#each [main_image].concat(galleryImages) as img}
 				<Slide class="shrink-0 grow-0 basis-full">
 					<picture>
-						<source srcset="{getDirectusImage(img)}&key=3-1x1920" media={mediaQueryLG}>
-						<source srcset="{getDirectusImage(img)}&key=3-1x1368" media={mediaQueryMD}>
+						<source srcset="{getDirectusImage(img)}" media={mediaQueryLG}>
+						<source srcset="{getDirectusImage(img)}" media={mediaQueryMD}>
 						<img
-							src="{getDirectusImage(img)}&key=stopover-item-sm"
+							src="{getDirectusImage(img)}"
 							alt={name}
-							class="h-auto w-full"
+							class="h-auto w-full max-w-[600px] object-cover aspect-[3_/_4] md:aspect-[3_/_1] md:max-w-[1368px] lg:max-w-[1920px]"
 						/>
 					</picture>
 				</Slide>
@@ -99,9 +99,9 @@
 				>
 					<picture>
 						<img
-							src="{getDirectusImage(img)}&key=stopover-item-thumbnail-sm"
+							src="{getDirectusImage(img)}"
 							alt={name}
-							class="h-auto w-full rounded"
+							class="h-auto w-full rounded aspect-square max-w-16 object-cover"
 						/>
 					</picture>
 					{#if selectedImage === i}
