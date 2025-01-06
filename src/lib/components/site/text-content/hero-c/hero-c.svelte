@@ -28,7 +28,7 @@
 		>
 			<picture>
 				<source srcset="{getDirectusImage(mainImage)}&width=700" media={mediaQueryMD} />
-				<img src="{getDirectusImage(mainImage)}&width=600" alt="" class="h-auto w-full" />
+				<img src="{getDirectusImage(mainImage)}&width=600" alt="" class="h-auto w-full max-w-[600px] md:max-w-[700px]" />
 			</picture>
 		</div>
 	{/if}
