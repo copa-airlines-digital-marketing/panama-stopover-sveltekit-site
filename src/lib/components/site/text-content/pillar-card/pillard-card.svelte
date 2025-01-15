@@ -28,8 +28,8 @@
 	{#if mainImage}
 		<Image>
 			<picture>
-				<source srcset="{getDirectusImage(mainImage)}" media={mediaQueryMD} />
-				<img src="{getDirectusImage(mainImage)}" class="h-auto w-full max-w-[600px] aspect-square object-cover md:aspect-[3_/_2]" alt="" loading="lazy" />
+				<source srcset="{getDirectusImage(mainImage)}?key=3-2x600" media={mediaQueryMD} />
+				<img src="{getDirectusImage(mainImage)}?key=square-600" class="h-auto w-full" alt="" />
 			</picture>
 		</Image>
 	{/if}
