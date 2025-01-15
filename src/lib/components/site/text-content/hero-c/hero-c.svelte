@@ -27,8 +27,8 @@
 			class="col-span-full col-start-1 row-span-4 row-start-1 pt-20 md:self-end md:justify-self-end md:pt-0"
 		>
 			<picture>
-				<source srcset="{getDirectusImage(mainImage)}" media={mediaQueryMD} />
-				<img src="{getDirectusImage(mainImage)}" alt="" class="h-auto w-full max-w-[600px] md:max-w-[700px]" />
+				<source srcset="{getDirectusImage(mainImage)}?width=700" media={mediaQueryMD} />
+				<img src="{getDirectusImage(mainImage)}?width=600" alt="" class="h-auto w-full" />
 			</picture>
 		</div>
 	{/if}
