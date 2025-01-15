@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { Button } from '$lib/components/ui/foundations/button';
-	import { getTypography, getTypographyVariant } from '$lib/components/ui/foundations/typography';
+	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import Description from '../description/description.svelte';
 
@@ -19,7 +19,12 @@
 
 {#if mainImage}
 	<picture>
-		<img src="{getDirectusImage(mainImage)}" alt="" class="mb-6 h-auto w-full max-w-[600px] object-cover aspect-[4_/_1]" loading="lazy" />
+		<img
+			src="{getDirectusImage(mainImage)}?key=4-1x600"
+			alt=""
+			class="mb-6 h-auto w-full"
+			loading="lazy"
+		/>
 	</picture>
 {/if}
 {#if title}
