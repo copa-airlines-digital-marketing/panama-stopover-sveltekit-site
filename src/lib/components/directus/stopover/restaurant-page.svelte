@@ -37,7 +37,7 @@
 	<meta property="og:title" content={currrentTranslation[0].name} />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content={$page.url.href} />
-	<meta property="og:image" content={getDirectusImage(main_image)} />
+	<meta property="og:image" content="{getDirectusImage(main_image)}?key=19x10-1200" />
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
