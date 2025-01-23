@@ -51,3 +51,5 @@ export async function load({ locals: { locale }, url: { hostname, searchParams }
     isMobile
 	};
 }
+
+export const prerender =  true

@@ -7,6 +7,8 @@ import type { RestaurantSchema } from '$lib/directus/restaurants.js';
 import type { SectionSchema } from '$lib/directus/section.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
+import { getAllSectionModules, getModuleRequest, setToValue } from '../../utils';
+import { isEmpty, isNil } from 'ramda';
 
 type DataTypeMap = {
   page: PageSchema | undefined,
@@ -36,6 +38,21 @@ export async function load(event) {
   const [pageData, parentData] = await Promise.all([getPageData({locale, preview, category, subCategory, article}), parent()])
 
   const { sections: pageSections } = pageData
+
+  if(pageSections){   
+    const modulesPaths = getAllSectionModules(pageSections)
+    
+    const modulesData = await Promise.allSettled(modulesPaths.map(getModuleRequest(pageSections, locale)))
+    
+    modulesPaths.forEach((path, key) => {
+      const items = modulesData[key].value || null
+      
+      if(isNil(items) || isEmpty(items))
+        return
+      
+      setToValue(pageSections, items, [...path, 'items'])
+    })
+  }
 
   const finalData: DataTypeMap = {
     page: undefined,
