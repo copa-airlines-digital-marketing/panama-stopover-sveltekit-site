@@ -15,6 +15,8 @@ export async function load(event) {
     return error(500)
   }
 
+  console.log('Requesting from Directus')
+
   const [pageData, parentData] = await Promise.all([getPageData({locale, home:'home', preview}), parent()])
   const { page, sections: pageSections } = pageData
 

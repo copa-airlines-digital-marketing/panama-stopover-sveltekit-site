@@ -12,11 +12,13 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"start": "node build/index.js"
 	},
 	"devDependencies": {
 		"@directus/sdk": "^18.0.3",
 		"@playwright/test": "^1.28.1",
+		"@sveltejs/adapter-node": "^5.2.12",
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/adapter-vercel": "^5.4.3",
 		"@sveltejs/kit": "^2.0.0",
@@ -52,6 +54,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"dotenv": "^16.4.7",
 		"embla-carousel": "^8.5.1",
 		"embla-carousel-fade": "^8.5.1",
 		"embla-carousel-svelte": "^8.5.1",

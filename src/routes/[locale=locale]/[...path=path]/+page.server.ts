@@ -31,6 +31,8 @@ export async function load(event) {
     return error(500)
   }
 
+  console.log('Requesting from directus')
+
   const preview = searchParams.get('preview')
 
   const [category, subCategory, article] = path.split('/')
