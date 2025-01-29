@@ -4,7 +4,6 @@
 	import { Navigation } from '../..';
 
 	export let item: HeaderSchema;
-	export let component: string | null;
 </script>
 
 <div

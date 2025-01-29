@@ -56,8 +56,11 @@ type ContentGroupContent = z.infer<typeof contentGroupContentSchema>
 
 type ContentGroupItems = z.infer<typeof contentGroupItems>
 
+const isContentGroupSchema = (value: unknown): value is ContentGroupSchema => contentGroupSchema.safeParse(value).success
+
 export {
   contentGroupSchema,
+  isContentGroupSchema,
   contentGroupQueryFields
 }
 

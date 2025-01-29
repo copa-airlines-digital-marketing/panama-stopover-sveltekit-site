@@ -6,7 +6,7 @@ export async function getSiteSettings(locale: string, preview?: string | null | 
   if (!locale) 
     return null
 
-  const data = await getData('site-settings', 60*60*2, {locale, preview}) // 2 hours site settings
+  const data = await getData('site-settings', {locale, preview}) // 2 hours site settings
 
   if ( isNil(data) || isEmpty(data)) {
     console.log('Error while getting site settings no data', data)
