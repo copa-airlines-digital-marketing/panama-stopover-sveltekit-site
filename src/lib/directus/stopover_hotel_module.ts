@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { any, z } from "zod";
 import { placesPilar } from "./place-to-visit";
 
 const sortSchema = z.object({
@@ -25,6 +25,7 @@ const stopoverHotelModuleSchema = z.object({
   highlight_only: z.boolean(),
   promo_only: z.boolean(),
   pilar: placesPilar.array().nullable(),
+  items: any().array().optional()
 })
 
 const stopoverHotelModuleQueryFields = [
@@ -38,8 +39,11 @@ const stopoverHotelModuleQueryFields = [
 
 type StopoverHotelModuleSchema = z.infer<typeof stopoverHotelModuleSchema>
 
+const isStopoverModuleSchema = (value: unknown): value is StopoverHotelModuleSchema => stopoverHotelModuleSchema.safeParse(value).success
+
 export {
   stopoverHotelModuleSchema,
+  isStopoverModuleSchema,
   stopoverHotelModuleQueryFields
 }
 
