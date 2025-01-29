@@ -12,7 +12,7 @@ import { getSiteSettings } from '$lib/data/site-settings.js'
 
 const ifLocalHostDev = (value: string) => includes(value, ['localhost', '127.0.0.1', '192']) ? 'dev' : value
 
-const ifProdHostProd = (value: string) => includes(value, ['www', 'stopoverinpanama', 'panama-stopover']) ? 'prod' : value
+const ifProdHostProd = (value: string) => includes(value, ['www', 'stopoverinpanama', 'panama-stopover', 'panama-stopover-29a13ab619c8']) ? 'prod' : value
 
 const getEnvironment = pipe(
   split('.'), 
