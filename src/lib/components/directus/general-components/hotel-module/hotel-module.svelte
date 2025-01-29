@@ -11,17 +11,7 @@
 
 	export let item: StopoverHotelModuleSchema;
 
-	const { max_items, highlight_only, promo_only, sort, collection, pilar } = item;
-
-	const requestURL = new URL(`/api/modules`, $page.url.href);
-	requestURL.searchParams.append('collection', collection);
-	requestURL.searchParams.append('max-items', toString(max_items));
-	requestURL.searchParams.append('highlights', toString(highlight_only));
-	requestURL.searchParams.append('promo-only', toString(promo_only));
-	requestURL.searchParams.append('locale', $page.data.locale);
-	const sorts = (sort && sort.map((v) => (v.order === 'asc' ? v.by : '-' + v.by))) || [];
-	sorts.forEach((v) => requestURL.searchParams.append('sort', v));
-	pilar && pilar.forEach((name) => requestURL.searchParams.append('pilar', name));
+	const { items } = item;
 
 	const cta =
 		$page.data.siteSettings.translations?.[0]?.labels?.filter((v) => v.name === 'view-more')?.[0] ||
@@ -32,12 +22,7 @@
 		return path[$page.data.locale];
 	}
 
-	let moduleItems: unknown;
-
-	onMount(async () => {
-		const request = await fetch(requestURL, { method: 'GET' });
-		moduleItems = await request.json();
-	});
+	const moduleItems = items;
 </script>
 
 {#if isNil(moduleItems)}

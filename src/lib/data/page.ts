@@ -27,7 +27,7 @@ export async function getPageData(body: RequestBody) {
   if(isNil(key))
     return null
 
-  const data = await getData(key, 60*60*2, body) //2h mins for pages 
+  const data = await getData(key, body) //2h mins for pages 
 
   if (isNil(data) || isEmpty(data)) {
     return null
@@ -36,7 +36,7 @@ export async function getPageData(body: RequestBody) {
   let sections: SectionSchema[] | undefined = undefined
 
   if(isPageSettings(data)) {
-    const sectionsRequest = await getData('sections', 60*60*2, { locale, storefront, page: data.id, preview })
+    const sectionsRequest = await getData('sections', { locale, storefront, page: data.id, preview })
     
     if(!isSectionSchema(sectionsRequest)) {
       return null
