@@ -25,7 +25,7 @@ export async function load(event) {
     say('Path param is required', event)
     return error(404)
   }
-p
+
   if(!locale) {
     say('No locale in locals', event)
     return error(500)
