@@ -1,14 +1,16 @@
 import { getPageData } from '$lib/data/page.js';
 import type { HotelSchema } from '$lib/directus/hotels.js';
 import { isNotFoundSchema } from '$lib/directus/not-found.js';
-import type { PageSchema } from '$lib/directus/page.js';
+import { isPageSettings, type PageSchema } from '$lib/directus/page.js';
 import type { PlaceSchema } from '$lib/directus/place-to-visit.js';
 import type { RestaurantSchema } from '$lib/directus/restaurants.js';
 import type { SectionSchema } from '$lib/directus/section.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
-import { getAllSectionModules, getModuleRequest, setToValue } from '../../utils';
+import { getAllSectionModules, getModuleRequest, setToValue } from '../utils';
 import { isEmpty, isNil } from 'ramda';
+import type { EntryGenerator } from '../$types';
+import { getAllPagesParams } from '$lib/data/pages';
 
 type DataTypeMap = {
   page: PageSchema | undefined,
@@ -18,28 +20,31 @@ type DataTypeMap = {
   stopover_place_to_visit: PlaceSchema | undefined
 }
 
+export const entries: EntryGenerator = async () => {
+  const allPagesParams = await getAllPagesParams()
+  return allPagesParams
+}
+
 export async function load(event) {
-  const { locals: { locale }, parent, params: { path } , route, url: { searchParams } }  = event
+  const { parent, params: { path } , route }  = event
 
   if(!path) {
     say('Path param is required', event)
     return error(404)
   }
 
-  if(!locale) {
-    say('No locale in locals', event)
+  const preview = null
+
+  const [locale, category, subCategory, article] = path.split('/')
+
+  const [pageData, parentData] = await Promise.all([getPageData({locale, preview, category, subCategory, article, home: category || 'true'}), parent()])
+
+  const { page, sections: pageSections } = pageData
+
+  if(!article && !isPageSettings(page)) {
+    say('error ocurred while getting homepage info')
     return error(500)
   }
-
-  console.log('Requesting from directus')
-
-  const preview = searchParams.get('preview')
-
-  const [category, subCategory, article] = path.split('/')
-
-  const [pageData, parentData] = await Promise.all([getPageData({locale, preview, category, subCategory, article}), parent()])
-
-  const { sections: pageSections } = pageData
 
   if(pageSections){   
     const modulesPaths = getAllSectionModules(pageSections)
@@ -55,9 +60,14 @@ export async function load(event) {
       setToValue(pageSections, items, [...path, 'items'])
     })
   }
+  
+  if(isNotFoundSchema(pageData)) {
+    say('Page requested not found', route)
+    return error(404)
+  }
 
   const finalData: DataTypeMap = {
-    page: undefined,
+    page,
     stopover_hotels: undefined,
     stopover_restaurants: undefined,
     stopover_place_to_visit: undefined,
@@ -65,13 +75,11 @@ export async function load(event) {
     pageSections
   }
 
-  if(isNotFoundSchema(pageData)) {
-    say('Page requested not found', route)
-    return error(404)
-  }
-
   return {
     ...parentData,
     ...finalData
   }
 }
+
+
+export const prerender = 'auto'
