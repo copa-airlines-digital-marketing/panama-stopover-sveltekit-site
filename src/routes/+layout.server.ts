@@ -24,19 +24,19 @@ const getEnvironment = pipe(
 
 export async function load(event) {
 
-  const { params, url: { hostname }, request: { headers }, locals } = event
+  const { url: { hostname, pathname }, request: { headers } } = event
+  
+  const [root, pahtLocale, category, subCategory, article] = pathname.split('/')
+  
+  const locale = pahtLocale || getPreferredLocale(event) || 'es'
 
-  const locale = params.locale || locals.locale || getPreferredLocale(event) || 'es'
-
-  if(!params.locale)
+  if(!pahtLocale)
     return redirect(307, '/'+locale)
 
   const preview = null
 
   const isMobile = /mobile|android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(headers.get('user-agent') || '')
   const previewEnv = preview === PREVIEW_SECRET ? 'preview' : null
-
-  console.log('locale', locale)
 
   const layoutDataRequest = await Promise.all([
     getSiteSettings(locale, preview),
