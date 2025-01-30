@@ -111,7 +111,7 @@
 				{:else}
 					{say('footer section in layout is required', footerSection)}
 				{/if}
-				{#if cookieBanner}
+				<!-- 				{#if cookieBanner}
 					<Drawer
 						let:Content
 						let:Close
@@ -127,7 +127,7 @@
 							</div>
 						</Content>
 					</Drawer>
-				{/if}
+				{/if} -->
 			</div>
 		</ScrollArea.Content>
 	</ScrollArea.Viewport>

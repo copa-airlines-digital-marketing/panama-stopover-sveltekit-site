@@ -4,11 +4,17 @@ import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
 import { getAllSectionModules, getModuleRequest, setToValue } from '../utils.js';
 import { isEmpty, isNil } from 'ramda';
+import type { EntryGenerator } from './$types.js';
+
+
+export const entries: EntryGenerator = async () => {
+  return ['en', 'es', 'pt'].map(v => ({locale: v}))
+}
 
 export async function load(event) {
-  const { locals: { locale }, parent, url: { searchParams } }  = event
+  const { parent, params: { locale } }  = event
 
-  const preview = searchParams.get('preview')
+  const preview = null
 
   if(!locale) {
     say('No locale in locals', event)
@@ -44,3 +50,5 @@ export async function load(event) {
     pageSections
   }
 }
+
+export const prerender = true

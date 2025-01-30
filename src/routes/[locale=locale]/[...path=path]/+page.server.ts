@@ -19,7 +19,7 @@ type DataTypeMap = {
 }
 
 export async function load(event) {
-  const { locals: { locale }, parent, params: { path } , route, url: { searchParams } }  = event
+  const { locals: { locale }, parent, params: { path } , route }  = event
 
   if(!path) {
     say('Path param is required', event)
@@ -33,7 +33,7 @@ export async function load(event) {
 
   console.log('Requesting from directus')
 
-  const preview = searchParams.get('preview')
+  const preview = null
 
   const [category, subCategory, article] = path.split('/')
 
