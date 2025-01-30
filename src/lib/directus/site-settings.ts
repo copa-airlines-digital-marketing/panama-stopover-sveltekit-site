@@ -127,6 +127,7 @@ const getSiteSettings = async (filters: DirectusRequestBody) => {
 
   if(!isSiteSettings(siteSettings)){
     say('Site settings does not match the schema', siteSettingSchema.safeParse(siteSettings).error)
+    say('Site settings output', siteSettings)
     return null
   }
   
