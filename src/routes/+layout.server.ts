@@ -11,14 +11,11 @@ import { getPageData } from '$lib/data/page.js'
 import { getSiteSettings } from '$lib/data/site-settings.js'
 import { getPreferredLocale } from '$lib/i18n/index.js'
 
-const ifLocalHostDev = (value: string) => includes(value, ['localhost', '127.0.0.1', '192', 'sveltekit-prerender']) ? 'dev' : value
-
-const ifProdHostProd = (value: string) => includes(value, ['www', 'stopoverinpanama', 'panama-stopover', 'panama-stopover-29a13ab619c8']) ? 'prod' : value
+const ifProdHostProd = (value: string) => includes(value, ['www', 'stopoverinpanama', 'panama-stopover', 'panama-stopover-29a13ab619c8']) ? 'prod' : 'dev'
 
 const getEnvironment = pipe(
   split('.'), 
   head, 
-  ifLocalHostDev, 
   ifProdHostProd
 )
 
