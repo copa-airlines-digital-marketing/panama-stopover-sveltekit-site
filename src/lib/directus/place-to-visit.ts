@@ -42,6 +42,7 @@ const placeSchema = z.object({
   pilar: placesPilar.nullable(),
   category: z.string().array(),
   location: locationSchema,
+  use_name: z.boolean(),
   parent_page: pathSchema.optional()
 })
 
