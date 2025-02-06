@@ -19,6 +19,7 @@ const getHotelQuery = ({locale, category, subCategory, article}: DirectusRequest
     'includes',
     'stars',
     'location',
+    'use_name',
     { 'gallery': ['directus_files_id', 'sort'] },
     { 'translations': [
       'lang_code',
