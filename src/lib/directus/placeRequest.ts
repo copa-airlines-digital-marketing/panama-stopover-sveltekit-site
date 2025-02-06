@@ -23,6 +23,7 @@ const getPlace = async ({locale, category, subCategory, article, preview }: Dire
       'pilar',
       'category',
       'location',
+      'use_name',
       { 'experiences': [{ 'Text_Content_id': textContentQuery}] },
       { 'gallery': ['directus_files_id', 'sort'] },
       { 'translations': [

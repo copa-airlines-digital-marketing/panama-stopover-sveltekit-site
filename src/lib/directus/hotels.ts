@@ -24,6 +24,7 @@ const hotelSchema = z.object({
   includes: z.string().array(),
   stars: z.number(),
   location: locationSchema,
+  use_name: z.boolean(),
   gallery: filesSchema.array(),
   translations: hotelTranslationsSchema.array(),
   parent_page: pathSchema.optional()
