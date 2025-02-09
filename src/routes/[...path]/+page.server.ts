@@ -22,11 +22,14 @@ type DataTypeMap = {
 
 export const entries: EntryGenerator = async () => {
   const allPagesParams = await getAllPagesParams()
+  console.log(`Sveltekit will render ${allPagesParams.length} pages`, JSON.stringify(allPagesParams.map(v => v.path), null, 2))
   return allPagesParams
 }
 
 export async function load(event) {
   const { parent, params: { path } , route }  = event
+
+  console.log(`requesting data for page: ${path}`)
 
   if(!path) {
     say('Path param is required', event)
@@ -75,11 +78,12 @@ export async function load(event) {
     pageSections
   }
 
+  console.log(`Processed data for: ${path}, sending it to render`)
+
   return {
     ...parentData,
     ...finalData
   }
 }
 
-
-export const prerender = 'auto'
+export const prerender = true

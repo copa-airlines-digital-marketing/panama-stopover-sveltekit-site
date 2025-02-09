@@ -2,28 +2,18 @@
 
 import { error, redirect } from '@sveltejs/kit'
 import { isSiteSettings } from '$lib/directus/site-settings.js'
-import { head, includes, pipe, split } from 'ramda'
 import { isPageSettings } from '$lib/directus/page.js'
 import { say } from '$lib/utils.js'
 import { isSectionSchema } from '$lib/directus/section.js'
-import { PREVIEW_SECRET } from '$env/static/private'
 import { getPageData } from '$lib/data/page.js'
 import { getSiteSettings } from '$lib/data/site-settings.js'
 import { getPreferredLocale } from '$lib/i18n/index.js'
 
-const ifProdHostProd = (value: string) => includes(value, ['www', 'stopoverinpanama', 'panama-stopover', 'panama-stopover-29a13ab619c8']) ? 'prod' : 'dev'
-
-const getEnvironment = pipe(
-  split('.'), 
-  head, 
-  ifProdHostProd
-)
-
 export async function load(event) {
 
-  const { url: { hostname, pathname }, request: { headers } } = event
+  const { url: { pathname }, request: { headers } } = event
   
-  const [root, pahtLocale, category, subCategory, article] = pathname.split('/')
+  const pahtLocale = pathname.split('/')[1]
   
   const locale = pahtLocale || getPreferredLocale(event) || 'es'
 
@@ -33,7 +23,6 @@ export async function load(event) {
   const preview = null
 
   const isMobile = /mobile|android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(headers.get('user-agent') || '')
-  const previewEnv = preview === PREVIEW_SECRET ? 'preview' : null
 
   const layoutDataRequest = await Promise.all([
     getSiteSettings(locale, preview),
@@ -50,7 +39,7 @@ export async function load(event) {
   }
   
 	return {
-    environment: previewEnv || getEnvironment(hostname),
+    environment: 'prod',
     locale,
 		siteSettings,
     layout,
