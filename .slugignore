@@ -1,0 +1,14 @@
+README.md
+package-lock.json
+/src
+/tests
+package.json
+/static
+tsconfig.json
+eslint.config.js
+playwright.config.ts
+svelte.config.js
+vite.config.ts
+/node_modules
+postcss.config.js
+tailwind.config.js
