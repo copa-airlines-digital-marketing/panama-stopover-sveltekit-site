@@ -1,10 +1,10 @@
 import { SITE_ID } from '$env/static/private';
 import { getItems } from '$lib/directus/utils';
-import { groupBy, map, path, prop, reduce, uniq, unwind } from 'ramda';
-import { getValueOfFulfilledPromise, isPromiseFulfilled, toIdObject, unifyPagesResponse, unifyPages, toFlattedTranslation, searchParent } from './utils';
+import { groupBy, map, path, reduce, unwind } from 'ramda';
+import { getValueOfFulfilledPromise, isPromiseFulfilled, toIdObject, unifyPages, toFlattedTranslation, searchParent } from './utils';
 
 const pagesQuery = {
-	fields: ['id', 'parent', { translations: ['languages_code', 'path'] }],
+	fields: ['id', 'status', 'parent', { translations: ['languages_code', 'path'] }],
 	filter: {
 		_and: [
 			{
@@ -22,7 +22,7 @@ const pagesQuery = {
 };
 
 const moduleQuery = {
-	fields: ['id', 'parent_page', { translations: ['lang_code', 'path'] }]
+	fields: ['id', 'status', 'parent_page', { translations: ['lang_code', 'path'] }]
 };
 
 
@@ -50,8 +50,7 @@ async function getAllPagesParams() {
 
   const pages = toFlattedTranslation(pageRequestValues.flat()).filter(page => ['en', 'es', 'pt'].includes(page.locale)).map(page => ({path: [...(pagesPathFinder[page.locale][page.parent] || []),page.path].join('/')}))
   
-  console.log(pages) 
-  return []
+  return pages
 }
 
 export { getAllPagesParams };
