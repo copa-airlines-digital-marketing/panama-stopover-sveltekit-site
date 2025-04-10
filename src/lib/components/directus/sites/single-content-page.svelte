@@ -3,8 +3,8 @@
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { filter, propEq } from 'ramda';
 	import { cn } from '$lib/utils';
-	import { getTypography, getTypographyVariant } from '$lib/components/ui/foundations/typography';
-	import { Button } from '$lib/components/ui/foundations/button';
+	import { getTypography, getTypographyVariant } from '$lib/components/ui/typography';
+	import { Button } from '$lib/components/ui/button';
 
 	export let layout: PageSchema;
 	export let locale: string;

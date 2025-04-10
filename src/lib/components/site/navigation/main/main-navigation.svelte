@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/foundations/button';
+	import { Button } from '$lib/components/ui/button';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 	import { say } from '$lib/utils';
 

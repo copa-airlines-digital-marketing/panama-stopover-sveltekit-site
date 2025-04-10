@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getPageCannonicals } from '$lib/components/directus/context';
-	import { Button } from '$lib/components/ui/foundations/button';
-	import { KeyBoardArrowRight } from '$lib/components/ui/foundations/icon';
-	import { Breadcrum } from '$lib/components/ui/master/breadcrum';
+	import { Button } from '$lib/components/ui/button';
+	import { KeyBoardArrowRight } from '$lib/components/ui/icon';
+	import { Breadcrum } from '$lib/components/ui/breadcrum';
 	import type { HotelSchema } from '$lib/directus/hotels';
 	import type { PageSchema } from '$lib/directus/page';
 	import type { PlaceSchema } from '$lib/directus/place-to-visit';
@@ -11,8 +11,9 @@
 	import { getBreadcrumNames } from '$lib/i18n/cannonicals';
 	import { cn } from '$lib/utils';
 	import { isNotEmpty, mapAccum } from 'ramda';
+	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
 
-	export let item: PageSchema | HotelSchema | RestaurantSchema | PlaceSchema;
+	export let item: PageSchema | HotelSchema | RestaurantSchema | PlaceSchema | StopoverTour;
 	export let variant: 'primary' | 'invert' = 'primary';
 
 	$: locale = $page.data.locale;
@@ -21,11 +22,8 @@
 
 	const appender = (a: string, b: string) => [`${a}/${b}`, `${a}/${b}`];
 
-	$: [, breadcrumLinks] = $cannonicals && mapAccum(
-		appender,
-		'',
-		$cannonicals[locale].split('/').filter(isNotEmpty)
-	);
+	$: [, breadcrumLinks] =
+		$cannonicals && mapAccum(appender, '', $cannonicals[locale].split('/').filter(isNotEmpty));
 
 	$: breadcrumNames = locale && item && getBreadcrumNames(item)[locale].split('/').slice(1);
 </script>

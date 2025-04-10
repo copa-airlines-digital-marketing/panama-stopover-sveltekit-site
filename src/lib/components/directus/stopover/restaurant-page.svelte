@@ -4,7 +4,7 @@
 	import { getDirectusImage } from './utils';
 	import { Hero } from '$lib/components/site/items';
 	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
-	import { getTypography } from '$lib/components/ui/foundations/typography';
+	import { getTypography } from '$lib/components/ui/typography';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
 	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
@@ -14,13 +14,15 @@
 
 	export let stopover_restaurants: RestaurantSchema;
 
-	const { main_image, translations } = stopover_restaurants;
+	const { gallery, main_image, translations } = stopover_restaurants;
 
 	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
 
 	const {
-		0: { description, promo_name, promo_description }
+		0: { description, name, promo_name, promo_description }
 	} = currrentTranslation;
+
+	const galleryImages = gallery.map((img) => img.directus_files_id);
 
 	const item = stopover_restaurants;
 
@@ -32,16 +34,16 @@
 </script>
 
 <svelte:head>
-	<title>{currrentTranslation[0].name}</title>
-	<meta name="description" content={currrentTranslation[0].description} />
-	<meta property="og:title" content={currrentTranslation[0].name} />
+	<title>{name}</title>
+	<meta name="description" content={description} />
+	<meta property="og:title" content={name} />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content={$page.url.href} />
 	<meta property="og:image" content="{getDirectusImage(main_image)}?key=19x10-1200" />
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
-<Hero {item} class="bg-stopover-gastronomy" />
+<Hero {galleryImages} {main_image} {name} class="bg-stopover-gastronomy" />
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum {item} />

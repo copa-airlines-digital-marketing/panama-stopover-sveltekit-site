@@ -7,7 +7,7 @@
 	import { PlainSectionCotent } from '../..';
 	import { Tabs } from 'bits-ui';
 	import { setTabContext } from './context';
-	import { buttonVariants } from '$lib/components/ui/foundations/button';
+	import { buttonVariants } from '$lib/components/ui/button';
 	import { crossfade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { PromoShow } from '$lib/components/ui/patterns/cards/promo-show';
+	import { PromoShow } from '$lib/components/ui/cards/promo-show';
 	import type { StopoverHotelModuleSchema } from '$lib/directus/stopover_hotel_module';
 	import { toString, map, replace, isNotNil, isNil } from 'ramda';
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '../../stopover/utils';
-	import KeyboardArrowRight from '$lib/components/ui/foundations/icon/keyboard-arrow-right.svelte';
+	import KeyboardArrowRight from '$lib/components/ui/icon/keyboard-arrow-right.svelte';
 	import { getPathRecursive } from '$lib/i18n/cannonicals';
 	import type { PathSchema } from '$lib/directus/page';
 	import { onMount } from 'svelte';

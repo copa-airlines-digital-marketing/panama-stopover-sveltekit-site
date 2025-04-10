@@ -10,16 +10,17 @@
 		PlacePage,
 		RestaurantPage,
 		StartOfPage,
-		SingleContentPage
+		SingleContentPage,
+		TourPage
 	} from '$lib/components/directus';
 	import { getCookie, say, setCookie } from '$lib/utils';
 	import { ScrollArea } from 'bits-ui';
 	import { getCannonicals } from '$lib/i18n/cannonicals';
 	import { setPageCannonicals } from './context';
 	import { page } from '$app/stores';
-	import { Drawer } from '../ui/master/drawer';
+	import { Drawer } from '$lib/components/ui/drawer';
 	import { onMount } from 'svelte';
-	import { CloseIcon } from '../ui/foundations/icon';
+	import { CloseIcon } from '../ui/icon';
 
 	$: environment = $page.data.environment;
 	$: siteSettings = $page.data.siteSettings;
@@ -31,6 +32,7 @@
 	$: stopover_hotels = $page.data.stopover_hotels;
 	$: stopover_place_to_visit = $page.data.stopover_place_to_visit;
 	$: stopover_restaurants = $page.data.stopover_restaurants;
+	$: stopover_tour = $page.data.stopover_tour;
 
 	export let single_content: TextContentSchema | null | undefined = undefined;
 
@@ -40,13 +42,19 @@
 			!!stopover_hotels ||
 			!!stopover_restaurants ||
 			!!stopover_place_to_visit ||
+			!!stopover_tour ||
 			!!single_content);
 
 	$: headerSection = layoutSections[0];
 	$: footerSection = layoutSections[1];
 	$: cookieBanner = layoutSections[2];
 
-	$: item = pageInfo || stopover_hotels?.hotel || stopover_restaurants || stopover_place_to_visit;
+	$: item =
+		pageInfo ||
+		stopover_hotels?.hotel ||
+		stopover_restaurants ||
+		stopover_place_to_visit ||
+		stopover_tour;
 
 	$: cannonicals = item && getCannonicals(item);
 
@@ -101,6 +109,8 @@
 						<RestaurantPage {siteSettings} {layout} {stopover_restaurants} />
 					{:else if isNotNil(stopover_place_to_visit)}
 						<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
+					{:else if isNotNil(stopover_tour)}
+						<TourPage {siteSettings} {layout} {stopover_tour} />
 					{/if}
 				</main>
 

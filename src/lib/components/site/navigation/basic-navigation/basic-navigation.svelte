@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Pre } from '$lib/components/testing';
-	import type { ButtonProps } from '$lib/components/ui/foundations/button';
-	import Button from '$lib/components/ui/foundations/button/button.svelte';
-	import { SVG } from '$lib/components/ui/foundations/icon';
+	import type { ButtonProps } from '$lib/components/ui/button';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { SVG } from '$lib/components/ui/icon';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 
 	export let navigation: NavigationSchema;

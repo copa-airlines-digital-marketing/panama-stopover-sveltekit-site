@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import type { HotelSchema } from '$lib/directus/hotels';
 	import { IconnedCTA } from '$lib/components/site/ui/icon-cta';
-	import { SVG } from '$lib/components/ui/foundations/icon';
+	import { SVG } from '$lib/components/ui/icon';
 
 	export let item: HotelSchema;
 

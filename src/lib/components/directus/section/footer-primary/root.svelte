@@ -2,7 +2,7 @@
 	import type { SectionSchema } from '$lib/directus/section';
 	import { cn } from '$lib/utils';
 	import { isNotNil } from 'ramda';
-	import { containerVariant, sectionVariants } from '../../sites';
+	import { containerVariant } from '../../sites';
 	import { landmarkToTag } from '../../utils';
 	import { SectionContent } from '../..';
 

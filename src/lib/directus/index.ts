@@ -1,18 +1,18 @@
-import type { ZodObject, ZodRawShape } from "zod"
-import { hotelSchema, isHotelSchema, type HotelSchema } from "./hotels"
-import { isPageSettings, pageSchema, type PageSchema } from "./page"
-import { isPlaceSchema, placeSchema, type PlaceSchema } from "./place-to-visit"
-import { isRestaurantSchema, restaurantSchema, type RestaurantSchema } from "./restaurants"
-import { getSiteSettings, isSiteSettings, siteSettingSchema, type SiteSettingsSchema } from "./site-settings"
+import { type HotelSchema } from "./hotels"
+import { type PageSchema } from "./page"
+import { type PlaceSchema } from "./place-to-visit"
+import { type RestaurantSchema } from "./restaurants"
+import { getSiteSettings, type SiteSettingsSchema } from "./site-settings"
 import type { DirectusRequestBody } from "./utils"
 import { filter, head, includes, isNil, keys, pipe } from "ramda"
 import { CATEGORIES_MAP } from "$env/static/private"
 import { say } from "$lib/utils"
-import { getSections, isSectionSchema, sectionSchema, type SectionSchema } from "./section"
+import { getSections, type SectionSchema } from "./section"
 import { getPage } from "./pageRequest"
 import { getHotel } from "./hotelRequests"
 import { getRestaurant } from "./restaurantRequest"
 import { getPlace } from "./placeRequest"
+import { getPublishedTours } from "./tours"
 
 type KeyToTypeMap = {
   'site-settings': SiteSettingsSchema,
@@ -31,28 +31,11 @@ const keyToDataMap: Record<DirectusDataKeys, (body: DirectusRequestBody) => Prom
   'sections': getSections,
   'stopover_hotels': getHotel,
   'stopover_restaurants': getRestaurant,
-  'stopover_place_to_visit': getPlace
+  'stopover_place_to_visit': getPlace,
+  'stopover_tour': getPublishedTours,
 } as const
 
-const isDirectusDataKey = (value: unknown): value is DirectusDataKeys => includes(value, keys(keyToDataMap))
-
-const keyToValidationMap: Record<DirectusDataKeys, (value: unknown) => value is KeyToTypeMap[DirectusDataKeys] > = {
-  'site-settings': isSiteSettings,
-  'page': isPageSettings,
-  'sections': isSectionSchema,
-  'stopover_hotels': isHotelSchema,
-  'stopover_restaurants': isRestaurantSchema,
-  'stopover_place_to_visit': isPlaceSchema
-}
-
-const keyToSchemaMap: Record<DirectusDataKeys, ZodObject<ZodRawShape>> = {
-  'site-settings': siteSettingSchema,
-  'page': pageSchema,
-  'sections': sectionSchema,
-  'stopover_hotels': hotelSchema,
-  'stopover_restaurants': restaurantSchema,
-  'stopover_place_to_visit': placeSchema
-}
+const isDirectusDataKey = (value: unknown): value is DirectusDataKeys => includes(value, keys(keyToDataMap));
 
 const keymapFilter = (subCategory: string) => (value: string) => {
   return includes(subCategory, value)
@@ -79,19 +62,14 @@ const articleToKeyMap = (subCategory: string | null, article: string | null): Di
   }
 }
 
-
-
 const getData = async (key: DirectusDataKeys, body: DirectusRequestBody) => {
   const data = await keyToDataMap[key](body)
-
   return data
 }
 
 export {
   articleToKeyMap,
-  getData,
-  keyToSchemaMap,
-  keyToValidationMap
+  getData
 }
 
 

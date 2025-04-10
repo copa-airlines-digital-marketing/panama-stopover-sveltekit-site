@@ -1,4 +1,4 @@
-import { getTypographyVariant } from "$lib/components/ui/foundations/typography";
+import { getTypographyVariant } from "$lib/components/ui/typography";
 import { cmTailwindVariants } from "$lib/utils";
 import type { ButtonProps } from "bits-ui";
 import type { VariantProps } from "tailwind-variants";

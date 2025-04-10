@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { Button } from '$lib/components/ui/foundations/button';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
+	import { Button } from '$lib/components/ui/button';
+	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
 	import { page } from '$app/stores';
 	import type { TextContentSchema } from '$lib/directus/text-content';
-	import { SVG } from '$lib/components/ui/foundations/icon';
+	import { SVG } from '$lib/components/ui/icon';
 	import { mediaQueryLG, mediaQueryMD } from '$lib/constants';
 
 	export let item: TextContentSchema;

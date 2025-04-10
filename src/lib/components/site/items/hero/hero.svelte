@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
-	import type { HotelSchema } from '$lib/directus/hotels';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
+	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { cn } from '$lib/utils';
-	import { page } from '$app/stores';
 	import ItemGallery from '$lib/components/site/items/carousel/carousel.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
@@ -13,19 +9,11 @@
 
 	let className: string | null | undefined = undefined;
 	export { className as class };
-	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
-
-	const { main_image, gallery, translations } = item;
-
-	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
-
-	const galleryImages = gallery.map((v) => v.directus_files_id);
+	export let galleryImages: string[];
+  export let main_image: string;
+  export let name: string 
 
 	let selectedImage = 0;
-
-	const {
-		0: { name }
-	} = currrentTranslation;
 
 	function changeSelectionElswere(event: CustomEvent) {
 		selectedImage = event.detail;

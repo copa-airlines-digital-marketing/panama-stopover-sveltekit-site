@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Alert } from '$lib/components/ui/master/alerts/alert';
+	import { Alert } from '$lib/components/ui/alerts/alert';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 
 	export let item: TextContentSchema;

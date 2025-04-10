@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
+	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { mediaQueryMD } from '$lib/constants';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { Breadcrum } from '../../navigation/breadcrum';

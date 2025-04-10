@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { Button } from '$lib/components/ui/foundations/button';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
+	import { Button } from '$lib/components/ui/button';
+	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import Description from '../description/description.svelte';
 

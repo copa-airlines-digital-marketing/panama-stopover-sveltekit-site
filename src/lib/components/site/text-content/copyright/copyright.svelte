@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getTypography } from '$lib/components/ui/foundations/typography';
+	import { getTypography } from '$lib/components/ui/typography';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { cn } from '$lib/utils';
 

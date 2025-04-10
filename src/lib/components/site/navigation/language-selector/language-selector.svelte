@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { getPageCannonicals } from '$lib/components/directus/context';
-	import { buttonVariants } from '$lib/components/ui/foundations/button';
-	import { SVG } from '$lib/components/ui/foundations/icon';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
-	import { Linkbar } from '$lib/components/ui/patterns/menu/linkbar';
+	import { buttonVariants } from '$lib/components/ui/button';
+	import { SVG } from '$lib/components/ui/icon';
+	import { getTypographyVariant } from '$lib/components/ui/typography';
+	import { Linkbar } from '$lib/components/ui/menu/linkbar';
 	import {
 		ModalBody,
 		ModalRoot,
@@ -11,7 +11,7 @@
 		ModalClose,
 		ModalTrigger,
 		ModalTitle
-	} from '$lib/components/ui/patterns/modal';
+	} from '$lib/components/ui/modal';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 	import { page } from '$app/stores';
 	import { dissoc } from 'ramda';
