@@ -74,14 +74,14 @@
 		<h2 class={getTypographyVariant('h2', 'text-primary')}>{location.value}</h2>
 		{#if !useName}
 			<div
-				class="mb-6 mt-2 aspect-[4/3] w-full rounded-2xl shadow-md md:aspect-[3/1]"
+				class="mb-6 mt-2 aspect-4/3 w-full rounded-2xl shadow-md md:aspect-3/1"
 				title="Mapa"
 				style="border:0"
 				id="map"
 			></div>
 		{:else}
 			<iframe
-				class="mb-6 mt-2 aspect-[4/3] w-full rounded-2xl shadow-md md:aspect-[3/1]"
+				class="mb-6 mt-2 aspect-4/3 w-full rounded-2xl shadow-md md:aspect-3/1"
 				title="Mapa"
 				style="border:0"
 				loading="lazy"

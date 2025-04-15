@@ -56,7 +56,7 @@
 		</ItemGallery>
 	</div>
 	<div
-		class="relative col-span-full row-span-2 row-start-2 bg-gradient-to-t from-black to-transparent"
+		class="relative col-span-full row-span-2 row-start-2 bg-linear-to-t from-black to-transparent"
 	></div>
 	<div class="relative col-start-2 row-start-2">
 		<slot />
@@ -90,14 +90,14 @@
 						<img
 							src="{getDirectusImage(img)}?key=stopover-item-thumbnail-sm"
 							alt={name}
-							class="h-auto w-full rounded"
+							class="h-auto w-full rounded-sm"
 						/>
 					</picture>
 					{#if selectedImage === i}
 						<div
 							in:send={{ key: 'trigger' }}
 							out:receive={{ key: 'trigger' }}
-							class={cn('absolute inset-0 rounded mix-blend-color', className)}
+							class={cn('absolute inset-0 rounded-sm mix-blend-color', className)}
 						></div>
 					{/if}
 				</button>

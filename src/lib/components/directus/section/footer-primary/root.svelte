@@ -40,7 +40,7 @@
 	style="background-color:{background_color || 'transparent'};"
 >
 	{#if isNotNil(section_content)}
-		<div class="footer-primary container mx-auto grid justify-items-center gap-4">
+		<div class="[grid-template-areas:'logo''lang''legal''social''copyright'] container mx-auto grid justify-items-center gap-4">
 			{#each section_content as item}
 				<SectionContent section_content={item} />
 			{:else}
@@ -51,9 +51,3 @@
 		{console.warn('no content for section: ' + id)}
 	{/if}
 </svelte:element>
-
-<style lang="postcss">
-	.footer-primary {
-		@apply [grid-template-areas:'logo''lang''legal''social''copyright'];
-	}
-</style>

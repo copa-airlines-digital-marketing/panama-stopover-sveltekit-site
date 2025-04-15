@@ -12,7 +12,7 @@ const buttonVariants = cmTailwindVariants({
       giant: 'px-8 py-6 gap-2 rounded-full text-2xl border *:max-h-8',
       'fancy-big': 'px-4 py-3 rounded-full gap-2 text-d1 border *:max-h-10',
       'fancy-small': 'px-4 py-1 rounded-full gap-2 text-d1 border *:max-h-8',
-      'link': 'text-d3 sm:text-d1 md:text-b *:max-h-4 sm:*:max-h-5 md:*:max-h-6 outline-none min-w-max border-b border-b-transparent hover:border-b-current active:border-b-current focus:border-b-current',
+      'link': 'text-d3 sm:text-d1 md:text-b *:max-h-4 sm:*:max-h-5 md:*:max-h-6 outline-hidden min-w-max border-b border-b-transparent hover:border-b-current active:border-b-current focus:border-b-current',
 		},
 		variant: {
       'solid-primary-main': 'bg-primary text-common-white outline-primary border-primary hover:bg-primary-ultradark active:bg-primary focus:bg-primary-ultradark disabled:text-grey-500 disabled:bg-grey-100',

@@ -26,20 +26,20 @@
 </script>
 
 {#if isNil(moduleItems)}
-	<div class="item-show-grid my-6 grid gap-2">
+	<div class="grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))] my-6 grid gap-2">
 		{#each new Array(4) as skeli}
 			<PromoShow let:Children>
 				<Children.Image class="aspect-video bg-grey-100" />
 				<Children.Discount class="h-4 w-10 animate-pulse justify-self-end bg-grey-300" />
-				<Children.Title class="h-5 animate-pulse rounded bg-grey-300" />
+				<Children.Title class="h-5 animate-pulse rounded-sm bg-grey-300" />
 				<Children.CallToAction
-					class="h-3 w-10 animate-pulse justify-self-end rounded bg-grey-300"
+					class="h-3 w-10 animate-pulse justify-self-end rounded-sm bg-grey-300"
 				/>
 			</PromoShow>
 		{/each}
 	</div>
 {:else}
-	<ul class="item-show-grid my-6 grid items-stretch gap-2 md:gap-4">
+	<ul class="grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))] my-6 grid items-stretch gap-2 md:gap-4">
 		{#each moduleItems as promo}
 			{#if promo.parent_page}
 				<li>
@@ -78,9 +78,3 @@
 		{/each}
 	</ul>
 {/if}
-
-<style lang="postcss">
-	.item-show-grid {
-		@apply grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))];
-	}
-</style>

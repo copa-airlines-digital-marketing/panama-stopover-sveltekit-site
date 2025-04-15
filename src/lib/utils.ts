@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { quintOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { extendTailwindMerge } from 'tailwind-merge';
-import { default as Preset } from 'cmds-tailwind-styles';
+//import { default as Preset } from 'cmds-tailwind-styles';
 import { allPass, curry, has, isNotEmpty, isNotNil } from 'ramda';
 import { createTV } from 'tailwind-variants';
 
@@ -17,7 +17,7 @@ function flatObject(entry: [string, string | object]) {
 		.map((v) => key + (v ? '-' + v : ''));
 }
 
-const colors = Object.entries(Preset.theme.extend.colors)
+/*const colors = Object.entries(Preset.theme.extend.colors)
 	.flatMap(flatObject)
 	.concat([
 		'stopover-gastronomy',
@@ -25,18 +25,18 @@ const colors = Object.entries(Preset.theme.extend.colors)
 		'stopover-nature',
 		'stopover-accent',
 		'stopover-culture'
-	]);
+	]);*/
 
 const cmTWMergeConfig = {
 	extend: {
-		theme: {
+		/*theme: {
 			colors: colors,
-			spacing: Object.keys(Preset.theme.extend.spacing)
+			//spacing: Object.keys(Preset.theme.extend.spacing)
 		},
 		classGroups: {
 			'font-family': [{ font: [...Object.keys(Preset.theme.extend.fontFamily), 'jakarta'] }], //this is good,
 			'font-size': [{ text: Object.keys(Preset.theme.extend.fontSize) }]
-		}
+		}*/
 	}
 } as const;
 

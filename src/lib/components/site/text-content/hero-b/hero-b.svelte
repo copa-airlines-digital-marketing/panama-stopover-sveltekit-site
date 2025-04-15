@@ -74,7 +74,7 @@
 	{/if}
 	{#if call_to_actions}
 		<ul class="col-start-2 row-start-7 mt-6 flex gap-2">
-			<li class="flex-grow">
+			<li class="grow">
 				{#each call_to_actions as cta, i}
 					<Button
 						href={cta.link}
