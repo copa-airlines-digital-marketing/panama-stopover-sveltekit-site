@@ -15,7 +15,9 @@
       "$lib": ["src/lib"],
       "$lib/*": ["src/lib/*"],
       "$cms/*": ["directus-cms-collections/src/*"],
-      "$cms": ["directus-cms-collections/src"]
+      "$cms": ["directus-cms-collections/src"],
+      "$ui": ["design-sytem-svelte-components/src/lib"],
+      "$ui/*": ["design-sytem-svelte-components/src/lib/*"],
     }
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
