@@ -4,6 +4,6 @@
 	import { cn } from '$lib/utils';
 </script>
 
-<div class={cn(getTypography('caption-small', 'caption'), 'text-center text-current')}>
+<div class={cn(getTypography('caption-small', 'caption'), 'mb-2 text-center text-current')}>
 	<slot />
 </div>

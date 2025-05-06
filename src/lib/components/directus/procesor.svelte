@@ -14,7 +14,6 @@
 		TourPage
 	} from '$lib/components/directus';
 	import { getCookie, say, setCookie } from '$lib/utils';
-	import { ScrollArea } from 'bits-ui';
 	import { getCannonicals } from '$lib/i18n/cannonicals';
 	import { setPageCannonicals } from './context';
 	import { page } from '$app/stores';
@@ -86,65 +85,51 @@
 	page_start_of_page_code={pageInfo?.start_of_body_code}
 />
 
-<ScrollArea.Root class="relative">
-	<ScrollArea.Viewport class="h-svh w-full">
-		<ScrollArea.Content>
-			<div class="relative grid min-h-svh grid-cols-1 grid-rows-[auto_1fr_auto]">
-				<div class="z-50 col-start-1 row-start-1">
-					{#if headerSection}
-						<Section section={headerSection}></Section>
-					{:else}
-						{say('header section in layout is required', headerSection)}
-					{/if}
+<div class="relative grid min-h-svh grid-cols-1 grid-rows-[auto_1fr_auto]">
+	<div class="z-50 col-start-1 row-start-1">
+		{#if headerSection}
+			<Section section={headerSection}></Section>
+		{:else}
+			{say('header section in layout is required', headerSection)}
+		{/if}
+	</div>
+
+	<main class="col-start-1 row-span-2 row-start-1">
+		{#if isNotNil(single_content)}
+			<SingleContentPage {layout} {single_content} {locale} />
+		{:else if isNotNil(pageInfo)}
+			<Page pageItem={pageInfo} {pageSections} {layout} />
+		{:else if isNotNil(stopover_hotels)}
+			<HotelPage {stopover_hotels} />
+		{:else if isNotNil(stopover_restaurants)}
+			<RestaurantPage {siteSettings} {layout} {stopover_restaurants} />
+		{:else if isNotNil(stopover_place_to_visit)}
+			<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
+		{:else if isNotNil(stopover_tour)}
+			<TourPage {siteSettings} {layout} {stopover_tour} />
+		{/if}
+	</main>
+
+	{#if footerSection}
+		<div class="col-start-1 row-start-3">
+			<Section section={footerSection}></Section>
+		</div>
+	{:else}
+		{say('footer section in layout is required', footerSection)}
+	{/if}
+	{#if cookieBanner}
+		<Drawer let:Content let:Close bind:open={bannerTrigger} onOpenChange={onOpenChangeCookieBanner}>
+			<Content aria-label="Cookies">
+				<div class="container mx-auto flex items-start">
+					<Section section={cookieBanner}></Section>
+					<Close aria-label="cerrar - close - fechar">
+						<CloseIcon class="fill-primary-light size-6"></CloseIcon>
+					</Close>
 				</div>
-
-				<main class="col-start-1 row-span-2 row-start-1">
-					{#if isNotNil(single_content)}
-						<SingleContentPage {layout} {single_content} {locale} />
-					{:else if isNotNil(pageInfo)}
-						<Page pageItem={pageInfo} {pageSections} {layout} />
-					{:else if isNotNil(stopover_hotels)}
-						<HotelPage {stopover_hotels} />
-					{:else if isNotNil(stopover_restaurants)}
-						<RestaurantPage {siteSettings} {layout} {stopover_restaurants} />
-					{:else if isNotNil(stopover_place_to_visit)}
-						<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
-					{:else if isNotNil(stopover_tour)}
-						<TourPage {siteSettings} {layout} {stopover_tour} />
-					{/if}
-				</main>
-
-				{#if footerSection}
-					<div class="col-start-1 row-start-3">
-						<Section section={footerSection}></Section>
-					</div>
-				{:else}
-					{say('footer section in layout is required', footerSection)}
-				{/if}
-				{#if cookieBanner}
-					<Drawer
-						let:Content
-						let:Close
-						bind:open={bannerTrigger}
-						onOpenChange={onOpenChangeCookieBanner}
-					>
-						<Content aria-label="Cookies">
-							<div class="container mx-auto flex items-start">
-								<Section section={cookieBanner}></Section>
-								<Close aria-label="cerrar - close - fechar">
-									<CloseIcon class="fill-primary-light size-6"></CloseIcon>
-								</Close>
-							</div>
-						</Content>
-					</Drawer>
-				{/if}
-			</div>
-		</ScrollArea.Content>
-	</ScrollArea.Viewport>
-	<ScrollArea.Scrollbar orientation="vertical">
-		<ScrollArea.Thumb />
-	</ScrollArea.Scrollbar>
-</ScrollArea.Root>
+			</Content>
+		</Drawer>
+	{/if}
+</div>
 
 <EndOfPage
 	site_end_of_page_code={siteSettings.end_of_body_code}

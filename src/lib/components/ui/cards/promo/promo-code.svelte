@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { toast } from 'svelte-sonner';
+	import { buttonVariants } from '$ui/components/button';
+	import { cn } from '$lib/utils';
 
 	let btn: HTMLButtonElement;
 
@@ -25,7 +26,10 @@
 <button
 	type="button"
 	bind:this={btn}
-	class={getTypographyVariant('h3', 'flex w-full items-center justify-center text-grey-50')}
+	class={cn(
+		buttonVariants({ variant: 'transparent-primary-main', size: 'large' }),
+		'text-grey-50 focus-visible:outline-grey-50 focus:outline-grey-50 active:outline-grey-50 font-jakarta mx-auto cursor-copy font-semibold'
+	)}
 	on:click={copyCode}
 >
 	<slot />

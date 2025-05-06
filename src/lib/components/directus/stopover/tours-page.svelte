@@ -66,19 +66,16 @@
 </svelte:head>
 
 <Hero {galleryImages} {name} {main_image} class="bg-secondary" />
-<div class="container mx-auto my-8 space-y-normal">
+<div class="space-y-normal container mx-auto my-8">
 	<div>
 		<Breadcrum item={stopover_tour} />
-		<p class={getTypography('body', 'body', 'flex items-center text-grey-600')}>
-			<span> </span>
-		</p>
 		<p class={getTypography('body-large', 'body', 'mb-petit')}>
 			{description}
 		</p>
 		{#if promo_name && promo_description}
 			<StopoverPromoCard item={stopover_tour}></StopoverPromoCard>
 		{/if}
-		<div class="mb-4 md:flex md:justify-center">
+		<div class="my-4 md:flex md:justify-center">
 			<MainCallToAction item={stopover_tour} class="mt-petit"></MainCallToAction>
 		</div>
 		{#if redeemDisclaimer && promo_name}

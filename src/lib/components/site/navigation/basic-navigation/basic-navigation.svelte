@@ -18,7 +18,14 @@
 	{#each links as link, i}
 		{@const { href, text, target, rel, icon } = link.links_id}
 		<li class="grow md:grow-0">
-			<Button {href} {target} rel={rel?.join(' ')} variant={buttonVariant[i]} title={text} class='font-jakarta' />
+			<Button
+				{href}
+				{target}
+				rel={rel?.join(' ')}
+				variant={buttonVariant[i]}
+				title={text}
+				class="font-jakarta"
+			>
 				{#if icon}
 					<SVG data={icon.code} title={text} class="w-auto fill-current"></SVG>
 				{/if}
