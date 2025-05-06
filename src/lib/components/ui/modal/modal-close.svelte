@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Dialog } from 'bits-ui';
-	import { buttonVariants } from '$lib/components/ui/button';
+	import { buttonVariants } from '$ui/components/button';
 	import { CloseIcon } from '$lib/components/ui/icon';
 	import { cn } from '$lib/utils';
 
@@ -13,7 +13,7 @@
 
 <div class="-mt-11 flex w-full justify-end px-2 pt-2">
 	<Dialog.Close
-		class={cn(buttonVariants({ variant: 'transparent-primary-main' }), className)}
+		class={cn(buttonVariants({ variant: 'transparent-primary-main' }), className, 'font-gilroy')}
 		{...$$restProps}
 	>
 		<CloseIcon class="size-5 fill-current" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
+	import { Button } from '$ui/components/button';
 	import { SVG } from '$lib/components/ui/icon';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 	import { say } from '$lib/utils';
@@ -24,7 +24,7 @@
 					rel={rel?.join(' ')}
 					size="link"
 					variant="link"
-					class="text-d3 font-normal text-primary-light sm:text-d3 md:text-d3 lg:text-d3"
+					class="text-d3 text-primary-light sm:text-d3 md:text-d3 lg:text-d3 font-normal"
 				>
 					{text}
 				</Button>

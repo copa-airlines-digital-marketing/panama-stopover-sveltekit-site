@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Button } from '$lib/components/ui/button';
+	import { Button } from '$ui/components/button';
 	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { isHotelSchema, type HotelSchema } from '$lib/directus/hotels';
 	import type { PlaceSchema } from '$lib/directus/place-to-visit';

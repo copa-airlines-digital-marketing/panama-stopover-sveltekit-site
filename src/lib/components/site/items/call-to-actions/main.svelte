@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
-	import { Button } from '$lib/components/ui/button';
+	import { Button } from '$ui/components/button';
 	import type { HotelSchema } from '$lib/directus/hotels';
 	import type { PlaceSchema } from '$lib/directus/place-to-visit';
 	import type { RestaurantSchema } from '$lib/directus/restaurants';

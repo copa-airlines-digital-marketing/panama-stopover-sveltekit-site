@@ -3,51 +3,73 @@ import { clsx } from 'clsx';
 import { quintOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { extendTailwindMerge } from 'tailwind-merge';
-//import { default as Preset } from 'cmds-tailwind-styles';
 import { allPass, curry, has, isNotEmpty, isNotNil } from 'ramda';
 import { createTV } from 'tailwind-variants';
 
-function flatObject(entry: [string, string | object]) {
-	const [key, value] = entry;
-
-	if (typeof value === 'string') return key === 'DEFAULT' ? null : key;
-
-	return Object.entries(value)
-		.flatMap(flatObject)
-		.map((v) => key + (v ? '-' + v : ''));
-}
-
-/*const colors = Object.entries(Preset.theme.extend.colors)
-	.flatMap(flatObject)
-	.concat([
-		'stopover-gastronomy',
-		'stopover-canal',
-		'stopover-nature',
-		'stopover-accent',
-		'stopover-culture'
-	]);*/
-
-const cmTWMergeConfig = {
+const stopoverTWMergeConfig = {
 	extend: {
-		/*theme: {
-			colors: colors,
-			//spacing: Object.keys(Preset.theme.extend.spacing)
-		},
-		classGroups: {
-			'font-family': [{ font: [...Object.keys(Preset.theme.extend.fontFamily), 'jakarta'] }], //this is good,
-			'font-size': [{ text: Object.keys(Preset.theme.extend.fontSize) }]
-		}*/
+		theme: {
+			colors: [
+				'primary',
+				'primary-light',
+				'primary-dark',
+				'primary-ultradark',
+				'primary-ultralight',
+				'primary-faded',
+				'secondary',
+				'secondary-faded',
+				'tertiary',
+				'background-lightblue',
+				'background-paper',
+				'alternative-pardo',
+				'alternative-gold',
+				'alternative-darkorange',
+				'alternative-lightorange',
+				'alternative-perfermemberblue',
+				'system-warning',
+				'system-warning-faded',
+				'system-error',
+				'system-error-faded',
+				'system-success',
+				'system-success-faded',
+				'grey-800',
+				'grey-700',
+				'grey-600',
+				'grey-500',
+				'grey-400',
+				'grey-300',
+				'grey-200',
+				'grey-100',
+				'grey-75',
+				'grey-50',
+				'common-black',
+				'common-white',
+				'status-member',
+				'status-silver',
+				'status-gold',
+				'status-platinum',
+				'status-presidential',
+				'stopover-accent',
+				'stopover-canal',
+				'stopover-culture',
+				'stopover-gastronomy',
+				'stopover-nature'
+			],
+			spacing: ['gutter', 'minimal', 'tiny', 'petit', 'normal', 'roomy', 'spacious', 'big', 'huge'],
+			font: ['Gilroy', "Suisse Int\'l", 'Jakarta'],
+			text: ['d3', 'd2', 'd1', 'b', 'u4', 'u1', 'u2', 'u3', 'u4', 'u5', 'u6']
+		}
 	}
 } as const;
 
-const customTwMerge = extendTailwindMerge(cmTWMergeConfig);
+const tm = extendTailwindMerge(stopoverTWMergeConfig);
 
-const cmTailwindVariants = createTV({
-	twMergeConfig: cmTWMergeConfig
+const tv = createTV({
+	twMergeConfig: stopoverTWMergeConfig
 });
 
 function cn(...inputs: ClassValue[]) {
-	return customTwMerge(clsx(inputs));
+	return tm(clsx(inputs));
 }
 
 type FlyAndScaleParams = {
@@ -149,8 +171,8 @@ export {
 	isNotNilNorEmpty,
 	say,
 	styleToString,
-	cmTailwindVariants,
-	customTwMerge,
+	tv as cmTailwindVariants,
+	tm as customTwMerge,
 	setCookie,
 	getCookie,
 	isNumberArray,

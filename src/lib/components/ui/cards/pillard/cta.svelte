@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonVariants } from '$lib/components/ui/button';
+	import { buttonVariants } from '$ui/components/button';
 	import { cn } from '$lib/utils';
 	import type { HTMLAttributes } from 'svelte/elements';
 
@@ -10,7 +10,11 @@
 </script>
 
 <span
-	class={cn(buttonVariants({ size: 'slim' }), 'mb-2 self-end md:justify-self-center', className)}
+	class={cn(
+		buttonVariants({ size: 'slim' }),
+		'font-gilroy mb-2 self-end md:justify-self-center',
+		className
+	)}
 	style="grid-area: cta;"
 >
 	<slot />

@@ -9,7 +9,7 @@
 </script>
 
 <DropdownMenuPrimitive.Content
-	class={cn('w-full max-w-56 rounded-md bg-backgound-paper shadow-md', className)}
+	class={cn('bg-background-paper w-full max-w-56 rounded-md shadow-md', className)}
 	transition={flyAndScale}
 	{...$$restProps}
 >

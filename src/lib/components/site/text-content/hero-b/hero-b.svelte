@@ -6,7 +6,7 @@
 	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { SVG } from '$lib/components/ui/icon';
-	import { Button } from '$lib/components/ui/button';
+	import { Button } from '$ui/components/button';
 	import { mediaQueryMD } from '$lib/constants';
 
 	export let item: TextContentSchema;
@@ -36,10 +36,10 @@
 			<Breadcrum item={pageSettings} variant="invert"></Breadcrum>
 		</div>
 	{/if}
-	<h1 class={getTypographyVariant('display', 'col-start-2 row-start-3 mb-6 text-grey-50')}>
+	<h1 class={getTypographyVariant('display', 'text-grey-50 col-start-2 row-start-3 mb-6')}>
 		{title}
 	</h1>
-	<div class="col-span-full col-start-1 row-span-3 row-start-5 bg-backgound-paper"></div>
+	<div class="bg-background-paper col-span-full col-start-1 row-span-3 row-start-5"></div>
 	s
 	{#if mainImage}
 		<div class="col-start-2 row-span-2 row-start-4">
@@ -66,7 +66,7 @@
 			class={getTypography(
 				'body',
 				'body',
-				`col-start-2 row-start-6 mb-spacious mt-6 [&_a:hover]:underline [&_a]:text-primary-light [&_h2]:mt-8 [&_h2]:text-u2 [&_h2]:font-bold [&_h2]:text-primary-dark [&_h3]:mt-6 [&_h3]:text-u1 [&_h3]:font-bold [&_h3]:text-grey-700 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-3`
+				`mb-spacious [&_a]:text-primary-light [&_h2]:text-u2 [&_h2]:text-primary-dark [&_h3]:text-u1 [&_h3]:text-grey-700 col-start-2 row-start-6 mt-6 [&_a:hover]:underline [&_h2]:mt-8 [&_h2]:font-bold [&_h3]:mt-6 [&_h3]:font-bold [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-3`
 			)}
 		>
 			{@html description}
@@ -80,6 +80,7 @@
 						href={cta.link}
 						target={cta.open_in}
 						variant={i > 0 ? 'outline-primary-main' : 'solid-primary-main'}
+						class="font-gilroy"
 					>
 						{cta.text}
 					</Button>

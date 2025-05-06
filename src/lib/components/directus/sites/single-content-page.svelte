@@ -4,7 +4,7 @@
 	import { filter, propEq } from 'ramda';
 	import { cn } from '$lib/utils';
 	import { getTypography, getTypographyVariant } from '$lib/components/ui/typography';
-	import { Button } from '$lib/components/ui/button';
+	import { Button } from '$ui/components/button';
 
 	export let layout: PageSchema;
 	export let locale: string;
@@ -30,7 +30,7 @@
 		</h1>
 	</div>
 </div>
-<div class="container mx-auto my-roomy">
+<div class="my-roomy container mx-auto">
 	<div class={getTypography('body-large', 'body')}>
 		{@html description}
 	</div>

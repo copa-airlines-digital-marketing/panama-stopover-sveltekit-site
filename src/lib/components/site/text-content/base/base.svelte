@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { Button } from '$lib/components/ui/button';
+	import { Button } from '$ui/components/button';
 	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import Description from '../description/description.svelte';
@@ -28,7 +28,7 @@
 	</picture>
 {/if}
 {#if title}
-	<h2 class={getTypographyVariant('h2', 'mb-4 mt-6 max-w-full')}>{title}</h2>
+	<h2 class={getTypographyVariant('h2', 'mt-6 mb-4 max-w-full')}>{title}</h2>
 {/if}
 <Description {description} />
 {#if call_to_actions}
@@ -39,6 +39,7 @@
 					href={cta.link}
 					target={cta.open_in}
 					variant={i > 0 ? 'outline-primary-main' : 'solid-primary-main'}
+					class="font-gilroy"
 				>
 					{cta.text}
 				</Button>

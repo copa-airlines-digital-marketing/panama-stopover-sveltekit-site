@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getPageCannonicals } from '$lib/components/directus/context';
-	import { Button } from '$lib/components/ui/button';
+	import { Button } from '$ui/components/button';
 	import { KeyBoardArrowRight } from '$lib/components/ui/icon';
 	import { Breadcrum } from '$lib/components/ui/breadcrum';
 	import type { HotelSchema } from '$lib/directus/hotels';
@@ -36,7 +36,7 @@
 					<Item let:Separator>
 						<Separator>
 							<KeyBoardArrowRight
-								class={cn('size-4 fill-grey-400 lg:size-6', {
+								class={cn('fill-grey-400 size-4 lg:size-6', {
 									'fill-green-100': variant === 'invert'
 								})}
 							/>
