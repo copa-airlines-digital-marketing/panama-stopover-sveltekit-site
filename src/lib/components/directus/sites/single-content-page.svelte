@@ -38,7 +38,12 @@
 		{#if call_to_actions}
 			{#each call_to_actions as cta, i}
 				{@const { text, link, open_in } = cta}
-				<Button href={link} target={open_in} variant={i === 0 ? undefined : 'outline-primary-main'}>
+				<Button
+					href={link}
+					target={open_in}
+					variant={i === 0 ? undefined : 'outline-primary-main'}
+					class="font-jakarta"
+				>
 					{text}
 				</Button>
 			{/each}

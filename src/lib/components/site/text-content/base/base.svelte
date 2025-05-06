@@ -39,7 +39,7 @@
 					href={cta.link}
 					target={cta.open_in}
 					variant={i > 0 ? 'outline-primary-main' : 'solid-primary-main'}
-					class="font-gilroy"
+					class="font-jakarta"
 				>
 					{cta.text}
 				</Button>

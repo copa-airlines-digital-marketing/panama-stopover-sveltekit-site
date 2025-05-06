@@ -56,7 +56,7 @@
 			<ul class="flex gap-2">
 				{#each ctas as cta}
 					<li>
-						<Button class="bg-secondary font-gilroy" href={cta.link} target={cta.open_in}
+						<Button class="bg-secondary font-jakarta" href={cta.link} target={cta.open_in}
 							>{cta.text}</Button
 						>
 					</li>

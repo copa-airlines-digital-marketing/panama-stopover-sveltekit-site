@@ -52,6 +52,7 @@
 						<Button
 							href={bclink}
 							size="link"
+							class="font-jankarta"
 							variant={variant === 'primary' ? 'link' : 'link-invert'}
 						>
 							{breadcrumNames[i]}

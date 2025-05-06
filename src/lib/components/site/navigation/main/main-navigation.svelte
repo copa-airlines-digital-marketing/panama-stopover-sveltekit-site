@@ -27,7 +27,7 @@
 					{target}
 					size="slim"
 					variant="transparent-primary-main"
-					class="text-d1 px-2 py-1 font-semibold"
+					class="text-d1 font-jakarta px-2 py-1 font-semibold"
 				>
 					{text}
 				</Button>

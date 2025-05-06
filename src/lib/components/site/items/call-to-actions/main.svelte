@@ -24,7 +24,13 @@
 </script>
 
 {#if url}
-	<Button href={url} rel="noreferrer nofollow" target="_blank" {...$$restProps}>
+	<Button
+		href={url}
+		rel="noreferrer nofollow"
+		target="_blank"
+		{...$$restProps}
+		class="font-jakarta"
+	>
 		{#if mainCTAText}
 			{mainCTAText.value}
 		{:else}

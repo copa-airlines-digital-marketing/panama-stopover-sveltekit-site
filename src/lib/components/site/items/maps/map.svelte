@@ -97,6 +97,7 @@
 				href={useName ? namedMapButtonURL : noNameMapButtonURL}
 				target="_blank"
 				rel="noreferrer nofollow"
+				class="font-jakarta"
 			>
 				{#if locationNavigate}
 					{locationNavigate.value}

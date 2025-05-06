@@ -16,7 +16,7 @@
 	import { page } from '$app/stores';
 	import { dissoc } from 'ramda';
 	import { browser } from '$app/environment';
-	import { cn } from '$ui';
+	import { cn } from '$lib/utils';
 
 	export let navigation: NavigationSchema;
 

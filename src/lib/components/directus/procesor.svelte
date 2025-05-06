@@ -128,11 +128,11 @@
 						bind:open={bannerTrigger}
 						onOpenChange={onOpenChangeCookieBanner}
 					>
-						<Content>
+						<Content aria-label="Cookies">
 							<div class="container mx-auto flex items-start">
 								<Section section={cookieBanner}></Section>
-								<Close>
-									<CloseIcon class="size-6 fill-primary-light"></CloseIcon>
+								<Close aria-label="cerrar - close - fechar">
+									<CloseIcon class="fill-primary-light size-6"></CloseIcon>
 								</Close>
 							</div>
 						</Content>

@@ -23,7 +23,8 @@
 					{target}
 					size="slim"
 					variant="transparent-primary-main"
-					class="rounded-full *:max-h-14 sm:*:max-h-14 md:*:max-h-14 lg:*:max-h-14"
+					class="font-jakarta rounded-full *:max-h-14 sm:*:max-h-14 md:*:max-h-14 lg:*:max-h-14"
+					title={text}
 				>
 					{#if icon}
 						<SVG data={icon?.code} class="h-14 w-auto"></SVG>

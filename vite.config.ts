@@ -8,6 +8,11 @@ export default defineConfig({
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},
+	server: {
+		fs: {
+			allow: ['./design-sytem-svelte-components/', './directus-cms-collections/']
+		}
+	},
 	resolve: {
 		alias: {
 			$cms: path.resolve('./directus-cms-collections/src'),
