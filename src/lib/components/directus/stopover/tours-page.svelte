@@ -5,7 +5,6 @@
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
 	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
 	import { Map as MapDisplay } from '$lib/components/site/items/maps';
-	import { HotelCTAs } from '$lib/components/site/items/iconned-cta';
 	import { SVG } from '$lib/components/ui/icon';
 	import { ItemIncludes } from '$lib/components/site/items/includes';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
@@ -16,7 +15,11 @@
 	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
 	import { isStopoverTourTranslations } from '$lib/directus/tours/utlis';
 	import type { StopoverTourTranslations } from '$cms/collections/stopover_tour_translations';
-	//import { isStopoverTourFile } from '$cms/collections/stopover_tour_files';
+	import { InformativeBoxContainer } from '$ui/components/boxes/informative';
+	import { AnunciosImportantes, CheckIn } from '$ui/components/pictograms';
+	import { Heading } from '$ui/components/typography';
+	import { cn } from '$lib/utils';
+	import { includes } from 'ramda';
 
 	export let stopover_tour: StopoverTour;
 
@@ -52,7 +55,7 @@
 		new Map()
 	);
 
-	console.log(operator);
+	const customcn = cn;
 </script>
 
 <svelte:head>
@@ -86,14 +89,41 @@
 		{/if}
 	</div>
 	<div>
-		<h2 class={getTypographyVariant('h2')}>
+		<Heading tag="h2" {customcn} class="font-jakarta">
 			{labels?.get('tour-experience')}
-		</h2>
+		</Heading>
 	</div>
 	<div>
-		<h2 class={getTypographyVariant('h2')}>
+		<Heading tag="h2" {customcn} class="font-jakarta">
 			{labels?.get('tour-includes')}
-		</h2>
+		</Heading>
+		<InformativeBoxContainer let:Box>
+			<Box alignment="center" class="bg-background-lightblue" let:Icon let:Title let:Description>
+				<Icon>
+					<CheckIn style="transparent" />
+				</Icon>
+				<Title>Incluye</Title>
+				<Description>
+					<ul>
+						{#each included?.map((i) => i.name) || [] as item}
+							<li>{item}</li>
+						{/each}
+					</ul>
+				</Description>
+			</Box>
+			<Box alignment="center" let:Icon let:Title let:Description>
+				<Icon>
+					<AnunciosImportantes />
+				</Icon>
+				<Title>No incluye</Title>
+				<Description>
+					yo
+					{#each not_included?.map((i) => i.name) || [] as item}
+						<li>{item}</li>
+					{/each}
+				</Description>
+			</Box>
+		</InformativeBoxContainer>
 	</div>
 	<!--
   <div class="space-y-4">
