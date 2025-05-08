@@ -1,13 +1,9 @@
 <script lang="ts">
-	import { getTypography, getTypographyVariant } from '$lib/components/ui/typography';
+	import { getTypography } from '$lib/components/ui/typography';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
 	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
-	import { Map as MapDisplay } from '$lib/components/site/items/maps';
-	import { SVG } from '$lib/components/ui/icon';
-	import { ItemIncludes } from '$lib/components/site/items/includes';
-	import { SpokenLanguages } from '$lib/components/site/items/languages';
 	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
 	import { getDirectusImage } from './utils';
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
@@ -19,7 +15,6 @@
 	import { AnunciosImportantes, CheckIn } from '$ui/components/pictograms';
 	import { Heading } from '$ui/components/typography';
 	import { cn } from '$lib/utils';
-	import { includes } from 'ramda';
 
 	export let stopover_tour: StopoverTour;
 
@@ -102,8 +97,8 @@
 				<Icon>
 					<CheckIn style="transparent" />
 				</Icon>
-				<Title>Incluye</Title>
-				<Description>
+				<Title class="font-jakarta">{labels?.get('included')}</Title>
+				<Description tag="ul" class="font-jakarta">
 					<ul>
 						{#each included?.map((i) => i.name) || [] as item}
 							<li>{item}</li>
@@ -115,9 +110,8 @@
 				<Icon>
 					<AnunciosImportantes />
 				</Icon>
-				<Title>No incluye</Title>
-				<Description>
-					yo
+				<Title class="font-jakarta">{labels?.get('not-included')}</Title>
+				<Description tag="ul" class="font-jakarta">
 					{#each not_included?.map((i) => i.name) || [] as item}
 						<li>{item}</li>
 					{/each}
@@ -125,19 +119,9 @@
 			</Box>
 		</InformativeBoxContainer>
 	</div>
-	<!--
-  <div class="space-y-4">
-      <h2 class={getTypographyVariant('h2')}>
-        {#if hotelIncludesLabel}
-				{hotelIncludesLabel.value}
-        {:else}
-				{'Plase include a hotel-includes label to the site'}
-        {/if}
-      </h2>
-      <ItemIncludes {item} amenites={stopover_hotels.amenities}></ItemIncludes>
-    </div>
-    <SpokenLanguages {item}></SpokenLanguages>
-    <Map {item}></Map>
-    <HotelCTAs {item}></HotelCTAs>
-    -->
+	<div>
+		<Heading tag="h2" {customcn} class="font-jakarta">
+			{labels?.get('tour-operated-by')}
+		</Heading>
+	</div>
 </div>

@@ -45,14 +45,14 @@
 				{/if}
 				<Item let:Page>
 					{#if i === breadcrumLinks.length - 1}
-						<Page class={cn('my-0', { 'text-grey-50': variant === 'invert' })}>
+						<Page class={cn('my-0', { 'text-grey-50': variant === 'invert' }, 'font-jakarta')}>
 							{breadcrumNames[i]}
 						</Page>
 					{:else}
 						<Button
 							href={bclink}
 							size="link"
-							class="font-jankarta"
+							class="font-jakarta"
 							variant={variant === 'primary' ? 'link' : 'link-invert'}
 						>
 							{breadcrumNames[i]}
