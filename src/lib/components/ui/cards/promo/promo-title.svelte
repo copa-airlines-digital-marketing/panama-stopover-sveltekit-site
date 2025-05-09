@@ -1,8 +1,7 @@
 <script>
-	import { getTypography } from '$lib/components/ui/typography';
-	import { cn } from '$lib/utils';
+	import { Heading } from '$ui/components/typography';
 </script>
 
-<h2 class={cn(getTypography('caption', 'caption'), 'mb-2 text-center text-current')}>
+<Heading class='mb-2 text-center text-current font-semibold' variant='h4'>
 	<slot />
-</h2>
+</Heading>

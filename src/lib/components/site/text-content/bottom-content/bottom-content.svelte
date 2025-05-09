@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { TextContentDescription } from '$lib/components/site/text-content/description';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { TextContentCallToActions } from '$lib/components/site/text-content/call-to-actions';
-	import { mediaQueryMD } from '$lib/constants';
+	import { getTypographyVariant } from '$ui/components/typography';
 
 	export let item: TextContentSchema;
 

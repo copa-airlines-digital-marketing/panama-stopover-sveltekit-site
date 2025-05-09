@@ -3,7 +3,6 @@
 	import { getDirectusImage } from './utils';
 	import { Hero } from '$lib/components/site/items';
 	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
-	import { getTypography } from '$lib/components/ui/typography';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
 	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
@@ -11,6 +10,7 @@
 	import type { PlaceSchema, PlacesPilar } from '$lib/directus/place-to-visit';
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
+	import { Body } from '$ui/components/typography';
 
 	export let stopover_place_to_visit: PlaceSchema;
 
@@ -58,9 +58,9 @@
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum {item} />
-		<p class={getTypography('body-large', 'body', 'mb-petit')}>
+		<Body size='body-large' class='mb-petit'>
 			{description}
-		</p>
+		</Body>
 		{#if promo_name && promo_description}
 			<StopoverPromoCard {item}></StopoverPromoCard>
 		{/if}

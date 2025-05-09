@@ -28,7 +28,7 @@
 	bind:this={btn}
 	class={cn(
 		buttonVariants({ variant: 'transparent-primary-main', size: 'large' }),
-		'text-grey-50 focus-visible:outline-grey-50 focus:outline-grey-50 active:outline-grey-50 font-jakarta mx-auto cursor-copy font-semibold'
+		'text-grey-50 focus-visible:outline-grey-50 focus:outline-grey-50 active:outline-grey-50 mx-auto cursor-copy font-semibold'
 	)}
 	on:click={copyCode}
 >

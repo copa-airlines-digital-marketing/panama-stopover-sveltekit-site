@@ -171,6 +171,7 @@ export {
 	isNotNilNorEmpty,
 	say,
 	styleToString,
+	tv,
 	tv as cmTailwindVariants,
 	tm as customTwMerge,
 	setCookie,

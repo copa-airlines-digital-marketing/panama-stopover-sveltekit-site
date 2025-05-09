@@ -66,7 +66,7 @@
 							value={[section_id, id, i].join('-')}
 							class={cn(
 								buttonVariants({ size: 'default', variant: 'transparent-primary-main' }),
-								'font-jakarta relative w-full rounded-none py-2 focus:outline-0 active:outline-0'
+								'relative w-full rounded-none py-2 focus:outline-0 active:outline-0'
 							)}
 						>
 							{tabName}

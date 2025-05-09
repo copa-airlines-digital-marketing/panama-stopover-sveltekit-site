@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { getTypography } from '$lib/components/ui/typography';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
@@ -13,7 +12,7 @@
 	import type { StopoverTourTranslations } from '$cms/collections/stopover_tour_translations';
 	import { InformativeBoxContainer } from '$ui/components/boxes/informative';
 	import { AnunciosImportantes, CheckIn } from '$ui/components/pictograms';
-	import { Heading } from '$ui/components/typography';
+	import { Body, Heading } from '$ui/components/typography';
 	import { cn } from '$lib/utils';
 
 	export let stopover_tour: StopoverTour;
@@ -67,9 +66,9 @@
 <div class="space-y-normal container mx-auto my-8">
 	<div>
 		<Breadcrum item={stopover_tour} />
-		<p class={getTypography('body-large', 'body', 'mb-petit')}>
+		<Body size='body-large' class='mb-petit'>
 			{description}
-		</p>
+		</Body>
 		{#if promo_name && promo_description}
 			<StopoverPromoCard item={stopover_tour}></StopoverPromoCard>
 		{/if}
@@ -84,12 +83,12 @@
 		{/if}
 	</div>
 	<div>
-		<Heading tag="h2" {customcn} class="font-jakarta">
+		<Heading tag="h2" {customcn} >
 			{labels?.get('tour-experience')}
 		</Heading>
 	</div>
 	<div>
-		<Heading tag="h2" {customcn} class="font-jakarta">
+		<Heading tag="h2" {customcn} >
 			{labels?.get('tour-includes')}
 		</Heading>
 		<InformativeBoxContainer let:Box>
@@ -97,8 +96,8 @@
 				<Icon>
 					<CheckIn style="transparent" />
 				</Icon>
-				<Title class="font-jakarta">{labels?.get('included')}</Title>
-				<Description tag="ul" class="font-jakarta">
+				<Title >{labels?.get('included')}</Title>
+				<Description tag="ul" >
 					<ul>
 						{#each included?.map((i) => i.name) || [] as item}
 							<li>{item}</li>
@@ -110,8 +109,8 @@
 				<Icon>
 					<AnunciosImportantes />
 				</Icon>
-				<Title class="font-jakarta">{labels?.get('not-included')}</Title>
-				<Description tag="ul" class="font-jakarta">
+				<Title >{labels?.get('not-included')}</Title>
+				<Description tag="ul" >
 					{#each not_included?.map((i) => i.name) || [] as item}
 						<li>{item}</li>
 					{/each}
@@ -120,7 +119,7 @@
 		</InformativeBoxContainer>
 	</div>
 	<div>
-		<Heading tag="h2" {customcn} class="font-jakarta">
+		<Heading tag="h2" {customcn} >
 			{labels?.get('tour-operated-by')}
 		</Heading>
 	</div>

@@ -3,6 +3,8 @@
 
 @theme {
 	--font-jakarta: 'Plus Jakarta Sans', ui-sans-serif, system-ui;
+	--font-heading: var(--font-jakarta);
+	--font-body: var(--font-jakarta);
 	--color-stopover-accent: oklch(0.9 0.185062 97.445);
 	--color-stopover-canal: oklch(0.49 0.2896 268.04);
 	--color-stopover-culture: oklch(0.63 0.2566 27.5);

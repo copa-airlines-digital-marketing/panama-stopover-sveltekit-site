@@ -19,7 +19,7 @@
 	<ul class={cn('col-start-2 row-start-7 mt-6 flex gap-2', className)}>
 		<li class:grow={stretch}>
 			{#each call_to_actions as cta, i}
-				<Button href={cta.link} target={cta.open_in} variant={variant[i]} class="font-jakarta">
+				<Button href={cta.link} target={cta.open_in} variant={variant[i]} >
 					{cta.text}
 				</Button>
 			{/each}

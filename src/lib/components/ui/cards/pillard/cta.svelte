@@ -12,7 +12,7 @@
 <span
 	class={cn(
 		buttonVariants({ size: 'slim' }),
-		'font-jakarta mb-2 self-end md:justify-self-center',
+		'mb-2 self-end md:justify-self-center',
 		className
 	)}
 	style="grid-area: cta;"

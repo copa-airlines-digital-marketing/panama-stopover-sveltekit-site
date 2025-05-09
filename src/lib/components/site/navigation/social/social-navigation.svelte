@@ -24,7 +24,7 @@
 					rel={rel?.join(' ')}
 					size="slim"
 					variant="transparent-primary-main"
-					class="text-grey-600 hover:text-grey-800 font-jakarta"
+					class="text-grey-600 hover:text-grey-800"
 					title={text}
 				>
 					{#if icon}

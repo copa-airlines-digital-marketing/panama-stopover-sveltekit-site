@@ -24,7 +24,6 @@
 				rel={rel?.join(' ')}
 				variant={buttonVariant[i]}
 				title={text}
-				class="font-jakarta"
 			>
 				{#if icon}
 					<SVG data={icon.code} title={text} class="w-auto fill-current"></SVG>

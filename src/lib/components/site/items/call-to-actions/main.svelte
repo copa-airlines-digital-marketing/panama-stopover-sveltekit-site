@@ -28,8 +28,7 @@
 		href={url}
 		rel="noreferrer nofollow"
 		target="_blank"
-		{...$$restProps}
-		class="font-jakarta"
+		{...$$restProps}	
 	>
 		{#if mainCTAText}
 			{mainCTAText.value}

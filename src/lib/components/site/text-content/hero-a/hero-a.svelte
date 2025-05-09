@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { Button } from '$ui/components/button';
-	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
 	import { page } from '$app/stores';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { SVG } from '$lib/components/ui/icon';
 	import { mediaQueryLG, mediaQueryMD } from '$lib/constants';
+	import { Heading } from '$ui/components/typography';
 
 	export let item: TextContentSchema;
 
@@ -46,7 +46,9 @@
 	<div
 		class="bg-primary col-span-1 col-start-2 row-span-2 row-start-3 my-8 space-y-5 rounded-2xl p-4 shadow-lg md:row-span-2 md:row-start-2 md:self-center md:justify-self-start md:p-6"
 	>
-		<h1 class={getTypographyVariant('display', 'text-grey-50')}>{title}</h1>
+		<Heading variant='display' class='text-grey-50'>
+			{title}
+		</Heading>
 		{#if description}
 			<div class="text-grey-50 md:max-w-prose">
 				{@html description}
@@ -56,7 +58,7 @@
 			<ul class="flex gap-2">
 				{#each ctas as cta}
 					<li>
-						<Button class="bg-secondary font-jakarta" href={cta.link} target={cta.open_in}
+						<Button class="bg-secondary" href={cta.link} target={cta.open_in}
 							>{cta.text}</Button
 						>
 					</li>

@@ -2,7 +2,6 @@
 	import { getPageCannonicals } from '$lib/components/directus/context';
 	import { buttonVariants } from '$ui/components/button';
 	import { SVG } from '$lib/components/ui/icon';
-	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { Linkbar } from '$lib/components/ui/menu/linkbar';
 	import {
 		ModalBody,
@@ -17,6 +16,7 @@
 	import { dissoc } from 'ramda';
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils';
+	import { getTypographyVariant } from '$ui/components/typography';
 
 	export let navigation: NavigationSchema;
 

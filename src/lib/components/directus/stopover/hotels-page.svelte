@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { HotelSchema } from '$lib/directus/hotels';
-	import { getTypography, getTypographyVariant } from '$lib/components/ui/typography';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
@@ -15,6 +14,7 @@
 	import { getDirectusImage } from './utils';
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
+	import { Body } from '$ui/components/typography';
 
 	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] };
 
@@ -63,7 +63,7 @@
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum {item} />
-		<p class={getTypography('body', 'body', 'flex items-center text-grey-600')}>
+		<Body size='body-large' class='flex items-center text-grey-600'>
 			{#if starIcon}
 				<SVG data={starIcon?.code} class="size-8 fill-current"></SVG>
 			{:else}
@@ -72,10 +72,10 @@
 			<span>
 				{`${stars} ${starsLabel ? starsLabel.value : 'Please add hotels-stars label to site'}`}
 			</span>
-		</p>
-		<p class={getTypography('body-large', 'body', 'mb-petit')}>
+		</Body>
+		<Body size='body-large' class='mb-petit'>
 			{description}
-		</p>
+		</Body>
 		{#if promo_name && promo_description}
 			<StopoverPromoCard {item}></StopoverPromoCard>
 		{/if}

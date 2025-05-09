@@ -1,9 +1,9 @@
-import { getTypographyVariant } from "$lib/components/ui/typography";
-import { cmTailwindVariants } from "$lib/utils";
+import { tv } from "$lib/utils";
+import { getTypographyVariant } from "$ui/components/typography";
 import type { ButtonProps } from "bits-ui";
 import type { VariantProps } from "tailwind-variants";
 
-const iconnedVariants = cmTailwindVariants({
+const iconnedVariants = tv({
   base: 'rounded-2xl flex gap-2 p-4 flex-col items-center',
   variants: {
     theme: {

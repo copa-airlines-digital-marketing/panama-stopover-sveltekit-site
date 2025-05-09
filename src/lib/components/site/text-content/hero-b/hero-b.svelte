@@ -1,13 +1,12 @@
 <script lang="ts">
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { page } from '$app/stores';
-	import { getTypography } from '$lib/components/ui/typography';
 	import { Breadcrum } from '../../navigation/breadcrum';
-	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
 	import { SVG } from '$lib/components/ui/icon';
 	import { Button } from '$ui/components/button';
 	import { mediaQueryMD } from '$lib/constants';
+	import { getTypography, Heading } from '$ui/components/typography';
 
 	export let item: TextContentSchema;
 
@@ -21,12 +20,6 @@
 	const pageSettings = $page.data.page;
 
 	const mainImage = media || image;
-
-	const classToChild = (value: string, selector: string) =>
-		value
-			.split(' ')
-			.map((v) => selector + v)
-			.join(' ');
 </script>
 
 <div class="container-grid auto-rows-auto">
@@ -36,9 +29,9 @@
 			<Breadcrum item={pageSettings} variant="invert"></Breadcrum>
 		</div>
 	{/if}
-	<h1 class={getTypographyVariant('display', 'text-grey-50 col-start-2 row-start-3 mb-6')}>
+	<Heading variant='display' class='text-grey-50 col-start-2 row-start-3 mb-6'>
 		{title}
-	</h1>
+	</Heading>
 	<div class="bg-background-paper col-span-full col-start-1 row-span-3 row-start-5"></div>
 	s
 	{#if mainImage}
@@ -80,7 +73,7 @@
 						href={cta.link}
 						target={cta.open_in}
 						variant={i > 0 ? 'outline-primary-main' : 'solid-primary-main'}
-						class="font-jakarta"
+						
 					>
 						{cta.text}
 					</Button>

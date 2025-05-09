@@ -1,12 +1,7 @@
 <script>
-	import { getTypographySize } from '$lib/components/ui/typography';
+	import { Caption } from '$ui/components/typography';
 </script>
 
-<span
-	class={getTypographySize(
-		'caption-tiny',
-		'col-start-3 row-span-2 ml-4 hidden text-primary sm:block'
-	)}
->
+<Caption size='caption-small' class='col-start-3 row-span-2 ml-4 hidden text-primary sm:block'>
 	<slot />
-</span>
+</Caption>

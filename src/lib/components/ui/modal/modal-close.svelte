@@ -13,7 +13,7 @@
 
 <div class="-mt-11 flex w-full justify-end px-2 pt-2">
 	<Dialog.Close
-		class={cn(buttonVariants({ variant: 'transparent-primary-main' }), className, 'font-jakarta')}
+		class={cn(buttonVariants({ variant: 'transparent-primary-main' }), className)}
 		{...$$restProps}
 	>
 		<CloseIcon class="size-5 fill-current" />

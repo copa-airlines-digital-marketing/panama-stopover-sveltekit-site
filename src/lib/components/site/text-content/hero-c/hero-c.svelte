@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { mediaQueryMD } from '$lib/constants';
 	import type { TextContentSchema } from '$lib/directus/text-content';
+	import { Heading } from '$ui/components/typography';
 	import { Breadcrum } from '../../navigation/breadcrum';
 	import { TextContentCallToActions } from '../call-to-actions';
 
@@ -38,9 +38,9 @@
 			<Breadcrum item={pageSettings} variant="invert"></Breadcrum>
 		</div>
 	{/if}
-	<h1 class={getTypographyVariant('display-big', 'col-start-2 row-start-3 text-grey-50')}>
+	<Heading variant='display-big' class='col-start-2 row-start-3 text-grey-50'>
 		{title}
-	</h1>
+	</Heading>
 	<div class="col-start-2 row-start-4 mb-4 self-end *:grow-0 md:self-start">
 		<TextContentCallToActions {call_to_actions} stretch={false} />
 	</div>

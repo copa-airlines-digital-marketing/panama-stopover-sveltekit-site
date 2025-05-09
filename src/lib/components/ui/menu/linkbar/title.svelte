@@ -1,7 +1,7 @@
 <script>
-	import { getTypographyVariant } from '$lib/components/ui/typography';
-	import { cn } from '$lib/utils';
+	import { getTypographyVariant } from '$ui/components/typography';
 	import { getLinkBarContext } from './context';
+	import { cn } from '$lib/utils';
 
 	let hasLabel = getLinkBarContext();
 </script>

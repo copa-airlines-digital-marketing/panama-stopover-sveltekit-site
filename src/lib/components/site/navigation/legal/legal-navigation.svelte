@@ -24,7 +24,7 @@
 					rel={rel?.join(' ')}
 					size="link"
 					variant="link"
-					class="text-d3 text-primary-light sm:text-d3 md:text-d3 lg:text-d3 font-jakarta font-normal"
+					class="text-d3 text-primary-light sm:text-d3 md:text-d3 lg:text-d3 font-normal"
 				>
 					{text}
 				</Button>

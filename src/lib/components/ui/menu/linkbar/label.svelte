@@ -1,7 +1,7 @@
 <script>
-	import { getTypographySize } from '$lib/components/ui/typography';
+	import { Overline } from '$ui/components/typography';
 </script>
 
-<span class={getTypographySize('overline-small', 'col-start-2 row-start-1 self-end')}>
+<Overline size='overline-small' class='col-start-2 row-start-1'>
 	<slot />
-</span>
+</Overline>

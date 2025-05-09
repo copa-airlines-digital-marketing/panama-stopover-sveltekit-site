@@ -4,7 +4,7 @@
 	import type { RestaurantSchema } from '$lib/directus/restaurants';
 	import { page } from '$app/stores';
 	import { SVG } from '$lib/components/ui/icon';
-	import { getTypography } from '$lib/components/ui/typography';
+	import { getTypography } from '$ui/components/typography';
 
 	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
 

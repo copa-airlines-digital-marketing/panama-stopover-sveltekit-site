@@ -3,8 +3,8 @@
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { filter, propEq } from 'ramda';
 	import { cn } from '$lib/utils';
-	import { getTypography, getTypographyVariant } from '$lib/components/ui/typography';
 	import { Button } from '$ui/components/button';
+	import { getTypography, Heading } from '$ui/components/typography';
 
 	export let layout: PageSchema;
 	export let locale: string;
@@ -25,9 +25,9 @@
 
 <div class="bg-primary pb-petit pt-40">
 	<div class="container mx-auto">
-		<h1 class={cn(getTypographyVariant('h1'), 'text-green-50')}>
+		<Heading tag='h1' class='text-grey-50'>
 			{title}
-		</h1>
+		</Heading>
 	</div>
 </div>
 <div class="my-roomy container mx-auto">
@@ -42,7 +42,6 @@
 					href={link}
 					target={open_in}
 					variant={i === 0 ? undefined : 'outline-primary-main'}
-					class="font-jakarta"
 				>
 					{text}
 				</Button>

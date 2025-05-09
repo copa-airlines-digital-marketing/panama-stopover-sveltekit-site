@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { getTypography, getTypographyVariant } from '$lib/components/ui/typography';
 	import { cn } from '$lib/utils';
+	import { getTypography } from '$ui/components/typography';
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	type $$Props = HTMLAttributes<HTMLDivElement>;

@@ -1,6 +1,6 @@
 <script>
-	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { cn } from '$lib/utils';
+	import { getTypographyVariant } from '$ui/components/typography';
 </script>
 
 <span class={cn(getTypographyVariant('display-big'), 'text-grey-50')}>

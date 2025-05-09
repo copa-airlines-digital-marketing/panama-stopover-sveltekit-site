@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { getTypographyVariant } from '$lib/components/ui/typography';
 	import { cn } from '$lib/utils';
 	import ItemGallery from '$lib/components/site/items/carousel/carousel.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
 	import { mediaQueryLG, mediaQueryMD } from '$lib/constants';
+	import { getTypographyVariant } from '$ui/components/typography';
 
 	let className: string | null | undefined = undefined;
 	export { className as class };
