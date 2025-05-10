@@ -14,7 +14,7 @@
 	import { getDirectusImage } from './utils';
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
-	import { Body } from '$ui/components/typography';
+	import { Body, Heading } from '$ui/components/typography';
 
 	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] };
 
@@ -90,13 +90,13 @@
 		{/if}
 	</div>
 	<div class="space-y-4">
-		<h2 class={getTypographyVariant('h2')}>
+		<Heading>
 			{#if hotelIncludesLabel}
 				{hotelIncludesLabel.value}
 			{:else}
 				{'Plase include a hotel-includes label to the site'}
 			{/if}
-		</h2>
+		</Heading>
 		<ItemIncludes {item} amenites={stopover_hotels.amenities}></ItemIncludes>
 	</div>
 	<SpokenLanguages {item}></SpokenLanguages>

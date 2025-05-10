@@ -1,8 +1,8 @@
-import { cmTailwindVariants } from "$lib/utils";
+import { tv } from "$lib/utils";
 import type { HTMLAttributes } from "svelte/elements";
 import type { VariantProps } from "tailwind-variants";
 
-const promoCardVariants = cmTailwindVariants({
+const promoCardVariants = tv({
   base: 'p-4 rounded-2xl md:p-8',
   variants: {
     theme: {

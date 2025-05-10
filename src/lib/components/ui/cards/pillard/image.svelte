@@ -10,7 +10,7 @@
 </script>
 
 <span
-	class={cn(getTypography('body'), 'text-grey-0 text-center font-bold', className)}
+	class={cn(getTypography('body'), 'text-grey-0 text-center font-bold mb-0', className)}
 	style="grid-area: image;"
 >
 	<slot />

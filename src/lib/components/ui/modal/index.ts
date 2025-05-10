@@ -5,7 +5,7 @@ import Body from './modal-body.svelte';
 import Footer from './modal-footer.svelte';
 import Overlay from './modal-overlay.svelte';
 import Close from './modal-close.svelte';
-import { cmTailwindVariants } from '$lib/utils';
+import { tv } from '$lib/utils';
 import type { VariantProps } from 'tailwind-variants';
 import type { HTMLAttributes } from 'svelte/elements';
 import { getContext, setContext } from 'svelte';
@@ -17,7 +17,7 @@ const Trigger = Dialog.Trigger;
 const Title = Dialog.Title;
 const Description = Dialog.Description;
 
-const modalVariants = cmTailwindVariants({
+const modalVariants = tv({
 	base: 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 min-h-80 md:min-h-96 max-h-[67%] w-full max-w-[90%] bg-background-paper pt-11 rounded-lg',
 	variants: {
 		size: {
@@ -32,7 +32,7 @@ const modalVariants = cmTailwindVariants({
 	}
 });
 
-const modalBodyVariants = cmTailwindVariants({
+const modalBodyVariants = tv({
 	base: 'px-2',
 	variants: {
 		size: {
@@ -43,7 +43,7 @@ const modalBodyVariants = cmTailwindVariants({
 	}
 });
 
-const modalFooterVariant = cmTailwindVariants({
+const modalFooterVariant = tv({
 	base: 'flex flex-col sm:flex-row-reverse',
 	variants: {
 		size: {

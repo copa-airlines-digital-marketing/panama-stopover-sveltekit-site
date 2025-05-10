@@ -3,7 +3,7 @@
 	import { TextContentDescription } from '$lib/components/site/text-content/description';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { TextContentCallToActions } from '$lib/components/site/text-content/call-to-actions';
-	import { getTypographyVariant } from '$ui/components/typography';
+	import { Heading } from '$ui/components/typography';
 
 	export let item: TextContentSchema;
 
@@ -24,7 +24,9 @@
 	>
 		<div class="px-4 py-6 md:flex md:flex-col md:justify-center md:px-8 md:py-8">
 			{#if title}
-				<h2 class={getTypographyVariant('h2', 'text-grey-50 mb-2')}>{title}</h2>
+				<Heading class='text-grey-50 mb-2 mt-0'>
+					{title}
+				</Heading>
 			{/if}
 			<TextContentDescription {description} theme="dark" />
 			<TextContentCallToActions {call_to_actions} theme="dark" />
