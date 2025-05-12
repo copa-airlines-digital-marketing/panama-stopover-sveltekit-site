@@ -33,7 +33,7 @@
 
 	const copyErrroLabel = labels?.filter((label) => label.name === 'promo-code-copied-error')[0];
 
-	const category = isPlaceSchema(item) && item.pilar;
+	const category = isPlaceSchema(item) ? item.pilar : item.pilar[0];
 
 	const theme = isHotelSchema(item)
 		? 'DEFAULT'
@@ -41,13 +41,21 @@
 			? 'gastro'
 			: category === 'panama-canal'
 				? 'canal'
-				: category === 'shopping'
-					? 'gastro'
-					: category === 'nature' || category === 'beach'
-						? 'nature'
-						: 'culture';
+				: category === 'nature' || category === 'beach'
+					? 'nature'
+					: category === 'shopping'
+						? 'gastro'
+						: category === 'culture'
+							? 'culture'
+							: 'DEFAULT';
 </script>
 
+{category}
+{typeof category}
+{JSON.stringify(category)}
+{theme}
+{isHotelSchema(item)}
+{category === 'nature' || category === 'beach'}
 <PromoCard let:Title let:Description let:CodeTitle let:Header let:Code {theme}>
 	<Header let:Icon let:Discount>
 		{#if promoIcon}
