@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
+	import type { StopoverTourTranslations } from '$cms/collections/stopover_tour_translations';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
@@ -7,13 +9,15 @@
 	import { getDirectusImage } from './utils';
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
-	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
 	import { isStopoverTourTranslations } from '$lib/directus/tours/utlis';
-	import type { StopoverTourTranslations } from '$cms/collections/stopover_tour_translations';
 	import { InformativeBoxContainer } from '$ui/components/boxes/informative';
 	import { AnunciosImportantes, CheckIn } from '$ui/components/pictograms';
 	import { Body, Heading } from '$ui/components/typography';
+	import { ContactCard } from '$lib/components/site/items/cards/contact';
 	import { cn } from '$lib/utils';
+	import { Alert } from '$lib/components/ui/alerts/alert';
+	import { Fallback } from '$ui/components/avatar';
+	import Name from '$lib/components/ui/cards/promo-show/name.svelte';
 
 	export let stopover_tour: StopoverTour;
 
@@ -24,17 +28,8 @@
 		? translations.filter((t) => t.languages_code === $page.data.locale)
 		: [<StopoverTourTranslations>{}];
 
-	const {
-		languages_code,
-		path,
-		name,
-		description,
-		experience,
-		included,
-		not_included,
-		promo_name,
-		promo_description
-	} = translation[0];
+	const { name, description, experience, included, not_included, promo_name, promo_description } =
+		translation[0];
 
 	const galleryImages = true ? gallery.map((img) => img.directus_files_id) : gallery;
 
@@ -63,10 +58,10 @@
 </svelte:head>
 
 <Hero {galleryImages} {name} {main_image} class="bg-secondary" />
-<div class="space-y-normal container mx-auto my-8">
+<div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum item={stopover_tour} />
-		<Body size='body-large' class='mb-petit'>
+		<Body size="body-large" class="mb-petit">
 			{description}
 		</Body>
 		{#if promo_name && promo_description}
@@ -83,12 +78,12 @@
 		{/if}
 	</div>
 	<div>
-		<Heading tag="h2" {customcn} >
+		<Heading tag="h2" {customcn}>
 			{labels?.get('tour-experience')}
 		</Heading>
 	</div>
 	<div>
-		<Heading tag="h2" {customcn} >
+		<Heading tag="h2" {customcn}>
 			{labels?.get('tour-includes')}
 		</Heading>
 		<InformativeBoxContainer let:Box>
@@ -96,8 +91,8 @@
 				<Icon>
 					<CheckIn style="transparent" />
 				</Icon>
-				<Title >{labels?.get('included')}</Title>
-				<Description tag="ul" >
+				<Title>{labels?.get('included')}</Title>
+				<Description tag="ul">
 					<ul>
 						{#each included?.map((i) => i.name) || [] as item}
 							<li>{item}</li>
@@ -109,8 +104,8 @@
 				<Icon>
 					<AnunciosImportantes />
 				</Icon>
-				<Title >{labels?.get('not-included')}</Title>
-				<Description tag="ul" >
+				<Title>{labels?.get('not-included')}</Title>
+				<Description tag="ul">
 					{#each not_included?.map((i) => i.name) || [] as item}
 						<li>{item}</li>
 					{/each}
@@ -118,9 +113,24 @@
 			</Box>
 		</InformativeBoxContainer>
 	</div>
-	<div>
-		<Heading tag="h2" {customcn} >
-			{labels?.get('tour-operated-by')}
-		</Heading>
-	</div>
+	{#if operator}
+		{@const { name, main_image, contact, network } = operator}
+		<div>
+			<Heading tag="h2" {customcn}>
+				{labels?.get('tour-operated-by')}
+			</Heading>
+			{JSON.stringify(operator, null, 2)}
+			<ContactCard let:Avatar let:Name>
+				<Avatar let:Image let:Fallback>
+					<Image src={getDirectusImage(main_image)} alt={name} />
+					<Fallback>TT</Fallback>
+				</Avatar>
+				<Name>
+					{name}
+				</Name>
+			</ContactCard>
+		</div>
+	{:else}
+		<Alert>Es necesario asociar el tour operador al tour</Alert>
+	{/if}
 </div>

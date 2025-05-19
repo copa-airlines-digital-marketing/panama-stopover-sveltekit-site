@@ -50,12 +50,6 @@
 							: 'DEFAULT';
 </script>
 
-{category}
-{typeof category}
-{JSON.stringify(category)}
-{theme}
-{isHotelSchema(item)}
-{category === 'nature' || category === 'beach'}
 <PromoCard let:Title let:Description let:CodeTitle let:Header let:Code {theme}>
 	<Header let:Icon let:Discount>
 		{#if promoIcon}
