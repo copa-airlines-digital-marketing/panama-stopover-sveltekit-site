@@ -18,6 +18,7 @@
 	import { Alert } from '$lib/components/ui/alerts/alert';
 	import { Fallback } from '$ui/components/avatar';
 	import Name from '$lib/components/ui/cards/promo-show/name.svelte';
+	import { Button } from '$ui/components/button';
 
 	export let stopover_tour: StopoverTour;
 
@@ -45,6 +46,22 @@
 	);
 
 	const customcn = cn;
+
+	const getTourOperatorInitials = (name: string) => {
+		const splitedName = name.split(' ');
+		const firstName = splitedName[0];
+		const lastName = splitedName[splitedName.length - 1];
+
+		if (firstName === lastName) return firstName.substring(0, 2).toUpperCase();
+
+		return `${firstName[0]}${lastName[0]}`.toUpperCase();
+	};
+
+	const getConctactFormIcon = (form: string) => {};
+
+	const getConctactFormLink = (form: string) => {};
+
+	const getSocialIcon = (type: string) => {};
 </script>
 
 <svelte:head>
@@ -83,16 +100,16 @@
 		</Heading>
 	</div>
 	<div>
-		<Heading tag="h2" {customcn}>
+		<Heading>
 			{labels?.get('tour-includes')}
 		</Heading>
 		<InformativeBoxContainer let:Box>
-			<Box alignment="center" class="bg-background-lightblue" let:Icon let:Title let:Description>
+			<Box alignment="center" class="border-primary bg-primary" let:Icon let:Title let:Description>
 				<Icon>
 					<CheckIn style="transparent" />
 				</Icon>
-				<Title>{labels?.get('included')}</Title>
-				<Description tag="ul">
+				<Title theme="invert">{labels?.get('included')}</Title>
+				<Description tag="ul" theme="invert">
 					<ul>
 						{#each included?.map((i) => i.name) || [] as item}
 							<li>{item}</li>
@@ -100,12 +117,12 @@
 					</ul>
 				</Description>
 			</Box>
-			<Box alignment="center" let:Icon let:Title let:Description>
+			<Box alignment="center" class="bg-grey-700" let:Icon let:Title let:Description>
 				<Icon>
-					<AnunciosImportantes />
+					<AnunciosImportantes style="monochrome" />
 				</Icon>
-				<Title>{labels?.get('not-included')}</Title>
-				<Description tag="ul">
+				<Title theme="invert">{labels?.get('not-included')}</Title>
+				<Description tag="ul" theme="invert">
 					{#each not_included?.map((i) => i.name) || [] as item}
 						<li>{item}</li>
 					{/each}
@@ -116,18 +133,39 @@
 	{#if operator}
 		{@const { name, main_image, contact, network } = operator}
 		<div>
-			<Heading tag="h2" {customcn}>
+			<Heading>
 				{labels?.get('tour-operated-by')}
 			</Heading>
-			{JSON.stringify(operator, null, 2)}
 			<ContactCard let:Avatar let:Name>
 				<Avatar let:Image let:Fallback>
 					<Image src={getDirectusImage(main_image)} alt={name} />
-					<Fallback>TT</Fallback>
+					<Fallback>{getTourOperatorInitials(name)}</Fallback>
 				</Avatar>
 				<Name>
 					{name}
 				</Name>
+				<Heading tag="h5">Contacto</Heading>
+				<ul class="grid grid-cols-3 [grid-area:contact]">
+					{#each contact as c}
+						<li>
+							<Button
+								variant="transparent-primary-main"
+								size="slim"
+								href={getConctactFormLink(c.contact)}>{c.form}</Button
+							>
+						</li>
+					{/each}
+				</ul>
+				<Heading tag="h5">Redes</Heading>
+				<ul class="grid grid-cols-4 [grid-area:social]">
+					{#each network as social}
+						<li>
+							<Button variant="transparent-primary-main" size="slim" href={social.link}
+								>{social.type}</Button
+							>
+						</li>
+					{/each}
+				</ul>
 			</ContactCard>
 		</div>
 	{:else}

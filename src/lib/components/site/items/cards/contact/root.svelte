@@ -16,6 +16,11 @@
 	};
 </script>
 
-<div class={cn('grid rounded-2xl border border-grey-300', className)}>
+<div
+	class={cn(
+		'grid grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border border-primary-faded p-4 [grid-template-areas:"avatar_name""contact_contact""social_social"]',
+		className
+	)}
+>
 	<slot {...children} />
 </div>
