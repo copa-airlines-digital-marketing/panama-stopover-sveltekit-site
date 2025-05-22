@@ -16,9 +16,8 @@
 	import { ContactCard } from '$lib/components/site/items/cards/contact';
 	import { cn } from '$lib/utils';
 	import { Alert } from '$lib/components/ui/alerts/alert';
-	import { Fallback } from '$ui/components/avatar';
-	import Name from '$lib/components/ui/cards/promo-show/name.svelte';
 	import { Button } from '$ui/components/button';
+	import { Globe, NoIcon, Phone, Social } from '$ui/components/icon';
 
 	export let stopover_tour: StopoverTour;
 
@@ -57,11 +56,31 @@
 		return `${firstName[0]}${lastName[0]}`.toUpperCase();
 	};
 
-	const getConctactFormIcon = (form: string) => {};
+	const getConctactFormIcon = (form: string) => {
+		if (form === 'phone') return Phone;
+
+		if (form === 'e-mail') return Social.Email;
+
+		if (form === 'whatsapp') return Social.Whatsapp;
+
+		return NoIcon;
+	};
 
 	const getConctactFormLink = (form: string) => {};
 
-	const getSocialIcon = (type: string) => {};
+	const getSocialIcon = (type: string) => {
+		if (type === 'instagram') return Social.Instagram;
+
+		if (type === 'website') return Globe;
+
+		if (type === 'facebook') return Social.Facebook;
+
+		if (type === 'tiktok') return Social.Tiktok;
+
+		if (type === 'youtube') return Social.Youtube;
+
+		return NoIcon;
+	};
 </script>
 
 <svelte:head>
@@ -144,28 +163,34 @@
 				<Name>
 					{name}
 				</Name>
-				<Heading tag="h5">Contacto</Heading>
-				<ul class="grid grid-cols-3 [grid-area:contact]">
-					{#each contact as c}
-						<li>
-							<Button
-								variant="transparent-primary-main"
-								size="slim"
-								href={getConctactFormLink(c.contact)}>{c.form}</Button
-							>
-						</li>
-					{/each}
-				</ul>
-				<Heading tag="h5">Redes</Heading>
-				<ul class="grid grid-cols-4 [grid-area:social]">
-					{#each network as social}
-						<li>
-							<Button variant="transparent-primary-main" size="slim" href={social.link}
-								>{social.type}</Button
-							>
-						</li>
-					{/each}
-				</ul>
+				<div class="[grid-area:contact]">
+					<Heading tag="h5" variant="h4">Contacto</Heading>
+					<ul class="flex gap-4 md:gap-6">
+						{#each contact as c}
+							<li>
+								<Button
+									variant="transparent-primary-main"
+									size="slim"
+									href={getConctactFormLink(c.contact)}
+								>
+									<svelte:component this={getConctactFormIcon(c.form)} />
+								</Button>
+							</li>
+						{/each}
+					</ul>
+				</div>
+				<div class="[grid-area:social]">
+					<Heading tag="h5" variant="h4">Redes</Heading>
+					<ul class="flex gap-4 md:gap-6">
+						{#each network as social}
+							<li>
+								<Button variant="transparent-primary-main" size="slim" href={social.link}>
+									<svelte:component this={getSocialIcon(social.type)}></svelte:component>
+								</Button>
+							</li>
+						{/each}
+					</ul>
+				</div>
 			</ContactCard>
 		</div>
 	{:else}
