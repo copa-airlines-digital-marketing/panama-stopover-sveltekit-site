@@ -2,4 +2,6 @@ import Name from './name.svelte';
 import Avatar from './avatar.svelte';
 import Root from './root.svelte';
 
-export { Name, Avatar, Root, Root as ContactCard };
+const Contact = {};
+
+export { Name, Contact, Avatar, Root, Root as ContactCard };

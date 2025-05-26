@@ -9,6 +9,10 @@
 	export { className as class };
 </script>
 
-<Heading variant="h4" class={cn('text-primary [grid-area:name]', className)} customcn={cn}>
+<Heading
+	variant="h3"
+	class={cn('justify-self-start text-primary [grid-area:name]', className)}
+	customcn={cn}
+>
 	<slot />
 </Heading>

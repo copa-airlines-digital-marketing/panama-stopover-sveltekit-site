@@ -66,7 +66,13 @@
 		return NoIcon;
 	};
 
-	const getConctactFormLink = (form: string) => {};
+	const getConctactFormLink = (form: string, target: string) => {
+		if (form === 'phone') return `tel:${target}`;
+
+		if (form === 'e-mail') return `mailto:${target}`;
+
+		if (form === 'whatsapp') return `https://wa.me/${target}`;
+	};
 
 	const getSocialIcon = (type: string) => {
 		if (type === 'instagram') return Social.Instagram;
@@ -119,15 +125,14 @@
 		</Heading>
 	</div>
 	<div>
-		<Heading>
-			{labels?.get('tour-includes')}
-		</Heading>
 		<InformativeBoxContainer let:Box>
 			<Box alignment="center" class="border-primary bg-primary" let:Icon let:Title let:Description>
 				<Icon>
 					<CheckIn style="transparent" />
 				</Icon>
-				<Title theme="invert">{labels?.get('included')}</Title>
+				<Title theme="invert">
+					{labels?.get('included')}
+				</Title>
 				<Description tag="ul" theme="invert">
 					<ul>
 						{#each included?.map((i) => i.name) || [] as item}
@@ -152,26 +157,29 @@
 	{#if operator}
 		{@const { name, main_image, contact, network } = operator}
 		<div>
-			<Heading>
-				{labels?.get('tour-operated-by')}
-			</Heading>
-			<ContactCard let:Avatar let:Name>
+			<ContactCard let:Avatar let:Name class="bg-background-lightblue">
 				<Avatar let:Image let:Fallback>
 					<Image src={getDirectusImage(main_image)} alt={name} />
 					<Fallback>{getTourOperatorInitials(name)}</Fallback>
 				</Avatar>
-				<Name>
+				<Name class="my-0">
+					<Body tag="span" size="body-small" class="my-0">{labels?.get('tour-operated-by')}</Body>
+					<br />
 					{name}
 				</Name>
 				<div class="[grid-area:contact]">
-					<Heading tag="h5" variant="h4">Contacto</Heading>
-					<ul class="flex gap-4 md:gap-6">
+					<Heading tag="h5" class="sr-only" variant="h4">
+						{labels?.get('tour-operator-contact')}
+					</Heading>
+					<ul class="flex gap-1 md:gap-2">
 						{#each contact as c}
 							<li>
 								<Button
-									variant="transparent-primary-main"
+									variant="solid-primary-light"
 									size="slim"
-									href={getConctactFormLink(c.contact)}
+									href={getConctactFormLink(c.form, c.contact)}
+									target="_blank"
+									rel="noreferrer nofollow"
 								>
 									<svelte:component this={getConctactFormIcon(c.form)} />
 								</Button>
@@ -180,11 +188,19 @@
 					</ul>
 				</div>
 				<div class="[grid-area:social]">
-					<Heading tag="h5" variant="h4">Redes</Heading>
-					<ul class="flex gap-4 md:gap-6">
+					<Heading tag="h5" class="sr-only" variant="h4"
+						>{labels?.get('tour-operator-socials')}</Heading
+					>
+					<ul class="flex gap-1 md:gap-2">
 						{#each network as social}
 							<li>
-								<Button variant="transparent-primary-main" size="slim" href={social.link}>
+								<Button
+									variant="solid-primary-light"
+									size="slim"
+									href={social.link}
+									target="_blank"
+									rel="noreferrer nofollow"
+								>
 									<svelte:component this={getSocialIcon(social.type)}></svelte:component>
 								</Button>
 							</li>
