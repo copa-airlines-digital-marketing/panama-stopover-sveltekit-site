@@ -3,16 +3,14 @@
 	import type { PlaceSchema } from '$lib/directus/place-to-visit';
 	import type { RestaurantSchema } from '$lib/directus/restaurants';
 	import { page } from '$app/stores';
-	import { SVG } from '$lib/components/ui/icon';
 	import { getTypography } from '$ui/components/typography';
+	import { Globe } from '$ui/components/icon';
 
 	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
 
 	const { supported_languages } = item;
 
 	const icons = $page.data.siteSettings.ui_icons?.map((icon) => icon.icons_id);
-
-	const iconGlobe = icons?.filter((icon) => icon.name === 'globe')[0];
 
 	const labels = $page.data.siteSettings.translations?.[0]?.labels;
 
@@ -26,11 +24,7 @@
 
 {#if supported_languages}
 	<div class="flex items-center gap-2">
-		{#if iconGlobe}
-			<SVG data={iconGlobe.code} class="size-7 fill-primary"></SVG>
-		{:else}
-			{'Please include a globe icon to the site'}
-		{/if}
+		<Globe class="size-6 fill-primary" />
 		<ul class="flex gap-1">
 			{#each supported_languages as lang}
 				<li class={getTypography('body-large', 'body')}>

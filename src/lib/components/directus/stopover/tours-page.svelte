@@ -11,18 +11,29 @@
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
 	import { isStopoverTourTranslations } from '$lib/directus/tours/utlis';
 	import { InformativeBoxContainer } from '$ui/components/boxes/informative';
-	import { AnunciosImportantes, CheckIn } from '$ui/components/pictograms';
+	import { AnunciosImportantes, CheckIn, Tiquetes } from '$ui/components/pictograms';
 	import { Body, Heading } from '$ui/components/typography';
 	import { ContactCard } from '$lib/components/site/items/cards/contact';
 	import { cn } from '$lib/utils';
 	import { Alert } from '$lib/components/ui/alerts/alert';
 	import { Button } from '$ui/components/button';
-	import { Globe, NoIcon, Phone, Social } from '$ui/components/icon';
+	import { Globe, NoIcon, Phone, Filled, Regular, Social } from '$ui/components/icon';
+	import { Pill } from '$ui/components/pill';
 
 	export let stopover_tour: StopoverTour;
 
-	const { main_image, duration, category, end_point, translations, gallery, operator } =
-		stopover_tour;
+	const {
+		main_image,
+		duration,
+		category,
+		start_time,
+		meeting_point,
+		end_point,
+		translations,
+		gallery,
+		operator,
+		supported_languages
+	} = stopover_tour;
 
 	const translation = isStopoverTourTranslations(translations)
 		? translations.filter((t) => t.languages_code === $page.data.locale)
@@ -74,6 +85,22 @@
 		if (form === 'whatsapp') return `https://wa.me/${target}`;
 	};
 
+	const getTourTypeLabel = (type: string) => {
+		if (type === 'walk-in') return labels?.get('guided-visit');
+
+		if (type === 'pass-by') return labels?.get('photo-stop');
+
+		return `No soportado: ${type}`;
+	};
+
+	const getTourTypeIcon = (type: string) => {
+		if (type === 'walk-in') return Regular.Walk;
+
+		if (type === 'pass-by') return Regular.Camera;
+
+		return NoIcon;
+	};
+
 	const getSocialIcon = (type: string) => {
 		if (type === 'instagram') return Social.Instagram;
 
@@ -86,6 +113,12 @@
 		if (type === 'youtube') return Social.Youtube;
 
 		return NoIcon;
+	};
+
+	const parseAMPM = (hour24: string) => {
+		const [hour, minutes] = hour24.split(':').map(Number);
+		const amPm = hour >= 12 ? 'PM' : 'AM';
+		return `${hour % 12 || 12}:${minutes.toString().padStart(2, '0')} ${amPm}`;
 	};
 </script>
 
@@ -119,10 +152,110 @@
 			<BaseTextContent item={disclaimer.Text_Content_id}></BaseTextContent>
 		{/if}
 	</div>
-	<div>
-		<Heading tag="h2" {customcn}>
+	<div class="rounded-2xl border border-grey-300 bg-common-white p-6">
+		<Tiquetes.Conexion class="size-16" />
+		<Heading tag="h2" class="mb-2 text-primary" {customcn}>
 			{labels?.get('tour-experience')}
 		</Heading>
+		<ul class="mb-6 flex flex-wrap gap-2">
+			{#each category || [] as cat}
+				<li>
+					<Pill thickness="slim" class="bg-grey-100" let:Text>
+						<Text class="text-grey-600">{labels?.get(`tour-category-${cat}`)}</Text>
+					</Pill>
+				</li>
+			{:else}
+				<li>
+					<Alert>Es necesario asociar el tour operador al tour</Alert>
+				</li>
+			{/each}
+		</ul>
+		<div class="mb-4 flex items-center-safe gap-2 md:gap-4">
+			<Globe class="size-6 fill-secondary" title={labels?.get('languages')} />
+			<ul class="flex items-center gap-1 md:gap-2">
+				<Body tag="li" class="mb-0">
+					{labels?.get('languages')}:
+				</Body>
+				{#each supported_languages as lang}
+					<Body tag="li" class="mb-0">
+						{labels?.get(`support-lang-${lang}`)}
+					</Body>
+				{/each}
+			</ul>
+		</div>
+		<div class="mb-4 flex items-center-safe gap-2 md:gap-4">
+			<Regular.History class="size-6 fill-secondary" title={labels?.get('duration')} />
+			<Body class="mb-0">{labels?.get('duration')}: {duration} {labels?.get('hours')}</Body>
+		</div>
+		<div class="flex items-center-safe gap-2 md:gap-4">
+			<Filled.Time class="size-6 fill-secondary" title={labels?.get('start-time')} />
+			<Body class="mb-0">{labels?.get('start-time')}: {parseAMPM(start_time || '00:00:00')}</Body>
+		</div>
+		<ul>
+			{#each experience || [] as tex}
+				{@const { title, description, type, duration, includes_admission } = tex}
+				<li>
+					<Heading variant="h3">{title}</Heading>
+					<Body>{description}</Body>
+					<ul class="flex flex-wrap gap-2 md:gap-4">
+						<li>
+							<Pill
+								let:Text
+								let:Icon
+								class={includes_admission ? 'bg-system-success-faded' : 'bg-grey-700'}
+							>
+								{#if includes_admission}
+									<Icon>
+										<Regular.Check
+											class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
+										/>
+									</Icon>
+								{:else}
+									<Icon>
+										<Regular.Close
+											class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
+										/>
+									</Icon>
+								{/if}
+								<Text class={includes_admission ? 'text-system-success' : 'text-common-white'}>
+									{includes_admission
+										? labels?.get('admision-included')
+										: labels?.get('admision-not-included')}
+								</Text>
+								<Icon>
+									<Filled.Ticket
+										class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
+									/>
+								</Icon>
+							</Pill>
+						</li>
+						<li>
+							<Pill let:Text let:Icon class="bg-background-lightblue" theme="transparent">
+								<Icon>
+									<svelte:component this={getTourTypeIcon(type)} class="fill-primary" />
+								</Icon>
+								<Text class="text-primary">
+									{getTourTypeLabel(type)}
+								</Text>
+							</Pill>
+						</li>
+						<li>
+							<Pill let:Text let:Icon class="bg-background-lightblue" theme="transparent">
+								<Icon>
+									<Filled.Time class="fill-primary" title={labels?.get('duration')} />
+								</Icon>
+								<Text class="text-primary">
+									{duration}
+									{labels?.get('minutes')}
+								</Text>
+							</Pill>
+						</li>
+					</ul>
+				</li>
+			{:else}
+				<Alert>Es necesario agregar las experiencias del tour</Alert>
+			{/each}
+		</ul>
 	</div>
 	<div>
 		<InformativeBoxContainer let:Box>
