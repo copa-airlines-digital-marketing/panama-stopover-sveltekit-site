@@ -19,6 +19,7 @@
 	import { Button } from '$ui/components/button';
 	import { Globe, NoIcon, Phone, Filled, Regular, Social } from '$ui/components/icon';
 	import { Pill } from '$ui/components/pill';
+	import { MapContainer } from '$lib/components/site/items/maps';
 
 	export let stopover_tour: StopoverTour;
 
@@ -34,6 +35,14 @@
 		operator,
 		supported_languages
 	} = stopover_tour;
+
+	const {
+		coordinates: [meet_lng, meet_lat]
+	} = meeting_point;
+
+	const {
+		coordinates: [end_lng, end_lat]
+	} = end_point;
 
 	const translation = isStopoverTourTranslations(translations)
 		? translations.filter((t) => t.languages_code === $page.data.locale)
@@ -191,6 +200,13 @@
 			<Filled.Time class="size-6 fill-secondary" title={labels?.get('start-time')} />
 			<Body class="mb-0">{labels?.get('start-time')}: {parseAMPM(start_time || '00:00:00')}</Body>
 		</div>
+		<MapContainer let:Title let:Static let:Button>
+			<Title>{labels?.get('start-point')}</Title>
+			<Static mapTitle={name} center={{ lat: meet_lat, lng: meet_lng }} />
+			<Button mapTitle={name} center={{ lat: meet_lat, lng: meet_lng }}>
+				{labels?.get('location-navigate')}
+			</Button>
+		</MapContainer>
 		<ul>
 			{#each experience || [] as tex}
 				{@const { title, description, type, duration, includes_admission } = tex}
@@ -256,6 +272,13 @@
 				<Alert>Es necesario agregar las experiencias del tour</Alert>
 			{/each}
 		</ul>
+		<MapContainer let:Title let:Static let:Button>
+			<Title>{labels?.get('end-point')}</Title>
+			<Static mapTitle={name} center={{ lat: end_lat, lng: end_lng }} />
+			<Button mapTitle={name} center={{ lat: end_lat, lng: end_lng }}>
+				{labels?.get('location-navigate')}
+			</Button>
+		</MapContainer>
 	</div>
 	<div>
 		<InformativeBoxContainer let:Box>
