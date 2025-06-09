@@ -11,9 +11,9 @@
 	export { className as class };
 
 	const children = {
-		Button,
-		Title,
-		Static
+		Button //,
+		//Title,
+		//Static
 	};
 </script>
 
@@ -26,5 +26,4 @@
 		grid-template-columns: [image-start] 8px [name-start] auto [name-end] 1fr [navigate-start] auto [navigate-end] 8px [image-end];
 		grid-template-rows: [image-start] 8px [name-start] auto [name-end] 1fr [navigate-start] auto [navigate-end] 8px [image-end];
 	}
-	
 </style>

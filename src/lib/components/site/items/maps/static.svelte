@@ -17,8 +17,8 @@
 	let className: $$Props['class'] = undefined;
 	export let mapTitle: $$Props['mapTitle'] = undefined;
 	export let markers: $$Props['markers'] = undefined;
-	export let zoom: $$Props['zoom'] = 16;
-	/* 	export let mapSize: $$Props['mapSize'] = undefined;
+	/*export let zoom: $$Props['zoom'] = 16;
+	 	export let mapSize: $$Props['mapSize'] = undefined;
 	export let scale: $$Props['scale'] = undefined;
 	export let mapType: $$Props['mapType'] = 'roadmap'; */
 	export let center: $$Props['center'];
