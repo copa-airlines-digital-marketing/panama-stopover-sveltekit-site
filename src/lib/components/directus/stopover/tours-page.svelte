@@ -161,12 +161,14 @@
 			<BaseTextContent item={disclaimer.Text_Content_id}></BaseTextContent>
 		{/if}
 	</div>
-	<div class="rounded-2xl border border-grey-300 bg-common-white p-6 lg:">
-		<Tiquetes.Conexion class="size-16" />
-		<Heading tag="h2" class="mb-2 text-primary" {customcn}>
+	<div
+		class="experience-layout rounded-2xl border border-grey-300 bg-common-white p-6 lg:grid lg:gap-6"
+	>
+		<Tiquetes.Conexion class="size-16 lg:[grid-area:icon]" />
+		<Heading tag="h2" class="text-primary lg:my-0 lg:[grid-area:title]" {customcn}>
 			{labels?.get('tour-experience')}
 		</Heading>
-		<ul class="mb-6 flex flex-wrap gap-2">
+		<ul class="flex flex-wrap gap-2 lg:[grid-area:categories]">
 			{#each category || [] as cat}
 				<li>
 					<Pill thickness="slim" class="bg-grey-100" let:Text>
@@ -179,40 +181,67 @@
 				</li>
 			{/each}
 		</ul>
-		<div class="mb-4 flex items-center-safe gap-2 md:gap-4">
-			<Globe class="size-6 fill-secondary" title={labels?.get('languages')} />
-			<ul class="flex items-center gap-1 md:gap-2">
-				<Body tag="li" class="mb-0">
-					{labels?.get('languages')}:
-				</Body>
-				{#each supported_languages as lang}
+		<div class="my-6 space-y-4 lg:my-0 lg:[grid-area:details]">
+			<div class="flex items-center-safe gap-2 md:gap-4">
+				<Globe class="size-6 fill-secondary" title={labels?.get('languages')} />
+				<ul class="flex items-center gap-1 md:gap-2">
 					<Body tag="li" class="mb-0">
-						{labels?.get(`support-lang-${lang}`)}
+						{labels?.get('languages')}:
 					</Body>
-				{/each}
-			</ul>
+					{#each supported_languages as lang}
+						<Body tag="li" class="mb-0">
+							{labels?.get(`support-lang-${lang}`)}
+						</Body>
+					{/each}
+				</ul>
+			</div>
+			<div class="flex items-center-safe gap-2 md:gap-4">
+				<Regular.History class="size-6 fill-secondary" title={labels?.get('duration')} />
+				<Body class="mb-0">
+					{labels?.get('duration')}: {duration}
+					{labels?.get('hours')}
+				</Body>
+			</div>
+			<div class="flex items-center-safe gap-2 md:gap-4">
+				<Filled.Time class="size-6 fill-secondary" title={labels?.get('start-time')} />
+				<Body class="mb-0">
+					{labels?.get('start-time')}: {parseAMPM(start_time || '00:00:00')}
+				</Body>
+			</div>
 		</div>
-		<div class="mb-4 flex items-center-safe gap-2 md:gap-4">
-			<Regular.History class="size-6 fill-secondary" title={labels?.get('duration')} />
-			<Body class="mb-0">{labels?.get('duration')}: {duration} {labels?.get('hours')}</Body>
-		</div>
-		<div class="flex items-center-safe gap-2 md:gap-4">
-			<Filled.Time class="size-6 fill-secondary" title={labels?.get('start-time')} />
-			<Body class="mb-0">{labels?.get('start-time')}: {parseAMPM(start_time || '00:00:00')}</Body>
-		</div>
-		<MapContainer let:Title let:Static let:Button class='mt-8 rounded-xl overflow-hidden'>
-			<Title class='bg-background-lightblue px-3 py-1 rounded-full'>{labels?.get('start-point')}</Title>
-			<Static mapType='roadmap' mapTitle={name} center={{ lat: meet_lat, lng: meet_lng }} markers={ [{ location: {lat: meet_lat, lng: meet_lng}, label: labels?.get('start-point')[0]}] } />
-			<Button class='md:mb-2' mapType='roadmap' mapTitle={name} center={{ lat: meet_lat, lng: meet_lng }}>
+		<MapContainer
+			let:Title
+			let:Static
+			let:Button
+			class="overflow-hidden rounded-xl lg:[grid-area:starting]"
+		>
+			<Title class="rounded-full bg-background-lightblue px-3 py-1"
+				>{labels?.get('start-point')}</Title
+			>
+			<Static
+				mapType="roadmap"
+				mapTitle={name}
+				center={{ lat: meet_lat, lng: meet_lng }}
+				markers={[
+					{ location: { lat: meet_lat, lng: meet_lng }, label: labels?.get('start-point')[0] }
+				]}
+				breakpointSize={{ lg: '300x300' }}
+			/>
+			<Button
+				class="md:mb-2"
+				mapType="roadmap"
+				mapTitle={name}
+				center={{ lat: meet_lat, lng: meet_lng }}
+			>
 				{labels?.get('location-navigate')}
 			</Button>
 		</MapContainer>
-		<ul class="my-6">
+		<ul class="my-6 space-y-normal lg:my-0 lg:self-center lg:[grid-area:stops]">
 			{#each experience || [] as tex}
 				{@const { title, description, type, duration, includes_admission } = tex}
 				<li>
-					<Heading variant="h3">{title}</Heading>
-					<Body>{description}</Body>
+					<Heading variant="h3" class="my-0">{title}</Heading>
+					<Body class="mb-4">{description}</Body>
 					<ul class="flex flex-wrap gap-2 md:gap-4">
 						<li>
 							<Pill
@@ -272,10 +301,28 @@
 				<Alert>Es necesario agregar las experiencias del tour</Alert>
 			{/each}
 		</ul>
-		<MapContainer let:Title let:Static let:Button class='rounded-xl overflow-hidden'>
-			<Title class='bg-background-lightblue px-3 py-1 rounded-full'>{labels?.get('end-point')}</Title>
-			<Static mapType='roadmap' mapTitle={name} center={{ lat: end_lat, lng: end_lng }} markers={ [{ location: {lat: end_lat, lng: end_lng}, label: labels?.get('end-point')[0]}] } />
-			<Button class='md:mb-2' mapType='roadmap' mapTitle={name} center={{ lat: end_lat, lng: end_lng }}>
+		<MapContainer
+			let:Title
+			let:Static
+			let:Button
+			class="overflow-hidden rounded-xl lg:[grid-area:ending]"
+		>
+			<Title class="rounded-full bg-background-lightblue px-3 py-1"
+				>{labels?.get('end-point')}</Title
+			>
+			<Static
+				mapType="roadmap"
+				mapTitle={name}
+				center={{ lat: end_lat, lng: end_lng }}
+				markers={[{ location: { lat: end_lat, lng: end_lng }, label: labels?.get('end-point')[0] }]}
+				breakpointSize={{ lg: '300x300' }}
+			/>
+			<Button
+				class="md:mb-2"
+				mapType="roadmap"
+				mapTitle={name}
+				center={{ lat: end_lat, lng: end_lng }}
+			>
 				{labels?.get('location-navigate')}
 			</Button>
 		</MapContainer>

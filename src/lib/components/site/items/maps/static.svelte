@@ -4,7 +4,15 @@
 	import { cn } from '$lib/utils';
 	import { Source } from '$ui/components/picture';
 
-	type $$Props = HTMLImgAttributes & MapProps;
+	type $$Props = HTMLImgAttributes &
+		MapProps & {
+			breakpointSize?: {
+				lg?: string;
+				md?: string;
+				sm?: string;
+				xs?: string;
+			};
+		};
 
 	let className: $$Props['class'] = undefined;
 	export let mapTitle: $$Props['mapTitle'] = undefined;
@@ -14,6 +22,7 @@
 	export let scale: $$Props['scale'] = undefined;
 	export let mapType: $$Props['mapType'] = 'roadmap'; */
 	export let center: $$Props['center'];
+	export let breakpointSize: $$Props['breakpointSize'] = undefined;
 	export { className as class };
 
 	const API = 'https://maps.googleapis.com/maps/api/staticmap';
@@ -42,9 +51,9 @@
 
 	const markerToURL = (marker: Marker) => {
 		const propsToParams = Object.keys(marker).map((m) => processMarkerProp(marker, m));
-		
+
 		const sortedParams = propsToParams.sort(sortLastLocation).join('%7C');
-		
+
 		return `markers=${sortedParams}`;
 	};
 
@@ -58,8 +67,21 @@
 </script>
 
 <picture class="block [grid-area:image]">
-	<Source screen="lg" srcset="{getmapSource('640x160')}&scale=2&zoom=16" />
-	<Source screen="md" srcset="{getmapSource('640x214')}&scale=2&zoom=17" />
-	<Source screen="sm" srcset="{getmapSource('640x360')}&scale=2&zoom=18" />
-	<img src="{getmapSource('600x600')}&scale=2&zoom=19" alt={mapTitle} class={cn('w-full h-auto', className)} />
+	<Source
+		screen="lg"
+		srcset="{getmapSource(breakpointSize?.['lg'] || '640x160')}&scale=2&zoom=16"
+	/>
+	<Source
+		screen="md"
+		srcset="{getmapSource(breakpointSize?.['md'] || '640x214')}&scale=2&zoom=17"
+	/>
+	<Source
+		screen="sm"
+		srcset="{getmapSource(breakpointSize?.['sm'] || '640x360')}&scale=2&zoom=18"
+	/>
+	<img
+		src="{getmapSource(breakpointSize?.['xs'] || '600x600')}&scale=2&zoom=19"
+		alt={mapTitle}
+		class={cn('h-auto w-full', className)}
+	/>
 </picture>

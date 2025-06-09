@@ -67,3 +67,13 @@
 	font-weight: 200 800;
 	font-style: normal;
 }
+
+@layer components {
+	.experience-layout {
+		@variant lg {
+			grid-template-columns: 1fr 1fr 2fr;
+			grid-template-rows: repeat(4, min-content) 1fr;
+			grid-template-areas: 'icon icon stops' 'title title stops' 'categories categories stops' 'details details stops' 'starting ending stops';
+		}
+	}
+}
