@@ -161,7 +161,7 @@
 			<BaseTextContent item={disclaimer.Text_Content_id}></BaseTextContent>
 		{/if}
 	</div>
-	<div class="rounded-2xl border border-grey-300 bg-common-white p-6">
+	<div class="rounded-2xl border border-grey-300 bg-common-white p-6 lg:">
 		<Tiquetes.Conexion class="size-16" />
 		<Heading tag="h2" class="mb-2 text-primary" {customcn}>
 			{labels?.get('tour-experience')}
@@ -200,14 +200,14 @@
 			<Filled.Time class="size-6 fill-secondary" title={labels?.get('start-time')} />
 			<Body class="mb-0">{labels?.get('start-time')}: {parseAMPM(start_time || '00:00:00')}</Body>
 		</div>
-		<MapContainer let:Title let:Static let:Button>
-			<Title>{labels?.get('start-point')}</Title>
-			<Static mapTitle={name} center={{ lat: meet_lat, lng: meet_lng }} />
-			<Button mapTitle={name} center={{ lat: meet_lat, lng: meet_lng }}>
+		<MapContainer let:Title let:Static let:Button class='mt-8 rounded-xl overflow-hidden'>
+			<Title class='bg-background-lightblue px-3 py-1 rounded-full'>{labels?.get('start-point')}</Title>
+			<Static mapType='roadmap' mapTitle={name} center={{ lat: meet_lat, lng: meet_lng }} markers={ [{ location: {lat: meet_lat, lng: meet_lng}, label: labels?.get('start-point')[0]}] } />
+			<Button class='md:mb-2' mapType='roadmap' mapTitle={name} center={{ lat: meet_lat, lng: meet_lng }}>
 				{labels?.get('location-navigate')}
 			</Button>
 		</MapContainer>
-		<ul>
+		<ul class="my-6">
 			{#each experience || [] as tex}
 				{@const { title, description, type, duration, includes_admission } = tex}
 				<li>
@@ -272,10 +272,10 @@
 				<Alert>Es necesario agregar las experiencias del tour</Alert>
 			{/each}
 		</ul>
-		<MapContainer let:Title let:Static let:Button>
-			<Title>{labels?.get('end-point')}</Title>
-			<Static mapTitle={name} center={{ lat: end_lat, lng: end_lng }} />
-			<Button mapTitle={name} center={{ lat: end_lat, lng: end_lng }}>
+		<MapContainer let:Title let:Static let:Button class='rounded-xl overflow-hidden'>
+			<Title class='bg-background-lightblue px-3 py-1 rounded-full'>{labels?.get('end-point')}</Title>
+			<Static mapType='roadmap' mapTitle={name} center={{ lat: end_lat, lng: end_lng }} markers={ [{ location: {lat: end_lat, lng: end_lng}, label: labels?.get('end-point')[0]}] } />
+			<Button class='md:mb-2' mapType='roadmap' mapTitle={name} center={{ lat: end_lat, lng: end_lng }}>
 				{labels?.get('location-navigate')}
 			</Button>
 		</MapContainer>

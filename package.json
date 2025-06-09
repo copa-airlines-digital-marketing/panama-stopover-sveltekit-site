@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "vite dev --host",
+    "dev": "vite dev --host --port 1614",
     "build": "vite build",
     "preview": "vite preview",
     "test": "pnpm run test:integration && npm run test:unit",

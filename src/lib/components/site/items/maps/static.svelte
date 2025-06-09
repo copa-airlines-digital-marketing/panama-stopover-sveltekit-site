@@ -9,7 +9,7 @@
 	let className: $$Props['class'] = undefined;
 	export let mapTitle: $$Props['mapTitle'] = undefined;
 	export let markers: $$Props['markers'] = undefined;
-	export let zoom: $$Props['zoom'] = 17;
+	export let zoom: $$Props['zoom'] = 16;
 	/* 	export let mapSize: $$Props['mapSize'] = undefined;
 	export let scale: $$Props['scale'] = undefined;
 	export let mapType: $$Props['mapType'] = 'roadmap'; */
@@ -28,7 +28,7 @@
 	const processMarkerProp = (marker: Marker, key: string) => {
 		if (!isKeyOfMarker(marker, key)) return '';
 
-		if (isCoordinate(marker[key])) `${marker[key].lat},${marker[key].lng}`;
+		if (isCoordinate(marker[key])) return `${marker[key].lat},${marker[key].lng}`;
 
 		return `${key}:${marker[key]}`;
 	};
@@ -42,22 +42,24 @@
 
 	const markerToURL = (marker: Marker) => {
 		const propsToParams = Object.keys(marker).map((m) => processMarkerProp(marker, m));
-		const sortedParams = propsToParams.sort(sortLastLocation).join('%7');
+		
+		const sortedParams = propsToParams.sort(sortLastLocation).join('%7C');
+		
 		return `markers=${sortedParams}`;
 	};
 
 	const generateMarker = (markers: $$Props['markers']) =>
-		markers ? markers.map(markerToURL).join('&') : '';
+		markers ? '&' + markers.map(markerToURL).join('&') : '';
 
 	const getmapSource = (size: string) =>
-		`${API}?center=${center.lat},${center.lng}&zoom=${zoom}&size=${size}${generateMarker(markers)}&key=${API_KEY}`;
+		`${API}?center=${center.lat},${center.lng}&size=${size}${generateMarker(markers)}&key=${API_KEY}`;
 
 	Source;
 </script>
 
 <picture class="block [grid-area:image]">
-	<Source screen="lg" srcset={getmapSource('600x600')} />
-	<Source screen="md" srcset={getmapSource('600x600')} />
-	<Source screen="sm" srcset={getmapSource('960x960')} />
-	<img src={getmapSource('600x600')} alt={mapTitle} class={cn('', className)} />
+	<Source screen="lg" srcset="{getmapSource('640x160')}&scale=2&zoom=16" />
+	<Source screen="md" srcset="{getmapSource('640x214')}&scale=2&zoom=17" />
+	<Source screen="sm" srcset="{getmapSource('640x360')}&scale=2&zoom=18" />
+	<img src="{getmapSource('600x600')}&scale=2&zoom=19" alt={mapTitle} class={cn('w-full h-auto', className)} />
 </picture>

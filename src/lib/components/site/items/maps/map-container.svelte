@@ -23,7 +23,8 @@
 
 <style lang="postcss">
 	.overlay-layout {
-		grid-template-columns: [image_start] 8px [name_start] auto [name_end] 1fr [navigate_start] auto [navigate_end] 8px [image_end];
-		grid-template-rows: [image_start] 8px [name_start] auto [name_end] 1fr [navigate_start] auto [navigate_end] 8px [image_end];
+		grid-template-columns: [image-start] 8px [name-start] auto [name-end] 1fr [navigate-start] auto [navigate-end] 8px [image-end];
+		grid-template-rows: [image-start] 8px [name-start] auto [name-end] 1fr [navigate-start] auto [navigate-end] 8px [image-end];
 	}
+	
 </style>

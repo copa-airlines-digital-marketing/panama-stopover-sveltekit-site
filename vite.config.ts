@@ -9,6 +9,7 @@ export default defineConfig({
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},
 	server: {
+		allowedHosts: ['local-dev.panama-stopover.com'],
 		fs: {
 			allow: ['./design-sytem-svelte-components/', './directus-cms-collections/']
 		}

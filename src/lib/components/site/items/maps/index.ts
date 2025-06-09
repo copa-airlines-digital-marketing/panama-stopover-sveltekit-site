@@ -13,10 +13,10 @@ type Coordinates = {
 };
 
 type Marker = {
-	location: [Coordinates];
+	location: Coordinates;
 	color?: string;
 	label?: string;
-	size: 'tiny' | 'mid' | 'small';
+	size?: 'tiny' | 'mid' | 'small';
 };
 
 type MapProps = {
