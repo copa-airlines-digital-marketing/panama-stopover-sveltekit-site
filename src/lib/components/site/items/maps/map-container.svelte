@@ -11,14 +11,14 @@
 	export { className as class };
 
 	const children = {
-		Button //,
-		//Title,
-		//Static
+		Button,
+		Title,
+		Static
 	};
 </script>
 
 <div class={cn('overlay-layout relative grid', className)} {...$$restProps}>
-	<slot {...children} />
+	<slot {Button} {Title} {Static} />
 </div>
 
 <style lang="postcss">

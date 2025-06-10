@@ -210,11 +210,16 @@
 			</div>
 		</div>
 
-		<MapContainer let:Static let:Button class="overflow-hidden rounded-xl lg:[grid-area:starting]">
-			<!-- <Title class="rounded-full bg-background-lightblue px-3 py-1"
+		<MapContainer
+			let:Title
+			let:Static
+			let:Button
+			class="overflow-hidden rounded-xl lg:[grid-area:starting]"
+		>
+			<Title class="rounded-full bg-background-lightblue px-3 py-1"
 				>{labels?.get('start-point')}</Title
-			> -->
-			<!-- <Static
+			>
+			<Static
 				mapType="roadmap"
 				mapTitle={name}
 				center={{ lat: meet_lat, lng: meet_lng }}
@@ -222,7 +227,7 @@
 					{ location: { lat: meet_lat, lng: meet_lng }, label: labels?.get('start-point')[0] }
 				]}
 				breakpointSize={{ lg: '300x300' }}
-			/> -->
+			/>
 			<Button
 				class="md:mb-2"
 				mapType="roadmap"
@@ -298,7 +303,6 @@
 				<Alert>Es necesario agregar las experiencias del tour</Alert>
 			{/each}
 		</ul>
-		<!-- 
 		<MapContainer
 			let:Title
 			let:Static
@@ -324,7 +328,6 @@
 				{labels?.get('location-navigate')}
 			</Button>
 		</MapContainer>
-    -->
 	</div>
 	<div>
 		<InformativeBoxContainer let:Box>
