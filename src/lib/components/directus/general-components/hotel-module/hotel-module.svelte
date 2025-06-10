@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { PromoShow } from '$lib/components/ui/cards/promo-show';
 	import type { StopoverHotelModuleSchema } from '$lib/directus/stopover_hotel_module';
-	import { toString, map, replace, isNotNil, isNil } from 'ramda';
+	import { map, replace, isNotNil, isNil } from 'ramda';
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '../../stopover/utils';
 	import KeyboardArrowRight from '$lib/components/ui/icon/keyboard-arrow-right.svelte';
 	import { getPathRecursive } from '$lib/i18n/cannonicals';
 	import type { PathSchema } from '$lib/directus/page';
-	import { onMount } from 'svelte';
 
 	export let item: StopoverHotelModuleSchema;
 
@@ -26,7 +25,9 @@
 </script>
 
 {#if isNil(moduleItems)}
-	<div class="grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))] my-6 grid gap-2">
+	<div
+		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-2 md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))]"
+	>
 		{#each new Array(4) as skeli}
 			<PromoShow let:Children>
 				<Children.Image class="aspect-video bg-grey-100" />
@@ -39,7 +40,9 @@
 		{/each}
 	</div>
 {:else}
-	<ul class="grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))] my-6 grid items-stretch gap-2 md:gap-4">
+	<ul
+		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] items-stretch gap-2 md:grid-cols-[repeat(auto-fill,minmax(320px,395px))] md:gap-4"
+	>
 		{#each moduleItems as promo}
 			{#if promo.parent_page}
 				<li>

@@ -13,77 +13,94 @@ import type { EntryGenerator } from '../$types';
 import { getAllPagesParams } from '$lib/data/pages';
 
 type DataTypeMap = {
-  page: PageSchema | undefined,
-  pageSections: SectionSchema[] | undefined,
-  stopover_hotels: HotelSchema | undefined,
-  stopover_restaurants: RestaurantSchema | undefined,
-  stopover_place_to_visit: PlaceSchema | undefined
-}
+	page: PageSchema | undefined;
+	pageSections: SectionSchema[] | undefined;
+	stopover_hotels: HotelSchema | undefined;
+	stopover_restaurants: RestaurantSchema | undefined;
+	stopover_place_to_visit: PlaceSchema | undefined;
+};
 
 export const entries: EntryGenerator = async () => {
-  const allPagesParams = await getAllPagesParams()
-  console.log(`Sveltekit will render ${allPagesParams.length} pages`, JSON.stringify(allPagesParams.map(v => v.path), null, 2))
-  return allPagesParams
-}
+	const allPagesParams = await getAllPagesParams();
+	console.log(
+		`Sveltekit will render ${allPagesParams.length} pages`,
+		JSON.stringify(
+			allPagesParams.map((v) => v.path),
+			null,
+			2
+		)
+	);
+	return allPagesParams;
+};
 
 export async function load(event) {
-  const { parent, params: { path } , route }  = event
+	const {
+		parent,
+		params: { path },
+		route
+	} = event;
 
-  console.log(`requesting data for page: ${path}`)
+	console.log(`requesting data for page: ${path}`);
 
-  if(!path) {
-    say('Path param is required', event)
-    return error(404)
-  }
+	if (!path) {
+		say('Path param is required', event);
+		return error(404);
+	}
 
-  const preview = null
+	const preview = null;
 
-  const [locale, category, subCategory, article] = path.split('/')
+	const [locale, category, subCategory, article] = path.split('/');
 
-  const [pageData, parentData] = await Promise.all([getPageData({locale, preview, category, subCategory, article, home: category || 'true'}), parent()])
+	const [pageData, parentData] = await Promise.all([
+		getPageData({ locale, preview, category, subCategory, article, home: category || 'true' }),
+		parent()
+	]);
 
-  const { page, sections: pageSections } = pageData
+	//console.log('pageData', pageData);
 
-  if(!article && !isPageSettings(page)) {
-    say('error ocurred while getting homepage info')
-    return error(500)
-  }
+	const { page, sections: pageSections } = pageData;
 
-  if(pageSections){   
-    const modulesPaths = getAllSectionModules(pageSections)
-    
-    const modulesData = await Promise.allSettled(modulesPaths.map(getModuleRequest(pageSections, locale)))
-    
-    modulesPaths.forEach((path, key) => {
-      const items = modulesData[key].value || null
-      
-      if(isNil(items) || isEmpty(items))
-        return
-      
-      setToValue(pageSections, items, [...path, 'items'])
-    })
-  }
-  
-  if(isNotFoundSchema(pageData)) {
-    say('Page requested not found', route)
-    return error(404)
-  }
+	if (!article && !isPageSettings(page)) {
+		say('error ocurred while getting homepage info');
+		return error(500);
+	}
 
-  const finalData: DataTypeMap = {
-    page,
-    stopover_hotels: undefined,
-    stopover_restaurants: undefined,
-    stopover_place_to_visit: undefined,
-    ...pageData,
-    pageSections
-  }
+	if (pageSections) {
+		const modulesPaths = getAllSectionModules(pageSections);
 
-  console.log(`Processed data for: ${path}, sending it to render`)
+		const modulesData = await Promise.allSettled(
+			modulesPaths.map(getModuleRequest(pageSections, locale))
+		);
 
-  return {
-    ...parentData,
-    ...finalData
-  }
+		modulesPaths.forEach((path, key) => {
+			const items = modulesData[key].value || null;
+
+			if (isNil(items) || isEmpty(items)) return;
+
+			setToValue(pageSections, items, [...path, 'items']);
+		});
+	}
+
+	if (isNotFoundSchema(pageData)) {
+		say('Page requested not found', route);
+		return error(404);
+	}
+
+	const finalData: DataTypeMap = {
+		page,
+		stopover_hotels: undefined,
+		stopover_restaurants: undefined,
+		stopover_place_to_visit: undefined,
+		...pageData,
+		pageSections
+	};
+
+	console.log(`Processed data for: ${path}, sending it to render`);
+
+	return {
+		...parentData,
+		...finalData
+	};
 }
 
-export const prerender = true
+export const prerender = true;
