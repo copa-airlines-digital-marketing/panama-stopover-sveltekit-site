@@ -27,7 +27,7 @@
 					title={text}
 				>
 					{#if icon}
-						<SVG data={icon?.code} class="h-14 w-auto"></SVG>
+						<SVG data={icon?.code} class="h-8 w-auto  sm:h-14"></SVG>
 					{:else}
 						{text}
 					{/if}
