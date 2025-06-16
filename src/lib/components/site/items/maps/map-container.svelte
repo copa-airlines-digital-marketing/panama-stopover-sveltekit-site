@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import Button from './button.svelte';
-	import Title from './title.svelte';
-	import Static from './static.svelte';
+	import { Button, Title, Static } from './index';
 
 	type $$Props = HTMLAttributes<HTMLDivElement>;
 
@@ -18,7 +16,7 @@
 </script>
 
 <div class={cn('overlay-layout relative grid', className)} {...$$restProps}>
-	<slot {Button} {Title} {Static} />
+	<slot {...children} />
 </div>
 
 <style lang="postcss">

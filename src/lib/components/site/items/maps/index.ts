@@ -1,5 +1,8 @@
 import type { HTMLAttributes } from 'svelte/elements';
 import MapContainer from './map-container.svelte';
+import Button from './button.svelte';
+import Title from './title.svelte';
+import Static from './static.svelte';
 
 export { default as Map } from './map.svelte';
 
@@ -79,4 +82,4 @@ const addGoogleMapsJS = (
 
 export type { Coordinates, Marker, MapProps, MapContainerElementProps };
 
-export { GOOGLE_MAP_KEY, addGoogleMapsJS, MapContainer };
+export { GOOGLE_MAP_KEY, addGoogleMapsJS, MapContainer, Button, Static, Title };
