@@ -33,7 +33,7 @@
 
 	const copyErrroLabel = labels?.filter((label) => label.name === 'promo-code-copied-error')[0];
 
-	const category = isPlaceSchema(item) ? item.pilar : item.pilar[0];
+	const category = isPlaceSchema(item) ? item.pilar : !!item.pilar ? item?.pilar[0] : null;
 
 	const theme = isHotelSchema(item)
 		? 'DEFAULT'
