@@ -124,6 +124,8 @@
 		return NoIcon;
 	};
 
+	//new (delete)
+
 	const parseAMPM = (hour24: string) => {
 		const [hour, minutes] = hour24.split(':').map(Number);
 		const amPm = hour >= 12 ? 'PM' : 'AM';
