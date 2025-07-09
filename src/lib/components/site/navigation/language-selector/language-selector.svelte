@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { getPageCannonicals } from '$lib/components/directus/context';
-	import { buttonVariants } from '$lib/components/ui/foundations/button';
-	import { SVG } from '$lib/components/ui/foundations/icon';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
-	import { Linkbar } from '$lib/components/ui/patterns/menu/linkbar';
+	import { buttonVariants } from '$ui/components/button';
+	import { SVG } from '$lib/components/ui/icon';
+	import { Linkbar } from '$lib/components/ui/menu/linkbar';
 	import {
 		ModalBody,
 		ModalRoot,
@@ -11,11 +10,13 @@
 		ModalClose,
 		ModalTrigger,
 		ModalTitle
-	} from '$lib/components/ui/patterns/modal';
+	} from '$lib/components/ui/modal';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 	import { page } from '$app/stores';
 	import { dissoc } from 'ramda';
 	import { browser } from '$app/environment';
+	import { cn } from '$lib/utils';
+	import { getTypographyVariant } from '$ui/components/typography';
 
 	export let navigation: NavigationSchema;
 
@@ -36,7 +37,9 @@
 </script>
 
 <ModalRoot>
-	<ModalTrigger class={buttonVariants({ variant: 'transparent-primary-main' })}>
+	<ModalTrigger
+		class={cn(buttonVariants({ variant: 'transparent-primary-main' }), 'hover:cursor-pointer')}
+	>
 		{#if icon}
 			<SVG data={icon.code} class="size-6" title={translation.title} />
 			<span class="sr-only">{translation.title}</span>
@@ -47,7 +50,7 @@
 	<ModalContent size="narrow">
 		<ModalClose />
 		<ModalBody>
-			<ModalTitle class={getTypographyVariant('h3', 'mb-6 mt-8 text-primary-dark')}
+			<ModalTitle class={getTypographyVariant('h3', 'text-primary-dark mt-8 mb-6')}
 				>{translation.title}</ModalTitle
 			>
 			<nav aria-label={translation.title}>

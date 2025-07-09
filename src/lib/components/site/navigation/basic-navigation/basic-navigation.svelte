@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { Pre } from '$lib/components/testing';
-	import type { ButtonProps } from '$lib/components/ui/foundations/button';
-	import Button from '$lib/components/ui/foundations/button/button.svelte';
-	import { SVG } from '$lib/components/ui/foundations/icon';
+	import { Button, type ButtonProps } from '$ui/components/button';
+	import { SVG } from '$lib/components/ui/icon';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 
 	export let navigation: NavigationSchema;
@@ -20,7 +18,13 @@
 	{#each links as link, i}
 		{@const { href, text, target, rel, icon } = link.links_id}
 		<li class="grow md:grow-0">
-			<Button {href} {target} rel={rel?.join(' ')} variant={buttonVariant[i]} title={text}>
+			<Button
+				{href}
+				{target}
+				rel={rel?.join(' ')}
+				variant={buttonVariant[i]}
+				title={text}
+			>
 				{#if icon}
 					<SVG data={icon.code} title={text} class="w-auto fill-current"></SVG>
 				{/if}

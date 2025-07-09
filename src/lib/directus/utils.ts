@@ -3,7 +3,6 @@ import { readItem, readItems, type QueryItem } from "@directus/sdk"
 import { getClient } from "./client"
 import type { Schema } from "./schema"
 import { replace } from "ramda"
-import { z } from "zod"
 
 type DirectusRequestBody = Record<string, string | number | undefined | null>
 

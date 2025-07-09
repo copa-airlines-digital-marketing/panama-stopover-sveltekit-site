@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { equals, filter, head, pipe, prop } from 'ramda';
 	import { Procesor } from '$lib/components/directus';
-	import { Toast } from '$lib/components/ui/master/alerts/toast';
+	import { Toast } from '$lib/components/ui/alerts/toast';
 
 	export let data;
 

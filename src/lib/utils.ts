@@ -1,48 +1,75 @@
-import type { ClassValue } from "clsx";
-import { clsx } from "clsx";
-import { quintOut } from "svelte/easing";
-import type { TransitionConfig } from "svelte/transition";
-import { extendTailwindMerge } from "tailwind-merge";
-import { default as Preset } from 'cmds-tailwind-styles';
-import { allPass, curry, has, isNotEmpty, isNotNil } from "ramda";
-import { createTV } from "tailwind-variants";
+import type { ClassValue } from 'clsx';
+import { clsx } from 'clsx';
+import { quintOut } from 'svelte/easing';
+import type { TransitionConfig } from 'svelte/transition';
+import { extendTailwindMerge } from 'tailwind-merge';
+import { allPass, curry, has, isNotEmpty, isNotNil } from 'ramda';
+import { createTV } from 'tailwind-variants';
 
-function flatObject(entry: [string, string | object]) {
-  const [key, value] = entry
+const stopoverTWMergeConfig = {
+	extend: {
+		theme: {
+			colors: [
+				'primary',
+				'primary-light',
+				'primary-dark',
+				'primary-ultradark',
+				'primary-ultralight',
+				'primary-faded',
+				'secondary',
+				'secondary-faded',
+				'tertiary',
+				'background-lightblue',
+				'background-paper',
+				'alternative-pardo',
+				'alternative-gold',
+				'alternative-darkorange',
+				'alternative-lightorange',
+				'alternative-perfermemberblue',
+				'system-warning',
+				'system-warning-faded',
+				'system-error',
+				'system-error-faded',
+				'system-success',
+				'system-success-faded',
+				'grey-800',
+				'grey-700',
+				'grey-600',
+				'grey-500',
+				'grey-400',
+				'grey-300',
+				'grey-200',
+				'grey-100',
+				'grey-75',
+				'grey-50',
+				'common-black',
+				'common-white',
+				'status-member',
+				'status-silver',
+				'status-gold',
+				'status-platinum',
+				'status-presidential',
+				'stopover-accent',
+				'stopover-canal',
+				'stopover-culture',
+				'stopover-gastronomy',
+				'stopover-nature'
+			],
+			spacing: ['gutter', 'minimal', 'tiny', 'petit', 'normal', 'roomy', 'spacious', 'big', 'huge'],
+			font: ['Gilroy', "Suisse Int\'l", 'Jakarta'],
+			text: ['d3', 'd2', 'd1', 'b', 'u4', 'u1', 'u2', 'u3', 'u4', 'u5', 'u6']
+		}
+	}
+} as const;
 
-  if(typeof value === 'string')
-    return key === 'DEFAULT' ? null : key
+const tm = extendTailwindMerge(stopoverTWMergeConfig);
 
-  return Object.entries(value).flatMap(flatObject).map(v => key + ( v ? '-'+v : '') )
-}
-
-const colors = Object.entries(Preset.theme.extend.colors).flatMap(flatObject).concat(['stopover-gastronomy',
-        'stopover-canal',
-        'stopover-nature',
-        'stopover-accent',
-        'stopover-culture'])
-
-const cmTWMergeConfig = {
-  extend: {
-    theme: {
-      colors: colors,
-      spacing: Object.keys(Preset.theme.extend.spacing)
-    },
-    classGroups: {
-      'font-family': [{font:[...Object.keys(Preset.theme.extend.fontFamily), 'jakarta']}], //this is good,
-      'font-size': [{text:Object.keys(Preset.theme.extend.fontSize)}],
-    }
-  }
-} as const
-
-const customTwMerge = extendTailwindMerge(cmTWMergeConfig)
-
-const cmTailwindVariants = createTV({
-  twMergeConfig: cmTWMergeConfig
-})
+const tv = createTV({
+	twMergeConfig: stopoverTWMergeConfig
+});
 
 function cn(...inputs: ClassValue[]) {
-	return customTwMerge(clsx(inputs));
+	return tm(clsx(inputs));
 }
 
 type FlyAndScaleParams = {
@@ -56,7 +83,7 @@ function styleToString(style: Record<string, number | string | undefined>): stri
 	return Object.keys(style).reduce((str, key) => {
 		if (style[key] === undefined) return str;
 		return `${str}${key}:${style[key]};`;
-	}, "");
+	}, '');
 }
 
 function flyAndScale(
@@ -64,13 +91,9 @@ function flyAndScale(
 	params: FlyAndScaleParams = { y: -8, x: 0, start: 0.95, duration: 150 }
 ): TransitionConfig {
 	const style = getComputedStyle(node);
-	const transform = style.transform === "none" ? "" : style.transform;
+	const transform = style.transform === 'none' ? '' : style.transform;
 
-	const scaleConversion = (
-		valueA: number,
-		scaleA: [number, number],
-		scaleB: [number, number]
-	) => {
+	const scaleConversion = (valueA: number, scaleA: [number, number], scaleB: [number, number]) => {
 		const [minA, maxA] = scaleA;
 		const [minB, maxB] = scaleB;
 
@@ -90,56 +113,69 @@ function flyAndScale(
 
 			return styleToString({
 				transform: `${transform} translate3d(${x}px, ${y}px, 0) scale(${scale})`,
-				opacity: t,
+				opacity: t
 			});
 		},
-		easing: quintOut,
+		easing: quintOut
 	};
 }
 
-const isNotNilNorEmpty = allPass([isNotNil, isNotEmpty])
+const isNotNilNorEmpty = allPass([isNotNil, isNotEmpty]);
 
 const say = curry((message: string, value: unknown) => {
-  console.log(message, JSON.stringify(value, null, 2))
-  return value
-})
+	console.log(message, JSON.stringify(value, null, 2));
+	return value;
+});
 
 function isKeyOfObject<T>(key: string | number | symbol, obj: T): key is keyof T {
-  return has(key, obj)
+	return has(key, obj);
 }
 
 function setCookie(name: string, value: string, days: number) {
-  let expires = "";
-  if (days) {
-      const date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      expires = "; expires=" + date.toUTCString();
-  }
-  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+	let expires = '';
+	if (days) {
+		const date = new Date();
+		date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+		expires = '; expires=' + date.toUTCString();
+	}
+	document.cookie = name + '=' + (value || '') + expires + '; path=/';
 }
 
 function getCookie(name: string) {
-  const nameEQ = name + "=";
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
+	const nameEQ = name + '=';
+	const ca = document.cookie.split(';');
+	for (let i = 0; i < ca.length; i++) {
+		let c = ca[i];
+		while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+		if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+	}
+	return null;
 }
 
+const isNumberArray = (value: unknown): value is Array<number> => {
+	if (Array.isArray(value)) return value.every((item) => typeof item === 'number');
 
+	return false;
+};
+
+const isStringArray = (value: unknown): value is Array<string> => {
+	if (Array.isArray(value)) return value.every((item) => typeof item === 'string');
+
+	return false;
+};
 
 export {
-  cn,
-  flyAndScale,
-  isKeyOfObject,
-  isNotNilNorEmpty,
-  say,
-  styleToString,
-  cmTailwindVariants,
-  customTwMerge,
-  setCookie,
-  getCookie
-}
+	cn,
+	flyAndScale,
+	isKeyOfObject,
+	isNotNilNorEmpty,
+	say,
+	styleToString,
+	tv,
+	tv as cmTailwindVariants,
+	tm as customTwMerge,
+	setCookie,
+	getCookie,
+	isNumberArray,
+	isStringArray
+};

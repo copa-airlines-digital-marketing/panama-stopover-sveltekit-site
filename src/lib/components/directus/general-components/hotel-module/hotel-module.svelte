@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { PromoShow } from '$lib/components/ui/patterns/cards/promo-show';
+	import { PromoShow } from '$lib/components/ui/cards/promo-show';
 	import type { StopoverHotelModuleSchema } from '$lib/directus/stopover_hotel_module';
-	import { toString, map, replace, isNotNil, isNil } from 'ramda';
+	import { map, replace, isNotNil, isNil } from 'ramda';
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '../../stopover/utils';
-	import KeyboardArrowRight from '$lib/components/ui/foundations/icon/keyboard-arrow-right.svelte';
+	import KeyboardArrowRight from '$lib/components/ui/icon/keyboard-arrow-right.svelte';
 	import { getPathRecursive } from '$lib/i18n/cannonicals';
 	import type { PathSchema } from '$lib/directus/page';
-	import { onMount } from 'svelte';
 
 	export let item: StopoverHotelModuleSchema;
 
@@ -26,20 +25,24 @@
 </script>
 
 {#if isNil(moduleItems)}
-	<div class="item-show-grid my-6 grid gap-2">
+	<div
+		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] items-stretch gap-2 md:grid-cols-[repeat(auto-fill,minmax(320px,395px))] md:gap-4"
+	>
 		{#each new Array(4) as skeli}
 			<PromoShow let:Children>
 				<Children.Image class="aspect-video bg-grey-100" />
 				<Children.Discount class="h-4 w-10 animate-pulse justify-self-end bg-grey-300" />
-				<Children.Title class="h-5 animate-pulse rounded bg-grey-300" />
+				<Children.Title class="h-5 animate-pulse rounded-sm bg-grey-300" />
 				<Children.CallToAction
-					class="h-3 w-10 animate-pulse justify-self-end rounded bg-grey-300"
+					class="h-3 w-10 animate-pulse justify-self-end rounded-sm bg-grey-300"
 				/>
 			</PromoShow>
 		{/each}
 	</div>
 {:else}
-	<ul class="item-show-grid my-6 grid items-stretch gap-2 md:gap-4">
+	<ul
+		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] items-stretch gap-2 md:grid-cols-[repeat(auto-fill,minmax(320px,395px))] md:gap-4"
+	>
 		{#each moduleItems as promo}
 			{#if promo.parent_page}
 				<li>
@@ -78,9 +81,3 @@
 		{/each}
 	</ul>
 {/if}
-
-<style lang="postcss">
-	.item-show-grid {
-		@apply grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))];
-	}
-</style>

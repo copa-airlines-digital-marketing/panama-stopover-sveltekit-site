@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { Button } from '$lib/components/ui/foundations/button';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
+	import { Button } from '$ui/components/button';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import Description from '../description/description.svelte';
+	import { Heading } from '$ui/components/typography';
 
 	export let item: TextContentSchema;
 
@@ -28,12 +28,14 @@
 	</picture>
 {/if}
 {#if title}
-	<h2 class={getTypographyVariant('h2', 'mb-4 mt-6 max-w-full')}>{title}</h2>
+	<Heading class='mt-6 mb-4 max-w-full'>
+		{title}
+	</Heading>
 {/if}
 <Description {description} />
 {#if call_to_actions}
 	<ul class="mt-6 flex gap-2">
-		<li class="flex-grow">
+		<li class="grow">
 			{#each call_to_actions as cta, i}
 				<Button
 					href={cta.link}
