@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/foundations/button';
-	import { SVG } from '$lib/components/ui/foundations/icon';
+	import { Button } from '$ui/components/button';
+	import { SVG } from '$lib/components/ui/icon';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 	import { say } from '$lib/utils';
 
@@ -24,9 +24,10 @@
 					size="slim"
 					variant="transparent-primary-main"
 					class="rounded-full *:max-h-14 sm:*:max-h-14 md:*:max-h-14 lg:*:max-h-14"
+					title={text}
 				>
 					{#if icon}
-						<SVG data={icon?.code} class="h-14 w-auto"></SVG>
+						<SVG data={icon?.code} class="h-8 w-auto  sm:h-14"></SVG>
 					{:else}
 						{text}
 					{/if}

@@ -8,7 +8,7 @@
 	const contents = item.content || [];
 </script>
 
-<ul class="pillar-grid mb-spacious grid gap-2 md:gap-4">
+<ul class="pillar-grid mb-spacious grid gap-2 md:gap-4 grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))]">
 	{#each contents as content}
 		<li>
 			{#if isNotNil(content) && isNotEmpty(content)}
@@ -19,9 +19,3 @@
 		<li>No content</li>
 	{/each}
 </ul>
-
-<style lang="postcss">
-	.pillar-grid {
-		@apply grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))];
-	}
-</style>

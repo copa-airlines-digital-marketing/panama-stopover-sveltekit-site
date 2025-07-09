@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { PillardCard } from '$lib/components/ui/patterns/cards/pillard';
+	import { PillardCard } from '$lib/components/ui/cards/pillard';
 	import { mediaQueryMD } from '$lib/constants';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 

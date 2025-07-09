@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getTypography } from '$lib/components/ui/foundations/typography';
+	import { getTypography } from '$ui/components/typography';
 	import { descriptionVariants, type DescriptionTheme } from './variants';
 
 	export let description: string | null | undefined;

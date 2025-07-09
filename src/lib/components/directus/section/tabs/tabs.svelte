@@ -7,7 +7,7 @@
 	import { PlainSectionCotent } from '../..';
 	import { Tabs } from 'bits-ui';
 	import { setTabContext } from './context';
-	import { buttonVariants } from '$lib/components/ui/foundations/button';
+	import { buttonVariants } from '$ui/components/button';
 	import { crossfade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 
@@ -59,7 +59,7 @@
 			class={cn(sectionVariants(variantObject), 'relative')}
 			class:col-start-2={horizontal_behaviour === 'container-grid'}
 		>
-			<Tabs.Root class="col-span-full mb-normal" bind:value>
+			<Tabs.Root class="mb-normal col-span-full" bind:value>
 				<Tabs.List class="flex content-start justify-around gap-2">
 					{#each $tabNames as tabName, i}
 						<Tabs.Trigger
@@ -74,7 +74,7 @@
 								<div
 									in:send={{ key: 'trigger' }}
 									out:receive={{ key: 'trigger' }}
-									class="absolute bottom-1 h-0.5 w-3/4 rounded-full bg-secondary"
+									class="bg-secondary absolute bottom-1 h-0.5 w-3/4 rounded-full"
 								/>
 							{/if}
 						</Tabs.Trigger>

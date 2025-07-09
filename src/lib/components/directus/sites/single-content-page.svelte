@@ -3,8 +3,8 @@
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { filter, propEq } from 'ramda';
 	import { cn } from '$lib/utils';
-	import { getTypography, getTypographyVariant } from '$lib/components/ui/foundations/typography';
-	import { Button } from '$lib/components/ui/foundations/button';
+	import { Button } from '$ui/components/button';
+	import { getTypography, Heading } from '$ui/components/typography';
 
 	export let layout: PageSchema;
 	export let locale: string;
@@ -25,12 +25,12 @@
 
 <div class="bg-primary pb-petit pt-40">
 	<div class="container mx-auto">
-		<h1 class={cn(getTypographyVariant('h1'), 'text-green-50')}>
+		<Heading tag='h1' class='text-grey-50'>
 			{title}
-		</h1>
+		</Heading>
 	</div>
 </div>
-<div class="container mx-auto my-roomy">
+<div class="my-roomy container mx-auto">
 	<div class={getTypography('body-large', 'body')}>
 		{@html description}
 	</div>
@@ -38,7 +38,11 @@
 		{#if call_to_actions}
 			{#each call_to_actions as cta, i}
 				{@const { text, link, open_in } = cta}
-				<Button href={link} target={open_in} variant={i === 0 ? undefined : 'outline-primary-main'}>
+				<Button
+					href={link}
+					target={open_in}
+					variant={i === 0 ? undefined : 'outline-primary-main'}
+				>
 					{text}
 				</Button>
 			{/each}

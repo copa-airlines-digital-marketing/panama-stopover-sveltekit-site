@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { SVG } from '$lib/components/ui/foundations/icon';
-	import { getTypography } from '$lib/components/ui/foundations/typography';
+	import { SVG } from '$lib/components/ui/icon';
 	import type { HotelAmenity } from '$lib/directus/hotel-amenities';
 	import type { HotelSchema } from '$lib/directus/hotels';
+	import { getTypography } from '$ui/components/typography';
 	import { IconList } from '../../ui/icon-list';
 
 	export let item: HotelSchema;

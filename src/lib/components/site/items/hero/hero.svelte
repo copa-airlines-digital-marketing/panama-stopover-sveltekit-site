@@ -1,31 +1,19 @@
 <script lang="ts">
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
-	import type { HotelSchema } from '$lib/directus/hotels';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
 	import { cn } from '$lib/utils';
-	import { page } from '$app/stores';
 	import ItemGallery from '$lib/components/site/items/carousel/carousel.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
 	import { mediaQueryLG, mediaQueryMD } from '$lib/constants';
+	import { getTypographyVariant } from '$ui/components/typography';
 
 	let className: string | null | undefined = undefined;
 	export { className as class };
-	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
-
-	const { main_image, gallery, translations } = item;
-
-	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
-
-	const galleryImages = gallery.map((v) => v.directus_files_id);
+	export let galleryImages: string[];
+  export let main_image: string;
+  export let name: string 
 
 	let selectedImage = 0;
-
-	const {
-		0: { name }
-	} = currrentTranslation;
 
 	function changeSelectionElswere(event: CustomEvent) {
 		selectedImage = event.detail;
@@ -68,7 +56,7 @@
 		</ItemGallery>
 	</div>
 	<div
-		class="relative col-span-full row-span-2 row-start-2 bg-gradient-to-t from-black to-transparent"
+		class="relative col-span-full row-span-2 row-start-2 bg-linear-to-t from-black to-transparent"
 	></div>
 	<div class="relative col-start-2 row-start-2">
 		<slot />
@@ -102,14 +90,14 @@
 						<img
 							src="{getDirectusImage(img)}?key=stopover-item-thumbnail-sm"
 							alt={name}
-							class="h-auto w-full rounded"
+							class="h-auto w-full rounded-sm"
 						/>
 					</picture>
 					{#if selectedImage === i}
 						<div
 							in:send={{ key: 'trigger' }}
 							out:receive={{ key: 'trigger' }}
-							class={cn('absolute inset-0 rounded mix-blend-color', className)}
+							class={cn('absolute inset-0 rounded-sm mix-blend-color', className)}
 						></div>
 					{/if}
 				</button>

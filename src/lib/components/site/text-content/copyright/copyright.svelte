@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getTypography } from '$lib/components/ui/foundations/typography';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { cn } from '$lib/utils';
+	import { getTypography } from '$ui/components/typography';
 
 	export let item: TextContentSchema;
 

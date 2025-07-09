@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/foundations/button';
+	import { Button } from '$ui/components/button';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { cn } from '$lib/utils';
 
@@ -19,7 +19,7 @@
 	<ul class={cn('col-start-2 row-start-7 mt-6 flex gap-2', className)}>
 		<li class:grow={stretch}>
 			{#each call_to_actions as cta, i}
-				<Button href={cta.link} target={cta.open_in} variant={variant[i]}>
+				<Button href={cta.link} target={cta.open_in} variant={variant[i]} >
 					{cta.text}
 				</Button>
 			{/each}

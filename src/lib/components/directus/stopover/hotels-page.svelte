@@ -1,13 +1,12 @@
 <script lang="ts">
 	import type { HotelSchema } from '$lib/directus/hotels';
-	import { getTypography, getTypographyVariant } from '$lib/components/ui/foundations/typography';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
 	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
 	import { Map } from '$lib/components/site/items/maps';
 	import { HotelCTAs } from '$lib/components/site/items/iconned-cta';
-	import { SVG } from '$lib/components/ui/foundations/icon';
+	import { SVG } from '$lib/components/ui/icon';
 	import { ItemIncludes } from '$lib/components/site/items/includes';
 	import type { HotelAmenity } from '$lib/directus/hotel-amenities';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
@@ -15,16 +14,19 @@
 	import { getDirectusImage } from './utils';
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
+	import { Body, Heading } from '$ui/components/typography';
 
 	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] };
 
-	const { main_image, stars, translations } = stopover_hotels.hotel;
+	const { gallery, main_image, stars, translations } = stopover_hotels.hotel;
 
 	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
 
 	const {
-		0: { description, promo_name, promo_description }
+		0: { description, name, promo_name, promo_description }
 	} = currrentTranslation;
+
+	const galleryImages = gallery.map((img) => img.directus_files_id);
 
 	const item = stopover_hotels.hotel;
 
@@ -46,20 +48,20 @@
 </script>
 
 <svelte:head>
-	<title>{currrentTranslation[0].name}</title>
-	<meta name="description" content={currrentTranslation[0].description} />
-	<meta property="og:title" content={currrentTranslation[0].name} />
+	<title>{name}</title>
+	<meta name="description" content={description} />
+	<meta property="og:title" content={name} />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content={$page.url.href} />
 	<meta property="og:image" content="{getDirectusImage(main_image)}?key=19x10-1200" />
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
-<Hero {item} class="bg-secondary" />
+<Hero {galleryImages} {main_image} {name} class="bg-secondary" />
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum {item} />
-		<p class={getTypography('body', 'body', 'flex items-center text-grey-600')}>
+		<Body size="body-large" class="flex items-center text-grey-600">
 			{#if starIcon}
 				<SVG data={starIcon?.code} class="size-8 fill-current"></SVG>
 			{:else}
@@ -68,10 +70,10 @@
 			<span>
 				{`${stars} ${starsLabel ? starsLabel.value : 'Please add hotels-stars label to site'}`}
 			</span>
-		</p>
-		<p class={getTypography('body-large', 'body', 'mb-petit')}>
+		</Body>
+		<Body size="body-large" class="mb-petit">
 			{description}
-		</p>
+		</Body>
 		{#if promo_name && promo_description}
 			<StopoverPromoCard {item}></StopoverPromoCard>
 		{/if}
@@ -86,13 +88,13 @@
 		{/if}
 	</div>
 	<div class="space-y-4">
-		<h2 class={getTypographyVariant('h2')}>
+		<Heading>
 			{#if hotelIncludesLabel}
 				{hotelIncludesLabel.value}
 			{:else}
 				{'Plase include a hotel-includes label to the site'}
 			{/if}
-		</h2>
+		</Heading>
 		<ItemIncludes {item} amenites={stopover_hotels.amenities}></ItemIncludes>
 	</div>
 	<SpokenLanguages {item}></SpokenLanguages>

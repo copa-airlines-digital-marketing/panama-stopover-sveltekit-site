@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Button } from '$lib/components/ui/foundations/button';
-	import { getTypographyVariant } from '$lib/components/ui/foundations/typography';
+	import { Button } from '$ui/components/button';
 	import { isHotelSchema, type HotelSchema } from '$lib/directus/hotels';
 	import type { PlaceSchema } from '$lib/directus/place-to-visit';
 	import { isRestaurantSchema, type RestaurantSchema } from '$lib/directus/restaurants';
-	import { map } from 'ramda';
 	import { onMount } from 'svelte';
+	import { getTypographyVariant } from '$ui/components/typography';
 
 	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
 
@@ -74,14 +73,14 @@
 		<h2 class={getTypographyVariant('h2', 'text-primary')}>{location.value}</h2>
 		{#if !useName}
 			<div
-				class="mb-6 mt-2 aspect-[4/3] w-full rounded-2xl shadow-md md:aspect-[3/1]"
+				class="mt-2 mb-6 aspect-4/3 w-full rounded-2xl shadow-md md:aspect-3/1"
 				title="Mapa"
 				style="border:0"
 				id="map"
 			></div>
 		{:else}
 			<iframe
-				class="mb-6 mt-2 aspect-[4/3] w-full rounded-2xl shadow-md md:aspect-[3/1]"
+				class="mt-2 mb-6 aspect-4/3 w-full rounded-2xl shadow-md md:aspect-3/1"
 				title="Mapa"
 				style="border:0"
 				loading="lazy"
