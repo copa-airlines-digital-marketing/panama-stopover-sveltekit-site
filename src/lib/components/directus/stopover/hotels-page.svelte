@@ -18,8 +18,6 @@
 
 	export let stopover_hotels: { hotel: HotelSchema; amenities: HotelAmenity[] };
 
-	console.log(stopover_hotels.hotel);
-
 	const { gallery, main_image, stars, translations } = stopover_hotels.hotel;
 
 	const currrentTranslation = translations.filter((t) => t.lang_code === $page.data.locale);
@@ -63,7 +61,7 @@
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum {item} />
-		<Body size='body-large' class='flex items-center text-grey-600'>
+		<Body size="body-large" class="flex items-center text-grey-600">
 			{#if starIcon}
 				<SVG data={starIcon?.code} class="size-8 fill-current"></SVG>
 			{:else}
@@ -73,7 +71,7 @@
 				{`${stars} ${starsLabel ? starsLabel.value : 'Please add hotels-stars label to site'}`}
 			</span>
 		</Body>
-		<Body size='body-large' class='mb-petit'>
+		<Body size="body-large" class="mb-petit">
 			{description}
 		</Body>
 		{#if promo_name && promo_description}

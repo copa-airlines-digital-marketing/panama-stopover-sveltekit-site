@@ -56,8 +56,6 @@ export async function load(event) {
 		parent()
 	]);
 
-	//console.log('pageData', pageData);
-
 	const { page, sections: pageSections } = pageData;
 
 	if (!article && !isPageSettings(page)) {

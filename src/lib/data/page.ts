@@ -39,7 +39,6 @@ export async function getPageData(body: RequestBody) {
 			page: data.id,
 			preview
 		});
-		//console.log('here', body.subCategory, sectionsRequest);
 
 		if (!isSectionSchema(sectionsRequest)) {
 			return null;
