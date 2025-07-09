@@ -24,6 +24,8 @@ export async function getPageData(body: RequestBody) {
 
 	if (isNil(key)) return null;
 
+	console.log('getting: ', key, body);
+
 	const data = await getData(key, body);
 
 	if (isNil(data) || isEmpty(data)) {
