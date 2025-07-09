@@ -16,7 +16,7 @@
 	import { ContactCard } from '$lib/components/site/items/cards/contact';
 	import { cn } from '$lib/utils';
 	import { Alert } from '$lib/components/ui/alerts/alert';
-	import { Button } from '$ui/components/button';
+	import { buttonVariants } from '$ui/components/button';
 	import { Globe, NoIcon, Phone, Filled, Regular, Social } from '$ui/components/icon';
 	import { Pill } from '$ui/components/pill';
 	import { MapContainer } from '$lib/components/site/items/maps';
@@ -381,15 +381,14 @@
 					<ul class="flex gap-1 md:gap-2">
 						{#each contact as c}
 							<li>
-								<Button
-									variant="solid-primary-light"
-									size="slim"
+								<a
 									href={getConctactFormLink(c.form, c.contact)}
 									target="_blank"
 									rel="noreferrer nofollow"
+									class={buttonVariants({ variant: 'solid-primary-light', size: 'slim' })}
 								>
 									<svelte:component this={getConctactFormIcon(c.form)} />
-								</Button>
+								</a>
 							</li>
 						{/each}
 					</ul>
@@ -401,15 +400,14 @@
 					<ul class="flex gap-1 md:gap-2">
 						{#each network as social}
 							<li>
-								<Button
-									variant="solid-primary-light"
-									size="slim"
+								<a
 									href={social.link}
 									target="_blank"
 									rel="noreferrer nofollow"
+									class={buttonVariants({ variant: 'solid-primary-light', size: 'slim' })}
 								>
-									<svelte:component this={getSocialIcon(social.type)}></svelte:component>
-								</Button>
+									<svelte:component this={getSocialIcon(social.type)} />
+								</a>
 							</li>
 						{/each}
 					</ul>
