@@ -101,4 +101,5 @@ export async function load(event) {
 	};
 }
 
+export const trailingSlash = 'always';
 export const prerender = true;
