@@ -32,13 +32,17 @@ const moduleQuery = {
 	fields: ['id', 'status', 'parent_page', { translations: ['lang_code', 'path'] }]
 };
 
+const moduleQuery2 = {
+	fields: ['id', 'status', 'parent_page', { translations: ['languages_code', 'path'] }]
+};
+
 function getAllPages() {
 	return Promise.allSettled([
 		getItems('pages', pagesQuery, null),
 		getItems('stopover_hotels', moduleQuery, null),
 		getItems('stopover_restaurants', moduleQuery, null),
 		getItems('stopover_place_to_visit', moduleQuery, null),
-		getItems('stopover_tour', moduleQuery, null)
+		getItems('stopover_tour', moduleQuery2, null)
 	]);
 }
 
