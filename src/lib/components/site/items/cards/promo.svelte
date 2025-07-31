@@ -6,8 +6,9 @@
 	import { isRestaurantSchema, type RestaurantSchema } from '$lib/directus/restaurants';
 	import { isPlaceSchema, type PlaceSchema } from '$lib/directus/place-to-visit';
 	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
+	import type { StopoverPackageQuery } from '$lib/directus/package/types';
 
-	export let item: HotelSchema | RestaurantSchema | PlaceSchema | StopoverTour;
+	export let item: HotelSchema | RestaurantSchema | PlaceSchema | StopoverTour | StopoverPackageQuery;
 
 	const { promo_discount_amount, promo_discount_percent, promo_code, translations } = item;
 

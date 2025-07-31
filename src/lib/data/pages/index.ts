@@ -42,7 +42,8 @@ function getAllPages() {
 		getItems('stopover_hotels', moduleQuery, null),
 		getItems('stopover_restaurants', moduleQuery, null),
 		getItems('stopover_place_to_visit', moduleQuery, null),
-		getItems('stopover_tour', moduleQuery2, null)
+		getItems('stopover_tour', moduleQuery2, null),
+		getItems('stopover_package', moduleQuery2, null)
 	]);
 }
 
