@@ -19,6 +19,7 @@
 	import { NoIcon, Phone, Social } from '$ui/components/icon';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
 	import { Pill } from '$ui/components/pill';
+	import Icon from '$ui/components/pill/icon.svelte';
 
 	export let stopover_package: StopoverPackageQuery;
 
@@ -89,10 +90,24 @@
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum item={stopover_package} />
-		<ul>
-			<li><Pill let:Text><Text>🌑 {nights} {labels?.get('label.night_plural')}</Text></Pill></li>
-			<li><Pill let:Text><Text>☀️ {nights + 1} {labels?.get('label.day_plural')}</Text></Pill></li>
-			<li><Pill let:Text><Text>{labels?.get('option.stay_region.city')}</Text></Pill></li>
+		<ul class="mb-gutter flex flex-wrap gap-2 md:gap-4">
+			<li>
+				<Pill class="bg-primary-ultralight" let:Icon let:Text>
+					<Icon class="text-d3">☀️</Icon>
+					<Text class="text-primary">{nights + 1} {labels?.get('label.day_plural')}</Text>
+				</Pill>
+			</li>
+			<li>
+				<Pill class="bg-primary-ultradark" let:Text let:Icon>
+					<Icon class="text-d3">🌑</Icon>
+					<Text>{nights} {labels?.get('label.night_plural')}</Text>
+				</Pill>
+			</li>
+			<li>
+				<Pill class="border-grey-600 bg-common-white " let:Text>
+					<Text class="text-grey-600">{labels?.get('option.stay_region.' + stay_region)}</Text>
+				</Pill>
+			</li>
 		</ul>
 		<Body size="body-large" class="mb-petit">
 			{@html description}
