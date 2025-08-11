@@ -65,6 +65,8 @@ pnpm dev
 
 As of version 2.10.1 the app compiles as static HTML.
 
+Environment variables are required to run the application
+
 To create a production version of the app:
 
 ```bash
