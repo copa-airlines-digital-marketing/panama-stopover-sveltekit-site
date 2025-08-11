@@ -56,14 +56,10 @@ const articleToKeyMap = (
 	subCategory: string | null,
 	article: string | null
 ): DirectusDataKeys | null => {
-	console.log('key map: ', article, subCategory);
-
 	if (isNil(article) || isNil(subCategory)) return 'page';
 
 	try {
 		const keyMap = JSON.parse(CATEGORIES_MAP);
-
-		console.log('key map 2: ', keyMap, subCategory);
 
 		const key = getKeyOfArticle(subCategory, keyMap);
 

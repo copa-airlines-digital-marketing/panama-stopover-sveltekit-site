@@ -72,8 +72,6 @@
 
 		if (form === 'whatsapp') return `https://wa.me/${target}`;
 	};
-
-	console.log(labels?.entries().toArray());
 </script>
 
 <svelte:head>
