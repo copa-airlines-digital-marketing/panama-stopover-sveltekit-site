@@ -126,7 +126,13 @@
 	<SpokenLanguages item={stopover_package} />
 	<div>
 		<InformativeBoxContainer let:Box>
-			<Box alignment="center" class="border-primary bg-primary" let:Icon let:Title let:Description>
+			<Box
+				alignment="center"
+				class="max-h-full border-primary bg-primary"
+				let:Icon
+				let:Title
+				let:Description
+			>
 				<Icon>
 					<CheckIn style="transparent" />
 				</Icon>
@@ -141,7 +147,7 @@
 					</ul>
 				</Description>
 			</Box>
-			<Box alignment="center" class="bg-grey-700" let:Icon let:Title let:Description>
+			<Box alignment="center" class="max-h-full bg-grey-700" let:Icon let:Title let:Description>
 				<Icon>
 					<AnunciosImportantes style="monochrome" />
 				</Icon>
