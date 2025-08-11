@@ -1,11 +1,18 @@
 import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
 import type { HotelSchema } from '$lib/directus/hotels';
+import type { StopoverPackageQuery } from '$lib/directus/package/types';
 import type { PageSchema, PathSchema } from '$lib/directus/page';
 import type { PlaceSchema } from '$lib/directus/place-to-visit';
 import type { RestaurantSchema } from '$lib/directus/restaurants';
 import { curry, filter, isNotNil, map, mergeWith, replace } from 'ramda';
 
-type DirectusItem = PageSchema | HotelSchema | RestaurantSchema | PlaceSchema | StopoverTour;
+type DirectusItem =
+	| PageSchema
+	| HotelSchema
+	| RestaurantSchema
+	| PlaceSchema
+	| StopoverTour
+	| StopoverPackageQuery;
 
 const concatWithSlash = curry((a: string, b: string) => `${a}/${b}`);
 
@@ -25,7 +32,7 @@ const getPageNameRecursive = (item: PathSchema) => {
 };
 
 const getBreadcrumNames = (item: DirectusItem) => {
-	const currentName = item.translations.reduce(
+	const currentName = item.translations?.reduce(
 		(a, c) => ({ ...a, [c.languages_code || c.lang_code]: c.name || c.title_tag }),
 		{}
 	);

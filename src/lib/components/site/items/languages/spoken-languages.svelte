@@ -5,8 +5,9 @@
 	import { page } from '$app/stores';
 	import { getTypography } from '$ui/components/typography';
 	import { Globe } from '$ui/components/icon';
+	import type { StopoverPackageQuery } from '$lib/directus/package/types';
 
-	export let item: HotelSchema | RestaurantSchema | PlaceSchema;
+	export let item: HotelSchema | RestaurantSchema | PlaceSchema | StopoverPackageQuery;
 
 	const { supported_languages } = item;
 
@@ -26,9 +27,9 @@
 	<div class="flex items-center gap-2">
 		<Globe class="size-6 fill-primary" />
 		<ul class="flex gap-1">
-			{#each supported_languages as lang}
+			{#each supported_languages as lang, i}
 				<li class={getTypography('body-large', 'body')}>
-					{langs[lang].value}
+					{langs[lang].value + `${i < supported_languages.length - 1 ? ',' : ''}`}
 				</li>
 			{/each}
 		</ul>

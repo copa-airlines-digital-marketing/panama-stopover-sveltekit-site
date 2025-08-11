@@ -12,8 +12,16 @@
 	import { cn } from '$lib/utils';
 	import { isNotEmpty, mapAccum } from 'ramda';
 	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
+	import type { StopoverPackageQuery } from '$lib/directus/package/types';
 
-	export let item: PageSchema | HotelSchema | RestaurantSchema | PlaceSchema | StopoverTour;
+	export let item:
+		| PageSchema
+		| HotelSchema
+		| RestaurantSchema
+		| PlaceSchema
+		| StopoverTour
+		| StopoverPackageQuery;
+
 	export let variant: 'primary' | 'invert' = 'primary';
 
 	$: locale = $page.data.locale;
@@ -36,7 +44,7 @@
 					<Item let:Separator>
 						<Separator>
 							<KeyBoardArrowRight
-								class={cn('fill-grey-400 size-4 lg:size-6', {
+								class={cn('size-4 fill-grey-400 lg:size-6', {
 									'fill-green-100': variant === 'invert'
 								})}
 							/>

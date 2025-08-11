@@ -42,7 +42,7 @@
 
 	const {
 		coordinates: [end_lng, end_lat]
-	} = end_point;
+	} = end_point || { coordinates: [0, 0] };
 
 	const translation = isStopoverTourTranslations(translations)
 		? translations.filter((t) => t.languages_code === $page.data.locale)
@@ -305,31 +305,35 @@
 				<Alert>Es necesario agregar las experiencias del tour</Alert>
 			{/each}
 		</ul>
-		<MapContainer
-			let:Title
-			let:Static
-			let:Button
-			class="overflow-hidden rounded-xl lg:[grid-area:ending]"
-		>
-			<Title class="rounded-full bg-background-lightblue px-3 py-1"
-				>{labels?.get('end-point')}</Title
+		{#if end_point}
+			<MapContainer
+				let:Title
+				let:Static
+				let:Button
+				class="overflow-hidden rounded-xl lg:[grid-area:ending]"
 			>
-			<Static
-				mapType="roadmap"
-				mapTitle={name}
-				center={{ lat: end_lat, lng: end_lng }}
-				markers={[{ location: { lat: end_lat, lng: end_lng }, label: labels?.get('end-point')[0] }]}
-				breakpointSize={{ lg: '300x300' }}
-			/>
-			<Button
-				class="md:mb-2"
-				mapType="roadmap"
-				mapTitle={name}
-				center={{ lat: end_lat, lng: end_lng }}
-			>
-				{labels?.get('location-navigate')}
-			</Button>
-		</MapContainer>
+				<Title class="rounded-full bg-background-lightblue px-3 py-1"
+					>{labels?.get('end-point')}</Title
+				>
+				<Static
+					mapType="roadmap"
+					mapTitle={name}
+					center={{ lat: end_lat, lng: end_lng }}
+					markers={[
+						{ location: { lat: end_lat, lng: end_lng }, label: labels?.get('end-point')[0] }
+					]}
+					breakpointSize={{ lg: '300x300' }}
+				/>
+				<Button
+					class="md:mb-2"
+					mapType="roadmap"
+					mapTitle={name}
+					center={{ lat: end_lat, lng: end_lng }}
+				>
+					{labels?.get('location-navigate')}
+				</Button>
+			</MapContainer>
+		{/if}
 	</div>
 	<div>
 		<InformativeBoxContainer let:Box>

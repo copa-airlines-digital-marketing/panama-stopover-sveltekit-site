@@ -1,6 +1,6 @@
 {
   "name": "panama-stopover-sveltekit-site",
-  "version": "0.0.1",
+  "version": "2.10.1",
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
