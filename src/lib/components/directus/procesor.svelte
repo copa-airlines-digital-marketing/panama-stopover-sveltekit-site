@@ -11,7 +11,8 @@
 		RestaurantPage,
 		StartOfPage,
 		SingleContentPage,
-		TourPage
+		TourPage,
+		PackagePage
 	} from '$lib/components/directus';
 	import { getCookie, say, setCookie } from '$lib/utils';
 	import { getCannonicals } from '$lib/i18n/cannonicals';
@@ -32,6 +33,7 @@
 	$: stopover_place_to_visit = $page.data.stopover_place_to_visit;
 	$: stopover_restaurants = $page.data.stopover_restaurants;
 	$: stopover_tour = $page.data.stopover_tour;
+	$: stopover_package = $page.data.stopover_package;
 
 	export let single_content: TextContentSchema | null | undefined = undefined;
 
@@ -42,6 +44,7 @@
 			!!stopover_restaurants ||
 			!!stopover_place_to_visit ||
 			!!stopover_tour ||
+			!!stopover_package ||
 			!!single_content);
 
 	$: headerSection = layoutSections[0];
@@ -53,7 +56,8 @@
 		stopover_hotels?.hotel ||
 		stopover_restaurants ||
 		stopover_place_to_visit ||
-		stopover_tour;
+		stopover_tour ||
+		stopover_package;
 
 	$: cannonicals = item && getCannonicals(item);
 
@@ -107,6 +111,8 @@
 			<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
 		{:else if isNotNil(stopover_tour)}
 			<TourPage {siteSettings} {layout} {stopover_tour} />
+		{:else if isNotNil(stopover_package)}
+			<PackagePage {stopover_package} />
 		{/if}
 	</main>
 
@@ -123,7 +129,7 @@
 				<div class="container mx-auto flex items-start">
 					<Section section={cookieBanner}></Section>
 					<Close aria-label="cerrar - close - fechar">
-						<CloseIcon class="fill-primary-light size-6"></CloseIcon>
+						<CloseIcon class="size-6 fill-primary-light"></CloseIcon>
 					</Close>
 				</div>
 			</Content>

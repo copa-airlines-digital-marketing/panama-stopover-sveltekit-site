@@ -14,24 +14,26 @@ import { default as SingleContentPage } from './sites/single-content-page.svelte
 import { default as StartOfPage } from './sites/start-of-page.svelte';
 import { default as TextContent } from './general-components/text-content.svelte';
 import { default as TourPage } from './stopover/tours-page.svelte';
-import { Header } from './blocks/header'
+import { default as PackagePage } from './stopover/package-page.svelte';
+import { Header } from './blocks/header';
 
 export {
-  EndOfPage,
-  Head,
-  Header,
-  HotelPage,
-  Logo,
-  Navigation,
-  Page,
-  PlacePage,
-  PlainSectionCotent,
-  Procesor,
-  RestaurantPage,
-  StartOfPage,
-  Section,
-  SectionContent,
-  SingleContentPage,
-  TextContent,
-  TourPage,
-}
+	EndOfPage,
+	Head,
+	Header,
+	HotelPage,
+	Logo,
+	Navigation,
+	Page,
+	PlacePage,
+	PlainSectionCotent,
+	Procesor,
+	RestaurantPage,
+	StartOfPage,
+	Section,
+	SectionContent,
+	SingleContentPage,
+	TextContent,
+	TourPage,
+	PackagePage
+};

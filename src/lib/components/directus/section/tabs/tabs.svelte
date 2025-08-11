@@ -59,14 +59,14 @@
 			class={cn(sectionVariants(variantObject), 'relative')}
 			class:col-start-2={horizontal_behaviour === 'container-grid'}
 		>
-			<Tabs.Root class="mb-normal col-span-full" bind:value>
-				<Tabs.List class="flex content-start justify-around gap-2">
+			<Tabs.Root class="col-span-full mb-normal" bind:value>
+				<Tabs.List class="flex flex-wrap content-start justify-around gap-2">
 					{#each $tabNames as tabName, i}
 						<Tabs.Trigger
 							value={[section_id, id, i].join('-')}
 							class={cn(
 								buttonVariants({ size: 'default', variant: 'transparent-primary-main' }),
-								'relative w-full rounded-none py-2 focus:outline-0 active:outline-0'
+								'relative grow rounded-none  py-2 focus:outline-0 active:outline-0 data-[state="active"]:bg-background-lightblue'
 							)}
 						>
 							{tabName}
@@ -74,7 +74,7 @@
 								<div
 									in:send={{ key: 'trigger' }}
 									out:receive={{ key: 'trigger' }}
-									class="bg-secondary absolute bottom-1 h-0.5 w-3/4 rounded-full"
+									class="absolute bottom-1 h-0.5 w-3/4 rounded-full bg-secondary"
 								/>
 							{/if}
 						</Tabs.Trigger>
