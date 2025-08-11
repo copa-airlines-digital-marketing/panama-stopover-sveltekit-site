@@ -29,20 +29,46 @@ Repo for the site [panama-stopover.com](https://panama-stopover.com)
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Prerequirements
+
+1. [Git](https://git-scm.com/downloads) on console
+2. [Node](https://nodejs.org/en/blog/release/v22.13.1) version 22.13.1
+3. [PNPM](https://pnpm.io/installation) version 10.10.0
+
+### Start developing
+
+1. Clone the repository with:
 
 ```bash
-npm run dev
+git clone --recursive https://github.com/copa-airlines-digital-marketing/panama-stopover-sveltekit-site.git
+```
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+2. Download submodules (all submodules repo are public) code with:
+
+```bash
+git submodule update --init --recursive
+```
+
+3. Install dependencies
+
+```bash
+pnpm i
+```
+
+4. start a development server:
+
+```bash
+pnpm dev
 ```
 
 ## Building
 
-To create a production version of your app:
+As of version 2.10.1 the app compiles as static HTML.
+
+To create a production version of the app:
 
 ```bash
+
 npm run build
 ```
 
