@@ -6,8 +6,14 @@
 	import { getTypography } from '$ui/components/typography';
 	import { Globe } from '$ui/components/icon';
 	import type { StopoverPackageQuery } from '$lib/directus/package/types';
+	import type { TransportationQuery } from '$lib/directus/transportation/types';
 
-	export let item: HotelSchema | RestaurantSchema | PlaceSchema | StopoverPackageQuery;
+	export let item:
+		| HotelSchema
+		| RestaurantSchema
+		| PlaceSchema
+		| StopoverPackageQuery
+		| TransportationQuery;
 
 	const { supported_languages } = item;
 

@@ -14,6 +14,7 @@ import { getRestaurant } from './restaurantRequest';
 import { getPlace } from './placeRequest';
 import { getPublishedTours } from './tours';
 import { getPublishedPackages } from './package';
+import { getPublishedTransportation } from './transportation';
 
 type KeyToTypeMap = {
 	'site-settings': SiteSettingsSchema;
@@ -37,7 +38,8 @@ const keyToDataMap: Record<
 	stopover_restaurants: getRestaurant,
 	stopover_place_to_visit: getPlace,
 	stopover_tour: getPublishedTours,
-	stopover_package: getPublishedPackages
+	stopover_package: getPublishedPackages,
+	stopover_transportation: getPublishedTransportation
 } as const;
 
 const isDirectusDataKey = (value: unknown): value is DirectusDataKeys =>

@@ -28,7 +28,8 @@ declare global {
 			stopover_hotels?: HotelSchema;
 			stopover_place_to_visit?: PlaceSchema;
 			stopover_restaurants?: RestaurantSchema;
-			stopover_package: StopoverPackageQuery;
+			stopover_package?: StopoverPackageQuery;
+			stopover_transportation?: StopoverTra;
 		}
 		// interface PageState {}
 		// interface Platform {}
