@@ -89,3 +89,11 @@ jobs:
         aws ecs wait services-stable \
           --cluster $ECS_CLUSTER_NAME \
           --services $ECS_SERVICE_NAME
+
+    - name: Invalidate CloudFront cache
+      env:
+        CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+      run: |
+        aws cloudfront create-invalidation \
+          --distribution-id $CLOUDFRONT_DISTRIBUTION_ID \
+          --paths "/*"
