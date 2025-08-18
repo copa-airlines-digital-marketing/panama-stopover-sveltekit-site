@@ -2,21 +2,24 @@
 
 This repository uses modern, secure GitHub Actions workflows with OIDC authentication for deploying to AWS ECS across multiple environments with automated CloudFront cache invalidation.
 
-## 🔄 **Optimized Architecture Available**
+## � **Optimized Reusable Workflow Architecture**
 
-We provide **two approaches** for managing deployment workflows:
+Our deployment system uses a **centralized reusable workflow** for maximum efficiency and maintainability:
 
-### **Current Implementation (Individual Workflows)**
-- `deploy-development.yml` - Deploys to development environment
-- `deploy-testing.yml` - Deploys to testing environment  
-- `deploy-production.yml` - Deploys to production environment
+### **Core Components:**
+- `deploy-reusable.yml` - **Centralized deployment logic** (all common steps)
+- `deploy-development.yml` - **Development environment caller** (15 lines)
+- `deploy-testing.yml` - **Testing environment caller** (15 lines)  
+- `deploy-production.yml` - **Production environment caller** (15 lines)
 
-### **🚀 Optimized Implementation (Reusable Workflow)**
-- `deploy-reusable.yml` - **Centralized common logic** (105 lines)
-- `deploy-*-optimized.yml` - **Environment-specific callers** (15 lines each)
-- **52% code reduction** and **centralized maintenance**
+### **🎯 Architecture Benefits:**
+- ✅ **52% less code** (~315 → ~150 lines total)
+- ✅ **Single source of truth** for deployment logic
+- ✅ **Consistent behavior** across all environments
+- ✅ **Easy maintenance** - change once, update everywhere
+- ✅ **Reduced errors** - no code duplication inconsistencies
 
-> 📖 **See [OPTIMIZATION.md](OPTIMIZATION.md)** for detailed comparison and migration guide
+> 📖 **See [OPTIMIZATION.md](OPTIMIZATION.md)** for detailed technical analysis
 
 ## 🔐 Security-First Architecture
 
@@ -34,8 +37,10 @@ All workflows use **OpenID Connect (OIDC)** for secure, keyless authentication t
 
 ## Environment-Specific Workflows
 
+## Environment-Specific Workflows
+
 ### Development Workflow (`deploy-development.yml`)
-- **Triggers**: Push to `feature/container-app` branch (other triggers commented out)
+- **Triggers**: Push to `feature/container-app` branch
 - **Manual trigger**: Available via workflow dispatch
 - **Environment**: `development` with URL deployment tracking
 - **AWS Role**: `arn:aws:iam::637423230985:role/github-actions-dev`
@@ -47,7 +52,7 @@ All workflows use **OpenID Connect (OIDC)** for secure, keyless authentication t
 - **AWS Role**: `arn:aws:iam::637423230985:role/github-actions-test`
 
 ### Production Workflow (`deploy-production.yml`)
-- **Triggers**: Push to `main` branch (`production` branch commented out)
+- **Triggers**: Push to `main` branch
 - **Manual trigger**: Available via workflow dispatch
 - **Environment**: `production` with URL deployment tracking
 - **AWS Role**: `arn:aws:iam::637423230985:role/github-actions-prod`
@@ -55,7 +60,10 @@ All workflows use **OpenID Connect (OIDC)** for secure, keyless authentication t
 
 ## Workflow Structure
 
-All workflows follow this secure, modern pattern:
+All environment workflows use the **reusable workflow pattern**:
+
+### **Common Workflow (`common-deploy.yml`)**
+Contains the complete deployment pipeline:
 
 1. **Checkout Code** - Get latest source code with recursive submodules
 2. **Setup Node.js** - Install Node.js 20.11.1
@@ -66,6 +74,23 @@ All workflows follow this secure, modern pattern:
 7. **Deploy to ECS** - Update ECS service with forced new deployment
 8. **Wait for Deployment** - Verify deployment stability
 9. **Invalidate CloudFront Cache** - Clear CDN cache for immediate updates
+
+### **Environment Workflows (Callers)**
+Each environment workflow is minimal and focused:
+
+```yaml
+name: Deploy to [Environment]
+on: { push: { branches: [...] }, workflow_dispatch }
+permissions: { id-token: write, contents: read }
+jobs:
+  deploy:
+    uses: ./.github/workflows/common-deploy.yml
+    secrets: inherit
+    with:
+      environment: [env-name]
+      aws_role: [env-specific-role]
+      # ... other environment-specific parameters
+```
 
 ## Required AWS IAM Setup
 
@@ -301,17 +326,43 @@ This setup provides significant improvements over traditional approaches:
 | Code duplication | ~95% | ~0% | **Perfect DRY** |
 
 ### **Reusable Workflow Benefits**
-- ✅ **Single Source of Truth**: All logic centralized in `deploy-reusable.yml`
+- ✅ **Single Source of Truth**: All logic centralized in `common-deploy.yml`
 - ✅ **Environment-Specific Configs**: Simple parameter-based differentiation
 - ✅ **Easy Maintenance**: One change updates all environments
 - ✅ **Consistent Behavior**: Guaranteed identical deployment logic
 - ✅ **Reduced Errors**: No risk of inconsistent updates
 
-### **Migration Path**
-1. **Review** the optimized workflows in `*-optimized.yml` files
-2. **Test** optimized workflow in development environment
-3. **Compare** logs and verify identical behavior
-4. **Replace** original workflows gradually
-5. **Clean up** old files after validation
+## 🚀 Architecture & Optimization
 
-> 📖 **Complete optimization guide**: [OPTIMIZATION.md](OPTIMIZATION.md)
+### **Why Reusable Workflows?**
+
+The current workflow architecture uses the **reusable workflow pattern** to eliminate code duplication and improve maintainability. This approach provides:
+
+#### **Code Efficiency**
+- **Before optimization**: 3 separate workflows × ~105 lines each = ~315 total lines
+- **After optimization**: 1 reusable workflow (~105 lines) + 3 caller workflows (~15 lines each) = ~150 total lines
+- **Result**: **52% code reduction** with zero functionality loss
+
+#### **Maintenance Benefits**
+- **Single point of change**: All deployment logic is in `common-deploy.yml`
+- **Consistent behavior**: All environments use identical deployment steps
+- **Easy updates**: New features or bug fixes only require one file change
+- **Reduced errors**: No risk of environment-specific inconsistencies
+
+#### **Workflow Structure**
+```
+.github/workflows/
+├── common-deploy.yml            # Core deployment logic (105 lines)
+├── deploy-development.yml       # Development caller (15 lines)
+├── deploy-testing.yml          # Testing caller (15 lines)
+└── deploy-production.yml       # Production caller (15 lines)
+```
+
+### **How It Works**
+
+1. **Environment workflows** (development, testing, production) act as lightweight callers
+2. **Common workflow** contains all the actual deployment logic
+3. **Parameters** are passed from callers to customize behavior per environment
+4. **Secrets and permissions** are inherited from calling workflows
+
+This pattern follows GitHub Actions best practices and provides enterprise-level maintainability while keeping environment-specific configurations simple and clear.
