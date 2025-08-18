@@ -47,6 +47,7 @@
 			!!stopover_place_to_visit ||
 			!!stopover_tour ||
 			!!stopover_package ||
+			!!stopover_transportation ||
 			!!single_content);
 
 	$: headerSection = layoutSections[0];
@@ -59,7 +60,8 @@
 		stopover_restaurants ||
 		stopover_place_to_visit ||
 		stopover_tour ||
-		stopover_package;
+		stopover_package ||
+		stopover_transportation;
 
 	$: cannonicals = item && getCannonicals(item);
 

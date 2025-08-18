@@ -21,8 +21,7 @@
 
 	export let stopover_transportation: TransportationQuery;
 
-	const { main_image, contact, translations, gallery, supported_languages } =
-		stopover_transportation;
+	const { main_image, contact, translations, gallery } = stopover_transportation;
 
 	const translation = isStopoverTourTranslations(translations)
 		? translations.filter((t) => t.languages_code === $page.data.locale)
@@ -85,7 +84,7 @@
 <Hero {galleryImages} {name} {main_image} class="bg-secondary" />
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
-		<!-- <Breadcrum item={stopover_transportation} /> -->
+		<Breadcrum item={stopover_transportation} />
 		{#if promo_name && promo_description}
 			<StopoverPromoCard item={stopover_transportation}></StopoverPromoCard>
 		{/if}

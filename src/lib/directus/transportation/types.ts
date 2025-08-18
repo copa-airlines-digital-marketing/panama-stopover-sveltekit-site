@@ -4,7 +4,7 @@ import type {
 	StopoverTransportationTranslations
 } from '$cms/collections/stopover_transportation';
 import type { Query } from '@directus/sdk';
-import type { pagePathFields } from '../page';
+import { pagePathFields } from '../page';
 
 type FilesQuery = Pick<StopoverTransportationFiles, 'directus_files_id' | 'sort'>;
 
@@ -39,7 +39,6 @@ const getTransportationQuery = (
 	article: string
 ): Query<Schema, StopoverTransportation> => ({
 	fields: [
-		'parent_page',
 		'name',
 		'main_image',
 		'promo_code',
@@ -50,7 +49,8 @@ const getTransportationQuery = (
 		'contact',
 		'gallery',
 		{ gallery: ['directus_files_id', 'sort'] },
-		{ translations: ['languages_code', 'name', 'promo_name', 'promo_description', 'url', 'path'] }
+		{ translations: ['languages_code', 'name', 'promo_name', 'promo_description', 'url', 'path'] },
+		{ parent_page: pagePathFields }
 	],
 	filter: {
 		_and: [
