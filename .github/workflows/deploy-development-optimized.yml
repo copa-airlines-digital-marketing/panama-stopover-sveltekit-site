@@ -1,0 +1,17 @@
+name: Deploy to Development (Optimized)
+
+on:
+  push:
+    branches:
+      - feature/container-app
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy-reusable.yml
+    with:
+      environment: development
+      environment_url: https://panamav2-dev-cdn.d6nfe7i1.monks.zone
+      aws_role: arn:aws:iam::637423230985:role/github-actions-dev
+      production_flag: ""
+      build_environment: production
