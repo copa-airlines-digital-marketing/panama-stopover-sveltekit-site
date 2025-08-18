@@ -9,7 +9,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: testing
+    environment: 
+      name: testing
+      url: https://panamav2-test-cdn.d6nfe7i1.monks.zone
     permissions:
       id-token: write
       contents: read

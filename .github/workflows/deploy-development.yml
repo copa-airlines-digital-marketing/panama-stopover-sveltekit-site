@@ -11,7 +11,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: development
+    environment: 
+        name: development
+        url: https://panamav2-dev-cdn.d6nfe7i1.monks.zone
     permissions:
       id-token: write
       contents: read
