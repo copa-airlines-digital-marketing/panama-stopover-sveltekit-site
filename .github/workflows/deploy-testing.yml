@@ -3,13 +3,13 @@ name: Deploy to Staging
 on:
   push:
     branches:
-      - staging
+      - test
   workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: testing
     permissions:
       id-token: write
       contents: read
@@ -27,7 +27,7 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: arn:aws:iam::637423230985:role/github-actions-stage
+        role-to-assume: arn:aws:iam::637423230985:role/github-actions-test
         aws-region: ${{ vars.AWS_REGION }}
 
     - name: Login to Amazon ECR
