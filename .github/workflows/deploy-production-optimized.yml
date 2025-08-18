@@ -13,6 +13,7 @@ permissions:
 jobs:
   deploy:
     uses: ./.github/workflows/deploy-reusable.yml
+    secrets: inherit
     with:
       environment: production
       environment_url: https://panamav2-prod-cdn.d6nfe7i1.monks.zone
