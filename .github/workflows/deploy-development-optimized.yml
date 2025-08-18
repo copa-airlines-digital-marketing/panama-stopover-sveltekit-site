@@ -6,6 +6,10 @@ on:
       - feature/container-app
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy:
     uses: ./.github/workflows/deploy-reusable.yml

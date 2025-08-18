@@ -31,9 +31,6 @@ jobs:
     environment:
       name: ${{ inputs.environment }}
       url: ${{ inputs.environment_url }}
-    permissions:
-      id-token: write
-      contents: read
     
     steps:
     - name: Checkout code
