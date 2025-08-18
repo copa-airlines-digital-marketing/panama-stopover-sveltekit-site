@@ -1,0 +1,145 @@
+name: Build and Deploy to AWS ECS
+
+on:
+  push:
+    branches:
+      - develop
+      - staging  
+      - main
+      - production
+      - feature/container-app
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+        - development
+        - staging
+        - production
+
+jobs:
+  # Determine environment based on branch or manual input
+  determine-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+    steps:
+    - name: Determine environment
+      id: set-env
+      run: |
+        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          echo "environment=production" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+          echo "environment=staging" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+          echo "environment=development" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.ref }}" == "refs/heads/feature/container-app" ]]; then
+          echo "environment=development" >> $GITHUB_OUTPUT
+        else
+          echo "environment=development" >> $GITHUB_OUTPUT
+        fi
+
+  build-and-deploy:
+    needs: determine-environment
+    runs-on: ubuntu-latest
+    environment: ${{ needs.determine-environment.outputs.environment }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js 20.11.1
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.11.1'
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Set environment variables
+      id: set-vars
+      run: |
+        ENVIRONMENT=${{ needs.determine-environment.outputs.environment }}
+        echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
+        
+        # Set production environment flag
+        if [[ "$ENVIRONMENT" == "production" ]]; then
+          echo "PRODUCTION_ENVIRONMENT=true" >> $GITHUB_OUTPUT
+        else
+          echo "PRODUCTION_ENVIRONMENT=" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build Docker image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+        DIRECTUS_REST_URL: ${{ vars.DIRECTUS_REST_URL }}
+        UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        UPSTASH_REDIS_REST_URL: ${{ vars.UPSTASH_REDIS_REST_URL }}
+        DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
+        PREVIEW_SECRET: ${{ secrets.PREVIEW_SECRET }}
+        DIRECTUS_PREVIEW_TOKEN: ${{ secrets.DIRECTUS_PREVIEW_TOKEN }}
+        SITE_ID: ${{ vars.SITE_ID }}
+        CATEGORIES_MAP: ${{ vars.CATEGORIES_MAP }}
+        PUBLIC_SUPPORTED_LANGUAGES: ${{ vars.PUBLIC_SUPPORTED_LANGUAGES }}
+        ENVIRONMENT_NAME: ${{ steps.set-vars.outputs.ENVIRONMENT }}
+        PRODUCTION_ENVIRONMENT: ${{ steps.set-vars.outputs.PRODUCTION_ENVIRONMENT }}
+      run: |
+        docker build \
+          --build-arg PRODUCTION_ENVIRONMENT="$PRODUCTION_ENVIRONMENT" \
+          --build-arg ENVIRONMENT="$ENVIRONMENT_NAME" \
+          --build-arg DIRECTUS_REST_URL="$DIRECTUS_REST_URL" \
+          --build-arg UPSTASH_REDIS_REST_TOKEN="$UPSTASH_REDIS_REST_TOKEN" \
+          --build-arg UPSTASH_REDIS_REST_URL="$UPSTASH_REDIS_REST_URL" \
+          --build-arg DIRECTUS_TOKEN="$DIRECTUS_TOKEN" \
+          --build-arg PREVIEW_SECRET="$PREVIEW_SECRET" \
+          --build-arg DIRECTUS_PREVIEW_TOKEN="$DIRECTUS_PREVIEW_TOKEN" \
+          --build-arg SITE_ID="$SITE_ID" \
+          --build-arg CATEGORIES_MAP="$CATEGORIES_MAP" \
+          --build-arg PUBLIC_SUPPORTED_LANGUAGES="$PUBLIC_SUPPORTED_LANGUAGES" \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT_NAME-${{ github.sha }} \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT_NAME-latest \
+          .
+
+    - name: Push Docker image to ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+        ENVIRONMENT_NAME: ${{ steps.set-vars.outputs.ENVIRONMENT }}
+      run: |
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT_NAME-${{ github.sha }}
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT_NAME-latest
+
+    - name: Update ECS service
+      env:
+        ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+        ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+      run: |
+        aws ecs update-service \
+          --cluster $ECS_CLUSTER_NAME \
+          --service $ECS_SERVICE_NAME \
+          --force-new-deployment
+
+    - name: Wait for ECS deployment to complete
+      env:
+        ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+        ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+      run: |
+        aws ecs wait services-stable \
+          --cluster $ECS_CLUSTER_NAME \
+          --services $ECS_SERVICE_NAME

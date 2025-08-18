@@ -1,0 +1,91 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js 20.11.1
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.11.1'
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ vars.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build Docker image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+        DIRECTUS_REST_URL: ${{ vars.DIRECTUS_REST_URL }}
+        UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        UPSTASH_REDIS_REST_URL: ${{ vars.UPSTASH_REDIS_REST_URL }}
+        DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
+        PREVIEW_SECRET: ${{ secrets.PREVIEW_SECRET }}
+        DIRECTUS_PREVIEW_TOKEN: ${{ secrets.DIRECTUS_PREVIEW_TOKEN }}
+        SITE_ID: ${{ vars.SITE_ID }}
+        CATEGORIES_MAP: ${{ vars.CATEGORIES_MAP }}
+        PUBLIC_SUPPORTED_LANGUAGES: ${{ vars.PUBLIC_SUPPORTED_LANGUAGES }}
+      run: |
+        docker build \
+          --build-arg PRODUCTION_ENVIRONMENT="" \
+          --build-arg ENVIRONMENT="staging" \
+          --build-arg DIRECTUS_REST_URL="$DIRECTUS_REST_URL" \
+          --build-arg UPSTASH_REDIS_REST_TOKEN="$UPSTASH_REDIS_REST_TOKEN" \
+          --build-arg UPSTASH_REDIS_REST_URL="$UPSTASH_REDIS_REST_URL" \
+          --build-arg DIRECTUS_TOKEN="$DIRECTUS_TOKEN" \
+          --build-arg PREVIEW_SECRET="$PREVIEW_SECRET" \
+          --build-arg DIRECTUS_PREVIEW_TOKEN="$DIRECTUS_PREVIEW_TOKEN" \
+          --build-arg SITE_ID="$SITE_ID" \
+          --build-arg CATEGORIES_MAP="$CATEGORIES_MAP" \
+          --build-arg PUBLIC_SUPPORTED_LANGUAGES="$PUBLIC_SUPPORTED_LANGUAGES" \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:staging-${{ github.sha }} \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:staging-latest \
+          .
+
+    - name: Push Docker image to ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+      run: |
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:staging-${{ github.sha }}
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:staging-latest
+
+    - name: Update ECS service
+      env:
+        ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+        ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+      run: |
+        aws ecs update-service \
+          --cluster $ECS_CLUSTER_NAME \
+          --service $ECS_SERVICE_NAME \
+          --force-new-deployment
+
+    - name: Wait for ECS deployment to complete
+      env:
+        ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+        ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+      run: |
+        aws ecs wait services-stable \
+          --cluster $ECS_CLUSTER_NAME \
+          --services $ECS_SERVICE_NAME
