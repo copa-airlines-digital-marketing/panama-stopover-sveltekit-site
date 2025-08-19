@@ -70,7 +70,6 @@ Environment variables are required to run the application
 To create a production version of the app:
 
 ```bash
-
 pnpm build
 ```
 

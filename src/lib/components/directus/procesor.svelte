@@ -21,6 +21,7 @@
 	import { Drawer } from '$lib/components/ui/drawer';
 	import { onMount } from 'svelte';
 	import { CloseIcon } from '../ui/icon';
+	import TransportationPage from './stopover/transportation-page.svelte';
 
 	$: environment = $page.data.environment;
 	$: siteSettings = $page.data.siteSettings;
@@ -34,6 +35,7 @@
 	$: stopover_restaurants = $page.data.stopover_restaurants;
 	$: stopover_tour = $page.data.stopover_tour;
 	$: stopover_package = $page.data.stopover_package;
+	$: stopover_transportation = $page.data.stopover_transportation;
 
 	export let single_content: TextContentSchema | null | undefined = undefined;
 
@@ -45,6 +47,7 @@
 			!!stopover_place_to_visit ||
 			!!stopover_tour ||
 			!!stopover_package ||
+			!!stopover_transportation ||
 			!!single_content);
 
 	$: headerSection = layoutSections[0];
@@ -57,7 +60,8 @@
 		stopover_restaurants ||
 		stopover_place_to_visit ||
 		stopover_tour ||
-		stopover_package;
+		stopover_package ||
+		stopover_transportation;
 
 	$: cannonicals = item && getCannonicals(item);
 
@@ -113,6 +117,8 @@
 			<TourPage {siteSettings} {layout} {stopover_tour} />
 		{:else if isNotNil(stopover_package)}
 			<PackagePage {stopover_package} />
+		{:else if isNotNil(stopover_transportation)}
+			<TransportationPage {stopover_transportation} />
 		{/if}
 	</main>
 

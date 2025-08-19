@@ -1,0 +1,131 @@
+<script lang="ts">
+	import type {
+		TransportationQuery,
+		TransportationTranslationQuery
+	} from '$lib/directus/transportation/types';
+	import { Hero } from '$lib/components/site/items';
+	import { page } from '$app/stores';
+	import { StopoverPromoCard } from '$lib/components/site/items/cards';
+	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
+	import { Breadcrum } from '$lib/components/site/navigation/breadcrum';
+	import { getDirectusImage } from './utils';
+	import { BaseTextContent } from '$lib/components/site/text-content/base';
+	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
+	import { isStopoverTourTranslations } from '$lib/directus/tours/utlis';
+	import { Heading } from '$ui/components/typography';
+	import { ContactCard } from '$lib/components/site/items/cards/contact';
+	import { Alert } from '$lib/components/ui/alerts/alert';
+	import { buttonVariants } from '$ui/components/button';
+	import { NoIcon, Phone, Social } from '$ui/components/icon';
+	import { SpokenLanguages } from '$lib/components/site/items/languages';
+
+	export let stopover_transportation: TransportationQuery;
+
+	const { main_image, contact, translations, gallery } = stopover_transportation;
+
+	const translation = isStopoverTourTranslations(translations)
+		? translations.filter((t) => t.languages_code === $page.data.locale)
+		: [<TransportationTranslationQuery>{}];
+
+	const { name, promo_name, promo_description } = translation[0];
+
+	const galleryImages = true ? gallery.map((img) => img.directus_files_id) : gallery;
+
+	const disclaimer = $page.data.siteSettings.error_messages?.filter((v) => v.error_code === 600)[0];
+
+	const redeemDisclaimer = $page.data.siteSettings.error_messages?.filter(
+		(v) => v.error_code === 700
+	)[0];
+
+	const labels = $page.data.siteSettings.translations?.[0]?.labels?.reduce(
+		(a, c) => a.set(c.name, c.value),
+		new Map()
+	);
+
+	const getConctactFormIcon = (form: string) => {
+		if (form === 'phone') return Phone;
+
+		if (form === 'e-mail') return Social.Email;
+
+		if (form === 'whatsapp') return Social.Whatsapp;
+
+		return NoIcon;
+	};
+
+	const getConctactFormLabelKey = (form: string) => {
+		if (form === 'phone') return 'actions.call.phone';
+
+		if (form === 'e-mail') return 'actions.message.email';
+
+		if (form === 'whatsapp') return 'actions.chat.whatsapp';
+
+		return NoIcon;
+	};
+
+	const getConctactFormLink = (form: string, target: string) => {
+		if (form === 'phone') return `tel:${target}`;
+
+		if (form === 'e-mail') return `mailto:${target}`;
+
+		if (form === 'whatsapp') return `https://wa.me/${target}`;
+	};
+</script>
+
+<svelte:head>
+	<title>{name}</title>
+	<meta name="description" content={name} />
+	<meta property="og:title" content={name} />
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content={$page.url.href} />
+	<meta property="og:image" content="{getDirectusImage(main_image)}?key=19x10-1200" />
+	<meta name="twitter:card" content="summary_large_image" />
+</svelte:head>
+
+<Hero {galleryImages} {name} {main_image} class="bg-secondary" />
+<div class="container mx-auto my-8 space-y-normal">
+	<div>
+		<Breadcrum item={stopover_transportation} />
+		{#if promo_name && promo_description}
+			<StopoverPromoCard item={stopover_transportation}></StopoverPromoCard>
+		{/if}
+		<div class="my-4 md:flex md:justify-center">
+			<MainCallToAction item={stopover_transportation} class="mt-petit"></MainCallToAction>
+		</div>
+		{#if redeemDisclaimer && promo_name}
+			<BannerAlert item={redeemDisclaimer.Text_Content_id}></BannerAlert>
+		{/if}
+		{#if disclaimer && promo_name}
+			<BaseTextContent item={disclaimer.Text_Content_id}></BaseTextContent>
+		{/if}
+	</div>
+	<SpokenLanguages item={stopover_transportation} />
+	{#if contact}
+		<ContactCard let:Name class="bg-background-lightblue">
+			<Name class="my-0">
+				{labels?.get('tour-operator-contact')}
+			</Name>
+			<div class="[grid-area:contact]">
+				<Heading tag="h5" class="sr-only" variant="h4">
+					{labels?.get('tour-operator-contact')}
+				</Heading>
+				<ul class="flex gap-1 md:gap-2">
+					{#each contact as c}
+						<li>
+							<a
+								href={getConctactFormLink(c.form, c.contact)}
+								target="_blank"
+								rel="noreferrer nofollow"
+								class={buttonVariants({ variant: 'solid-primary-light', size: 'slim' })}
+							>
+								<svelte:component this={getConctactFormIcon(c.form)} />
+								{labels?.get(getConctactFormLabelKey(c.form))}
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		</ContactCard>
+	{:else}
+		<Alert>Contact infomation is required</Alert>
+	{/if}
+</div>

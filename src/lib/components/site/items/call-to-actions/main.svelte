@@ -9,8 +9,15 @@
 	import { Alert } from '$lib/components/ui/alerts/alert';
 	import { Pre } from '$lib/components/testing';
 	import type { StopoverPackageQuery } from '$lib/directus/package/types';
+	import type { TransportationQuery } from '$lib/directus/transportation/types';
 
-	export let item: HotelSchema | RestaurantSchema | PlaceSchema | StopoverTour | StopoverPackageQuery;
+	export let item:
+		| HotelSchema
+		| RestaurantSchema
+		| PlaceSchema
+		| StopoverTour
+		| StopoverPackageQuery
+		| TransportationQuery;
 
 	const { translations } = item;
 
@@ -20,9 +27,7 @@
 </script>
 
 {#if !!translations && typeof translations !== 'number' && !isNumberArray(translations)}
-	{@const trans = translations.filter(
-		(t) => t.lang_code || t.languages_code === $page.data.locale
-	)}
+	{@const trans = translations.filter((t) => t.lang_code || t.languages_code === $page.data.locale)}
 	{#if trans?.[0].url}
 		<Button href={trans?.[0].url} rel="noreferrer nofollow" target="_blank" {...$$restProps}>
 			{#if mainCTAText}

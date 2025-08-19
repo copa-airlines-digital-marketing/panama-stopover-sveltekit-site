@@ -45,7 +45,7 @@
 	>
 		{#each moduleItems as promo}
 			{#if promo.parent_page}
-				<li>
+				<li class="max-w-[398px]">
 					<PromoShow
 						let:Children
 						href="{calculatePath(promo.parent_page)}/{promo.translations[0].path}"

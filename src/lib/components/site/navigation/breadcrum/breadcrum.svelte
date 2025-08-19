@@ -13,6 +13,7 @@
 	import { isNotEmpty, mapAccum } from 'ramda';
 	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
 	import type { StopoverPackageQuery } from '$lib/directus/package/types';
+	import type { TransportationQuery } from '$lib/directus/transportation/types';
 
 	export let item:
 		| PageSchema
@@ -20,7 +21,8 @@
 		| RestaurantSchema
 		| PlaceSchema
 		| StopoverTour
-		| StopoverPackageQuery;
+		| StopoverPackageQuery
+		| TransportationQuery;
 
 	export let variant: 'primary' | 'invert' = 'primary';
 
