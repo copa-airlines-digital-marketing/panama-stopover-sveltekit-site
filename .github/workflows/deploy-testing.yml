@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   deploy:
-    uses: ./.github/workflows/common-deploy.yml
+    uses: ./.github/common/common-deploy.yml
     secrets: inherit
     with:
       environment: testing
