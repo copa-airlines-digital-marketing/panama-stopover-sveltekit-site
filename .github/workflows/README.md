@@ -7,7 +7,7 @@ This repository uses modern, secure GitHub Actions workflows with OIDC authentic
 The deployment system uses a **reusable workflow pattern** with a centralized common workflow:
 
 ### **Active Components:**
-- `.common-deploy.yml` - **Centralized deployment logic** (119 lines, hidden from Actions UI)
+- `common-deploy.yml` - **Centralized deployment logic** (119 lines, hidden from Actions UI)
 - `deploy-development.yml` - **Development environment caller** (22 lines)
 - `deploy-testing.yml` - **Testing environment caller** (22 lines)  
 - `deploy-production.yml` - **Production environment caller** (22 lines)
@@ -62,7 +62,7 @@ All workflows use **OpenID Connect (OIDC)** for secure, keyless authentication t
 
 All environment workflows use the **reusable workflow pattern**:
 
-### **Common Workflow (`.common-deploy.yml`)**
+### **Common Workflow (`common-deploy.yml`)**
 Contains the complete deployment pipeline:
 
 ## 🔐 Security-First Architecture
@@ -352,7 +352,7 @@ Each environment uses specific build configurations:
 ## Available Workflow Files
 
 ### Active Workflows
-- `.common-deploy.yml` - **Reusable workflow with all deployment logic** (hidden from UI)
+- `common-deploy.yml` - **Reusable workflow with all deployment logic** (hidden from UI)
 - `deploy-development.yml` - Development environment deployment
 - `deploy-testing.yml` - Testing environment deployment
 - `deploy-production.yml` - Production environment deployment
