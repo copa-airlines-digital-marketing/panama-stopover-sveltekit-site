@@ -4,6 +4,7 @@ import type { StopoverPackageQuery } from '$lib/directus/package/types';
 import type { PageSchema, PathSchema } from '$lib/directus/page';
 import type { PlaceSchema } from '$lib/directus/place-to-visit';
 import type { RestaurantSchema } from '$lib/directus/restaurants';
+import type { TransportationQuery } from '$lib/directus/transportation/types';
 import { curry, filter, isNotNil, map, mergeWith, replace } from 'ramda';
 
 type DirectusItem =
@@ -12,7 +13,8 @@ type DirectusItem =
 	| RestaurantSchema
 	| PlaceSchema
 	| StopoverTour
-	| StopoverPackageQuery;
+	| StopoverPackageQuery
+	| TransportationQuery;
 
 const concatWithSlash = curry((a: string, b: string) => `${a}/${b}`);
 
