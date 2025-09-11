@@ -41,11 +41,11 @@
 	</div>
 {:else}
 	<ul
-		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] items-stretch gap-2 md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] md:gap-4"
+		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] items-stretch gap-2 md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))] md:gap-4"
 	>
 		{#each moduleItems as promo}
 			{#if promo.parent_page}
-				<li>
+				<li class="max-w-[398px]">
 					<PromoShow
 						let:Children
 						href="{calculatePath(promo.parent_page)}/{promo.translations[0].path}"
