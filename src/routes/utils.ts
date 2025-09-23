@@ -104,6 +104,7 @@ const buildModuleQuery = (
 	locale: string
 ): QueryItem<Schema, 'stopover_hotels'> => ({
 	fields: [
+		'priority',
 		'main_image',
 		'promo_discount_percent',
 		'promo_discount_amount',
