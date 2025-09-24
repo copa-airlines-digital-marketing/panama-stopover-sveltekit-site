@@ -1,0 +1,118 @@
+name: Reusable Deploy Workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'Target environment (development, testing, production)'
+      environment_url:
+        required: false
+        type: string
+        description: 'Environment URL for deployment tracking'
+      aws_role:
+        required: true
+        type: string
+        description: 'AWS IAM role ARN to assume'
+      production_flag:
+        required: false
+        type: string
+        default: ""
+        description: 'Production environment flag'
+      build_environment:
+        required: true
+        type: string
+        description: 'Environment value for build args'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ inputs.environment_url }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Set up Node.js 20.11.1
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.11.1'
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ inputs.aws_role }}
+        aws-region: ${{ vars.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build Docker image
+      env:
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+        DIRECTUS_REST_URL: ${{ vars.DIRECTUS_REST_URL }}
+        UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        UPSTASH_REDIS_REST_URL: ${{ vars.UPSTASH_REDIS_REST_URL }}
+        DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
+        PREVIEW_SECRET: ${{ secrets.PREVIEW_SECRET }}
+        DIRECTUS_PREVIEW_TOKEN: ${{ secrets.DIRECTUS_PREVIEW_TOKEN }}
+        SITE_ID: ${{ vars.SITE_ID }}
+        CATEGORIES_MAP: ${{ vars.CATEGORIES_MAP }}
+        PUBLIC_SUPPORTED_LANGUAGES: ${{ vars.PUBLIC_SUPPORTED_LANGUAGES }}
+      run: |
+        docker build \
+          --build-arg PRODUCTION_ENVIRONMENT="${{ inputs.production_flag }}" \
+          --build-arg ENVIRONMENT="${{ inputs.build_environment }}" \
+          --build-arg DIRECTUS_REST_URL="$DIRECTUS_REST_URL" \
+          --build-arg UPSTASH_REDIS_REST_TOKEN="$UPSTASH_REDIS_REST_TOKEN" \
+          --build-arg UPSTASH_REDIS_REST_URL="$UPSTASH_REDIS_REST_URL" \
+          --build-arg DIRECTUS_TOKEN="$DIRECTUS_TOKEN" \
+          --build-arg PREVIEW_SECRET="$PREVIEW_SECRET" \
+          --build-arg DIRECTUS_PREVIEW_TOKEN="$DIRECTUS_PREVIEW_TOKEN" \
+          --build-arg SITE_ID="$SITE_ID" \
+          --build-arg CATEGORIES_MAP="$CATEGORIES_MAP" \
+          --build-arg PUBLIC_SUPPORTED_LANGUAGES="$PUBLIC_SUPPORTED_LANGUAGES" \
+          -t $ECR_REPOSITORY:${{ github.sha }} \
+          -t $ECR_REPOSITORY:latest \
+          .
+
+    - name: Push Docker image to ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+      run: |
+        docker push $ECR_REPOSITORY:${{ github.sha }}
+        docker push $ECR_REPOSITORY:latest
+
+    - name: Update ECS service
+      env:
+        ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+        ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+      run: |
+        aws ecs update-service \
+          --cluster $ECS_CLUSTER_NAME \
+          --service $ECS_SERVICE_NAME \
+          --force-new-deployment
+
+    - name: Wait for ECS deployment to complete
+      env:
+        ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+        ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+      run: |
+        aws ecs wait services-stable \
+          --cluster $ECS_CLUSTER_NAME \
+          --services $ECS_SERVICE_NAME
+
+    - name: Invalidate CloudFront cache
+      env:
+        CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+      run: |
+        aws cloudfront create-invalidation \
+          --distribution-id $CLOUDFRONT_DISTRIBUTION_ID \
+          --paths "/*"

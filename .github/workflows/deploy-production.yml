@@ -1,0 +1,22 @@
+name: Deploy to Production
+
+on:
+  #push:
+  #  branches:
+  #    - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/common-deploy.yml
+    secrets: inherit
+    with:
+      environment: production
+      environment_url: https://panamav2-prod-cdn.d6nfe7i1.monks.zone
+      aws_role: arn:aws:iam::637423230985:role/github-actions-prod
+      production_flag: "true"
+      build_environment: production
