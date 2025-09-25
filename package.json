@@ -29,6 +29,7 @@
     "@tailwindcss/vite": "^4.1.3",
     "@types/eslint": "^9.6.1",
     "@types/node": "^24.5.2",
+    "@types/qrcode": "^1.5.5",
     "@types/ramda": "^0.30.2",
     "@upstash/redis": "^1.34.3",
     "bits-ui": "^0.22.0",
@@ -66,6 +67,7 @@
     "embla-carousel-svelte": "^8.5.1",
     "nanoid": "^5.1.6",
     "qrcode": "^1.5.4",
+    "sharp": "^0.34.4",
     "svelte-sonner": "^0.3.28",
     "vaul-svelte": "^0.3.2"
   },
