@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccessTokenStatus {
+  active
+  revoked
+  expired
+}
+
+enum AccessLogResult {
+  ok
+  not_found
+  expired
+  revoked
+}
+
+enum ConsentActor {
+  traveler
+  agent
+  system
+}
+
+model Reservation {
+  id             String        @id @default(uuid()) @map("id") @db.Uuid
+  pnrLocator     String?       @unique @map("pnr_locator") @db.VarChar(6)
+  arrivalPtyAt   DateTime      @map("arrival_pty_at") @db.Date
+  departurePtyAt DateTime      @map("departure_pty_at") @db.Date
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  travelers      Traveler[]
+  accessTokens   AccessToken[]
+  consents       Consent[]
+
+  @@index([arrivalPtyAt, departurePtyAt], map: "idx_reservations_dates")
+  @@map("reservations")
+}
+
+model Traveler {
+  id            String        @id @default(uuid()) @map("id") @db.Uuid
+  reservationId String        @map("reservation_id") @db.Uuid
+  firstName     String        @map("first_name")
+  lastName1     String        @map("last_name_1")
+  lastName2     String?       @map("last_name_2")
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  reservation   Reservation   @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  accessTokens  AccessToken[]
+
+  @@index([reservationId], map: "idx_travelers_reservation")
+  @@map("travelers")
+}
+
+model AccessToken {
+  id            String            @id @default(uuid()) @map("id") @db.Uuid
+  publicId      String            @unique @map("public_id")
+  reservationId String            @map("reservation_id") @db.Uuid
+  travelerId    String?           @map("traveler_id") @db.Uuid
+  expiresAt     DateTime          @map("expires_at") @db.Timestamptz(6)
+  status        AccessTokenStatus @default(active) @map("status")
+  createdAt     DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  reservation   Reservation       @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  traveler      Traveler?         @relation(fields: [travelerId], references: [id], onDelete: Cascade)
+  logs          QrAccessLog[]
+
+  @@index([publicId], map: "idx_tokens_lookup")
+  @@index([reservationId, travelerId], map: "idx_tokens_reservation_traveler")
+  @@index([expiresAt], map: "idx_tokens_expiration")
+  @@map("access_tokens")
+}
+
+model QrAccessLog {
+  id            String          @id @default(uuid()) @map("id") @db.Uuid
+  accessTokenId String          @map("access_token_id") @db.Uuid
+  scannedAt     DateTime        @default(now()) @map("scanned_at") @db.Timestamptz(6)
+  result        AccessLogResult @map("result")
+  ipHash        Bytes?          @map("ip_hash") @db.ByteA
+  userAgent     String?         @map("user_agent")
+  note          String?         @map("note")
+  accessToken   AccessToken     @relation(fields: [accessTokenId], references: [id], onDelete: Cascade)
+
+  @@index([accessTokenId, scannedAt], map: "idx_logs_token_time")
+  @@index([result], map: "idx_logs_result")
+  @@index([ipHash], map: "idx_logs_iphash")
+  @@map("qr_access_logs")
+}
+
+model ConsentText {
+  id        String    @id @default(uuid()) @map("id") @db.Uuid
+  version   String    @unique @map("version") // ej. 'v1.0-es'
+  locale    String    @map("locale") // 'es', 'en', ...
+  body      String    @map("body") // texto completo
+  bodyHash  Bytes     @map("body_hash") @db.ByteA // SHA-256 del body
+  status    String    @default("active") @map("status") // active/retired
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  consents  Consent[]
+
+  @@map("consent_texts")
+}
+
+model Consent {
+  id             String       @id @default(uuid()) @map("id") @db.Uuid
+  reservationId  String       @map("reservation_id") @db.Uuid
+  consentTextId  String       @map("consent_text_id") @db.Uuid
+  scope          String       @default("stopover_validation") @map("scope")
+  grantedAt      DateTime     @default(now()) @map("granted_at") @db.Timestamptz(6)
+  retentionUntil DateTime?    @map("retention_until") @db.Date
+  source         String?      @map("source")
+  actor          ConsentActor @default(traveler) @map("actor")
+  reservation    Reservation  @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  consentText    ConsentText  @relation(fields: [consentTextId], references: [id], onDelete: Restrict)
+
+  @@index([reservationId], map: "idx_consents_reservation")
+  @@map("consents")
+}
