@@ -48,7 +48,7 @@ export async function qrImage(
 	if (!token) return new Response('not found', { status: 404 });
 
 	const base = BASE_URL ?? `${reqUrl.protocol}//${reqUrl.host}`;
-	const verifyUrl = `${base}/api/verify?id=${encodeURIComponent(publicId)}`;
+	const verifyUrl = `${base}/verify?id=${encodeURIComponent(publicId)}`;
 
 	const w = clampInt(reqUrl.searchParams.get('w'), 600, 240, 2048);
 	const m = clampInt(reqUrl.searchParams.get('m'), 2, 0, 8);
