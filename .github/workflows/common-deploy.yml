@@ -65,6 +65,11 @@ jobs:
         SITE_ID: ${{ vars.SITE_ID }}
         CATEGORIES_MAP: ${{ vars.CATEGORIES_MAP }}
         PUBLIC_SUPPORTED_LANGUAGES: ${{ vars.PUBLIC_SUPPORTED_LANGUAGES }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        BASE_URL: ${{ vars.BASE_URL }}
+        IP_HASH_SALT: ${{ secrets.IP_HASH_SALT }}
+        CF_TURNSTILE_SITE_KEY: ${{ vars.CF_TURNSTILE_SITE_KEY }}
+        CF_TURNSTILE_SECRET_KEY: ${{ secrets.CF_TURNSTILE_SECRET_KEY }}
       run: |
         docker build \
           --build-arg PRODUCTION_ENVIRONMENT="${{ inputs.production_flag }}" \
@@ -78,6 +83,11 @@ jobs:
           --build-arg SITE_ID="$SITE_ID" \
           --build-arg CATEGORIES_MAP="$CATEGORIES_MAP" \
           --build-arg PUBLIC_SUPPORTED_LANGUAGES="$PUBLIC_SUPPORTED_LANGUAGES" \
+          --build-arg DATABASE_URL="$DATABASE_URL" \
+          --build-arg BASE_URL="$BASE_URL" \
+          --build-arg IP_HASH_SALT="$IP_HASH_SALT" \
+          --build-arg CF_TURNSTILE_SITE_KEY="$CF_TURNSTILE_SITE_KEY" \
+          --build-arg CF_TURNSTILE_SECRET_KEY="$CF_TURNSTILE_SECRET_KEY" \
           -t $ECR_REPOSITORY:${{ github.sha }} \
           -t $ECR_REPOSITORY:latest \
           .
