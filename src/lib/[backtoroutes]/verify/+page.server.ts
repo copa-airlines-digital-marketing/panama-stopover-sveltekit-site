@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import type { PageServerLoad } from '../[...path]/$types';
+import type { PageServerLoad } from '../../../routes/[...path]/$types';
 import {
 	getClientIpFromHeaders,
 	hashIp,
