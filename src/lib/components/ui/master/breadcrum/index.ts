@@ -1,0 +1,1 @@
+export { default as Breadcrum } from './breadcrum.svelte'
