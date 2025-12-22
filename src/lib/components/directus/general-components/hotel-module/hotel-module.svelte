@@ -10,7 +10,7 @@
 
 	export let item: StopoverHotelModuleSchema;
 
-	const { items } = item;
+	const { items, sort } = item;
 
 	const cta =
 		$page.data.siteSettings.translations?.[0]?.labels?.filter((v) => v.name === 'view-more')?.[0] ||
@@ -21,7 +21,29 @@
 		return path[$page.data.locale];
 	}
 
-	const moduleItems = items;
+	const sortByProperty = (order: 'asc' | 'desc', prop: string, a: any, b: any) => {
+		const aProp = typeof a[prop] != null ? a[prop] : 0;
+		const bProp = typeof b[prop] != null ? b[prop] : 0;
+
+		const orderFactor = order === 'desc' ? -1 : 1;
+
+		return orderFactor * (aProp - bProp);
+	};
+
+	const sortMultiple = (sorting: typeof sort) => (a: any, b: any) => {
+		if (!sorting) return a - b;
+
+		let i = 0;
+		let order = 0;
+		do {
+			order = sortByProperty(sorting[i].order, sorting[i].by, a, b);
+			i += 1;
+		} while (order === 0 && i < sorting.length);
+
+		return order;
+	};
+
+	const moduleItems = items?.sort(sortMultiple(sort));
 </script>
 
 {#if isNil(moduleItems)}
@@ -41,7 +63,7 @@
 	</div>
 {:else}
 	<ul
-		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] items-stretch gap-2 md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] md:gap-4"
+		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] items-stretch gap-2 md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))] md:gap-4"
 	>
 		{#each moduleItems as promo}
 			{#if promo.parent_page}
