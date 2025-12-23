@@ -5,7 +5,8 @@ on:
     #branches:
     #  - feature/container-app
   workflow_dispatch:
-
+  push:
+  
 permissions:
   id-token: write
   contents: read
