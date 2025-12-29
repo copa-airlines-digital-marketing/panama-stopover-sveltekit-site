@@ -36,8 +36,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        args: git submodule update --init --recursive
-
+        submodules: recursive
+        
     - name: Set up Node.js 20.11.1
       uses: actions/setup-node@v4
       with:
