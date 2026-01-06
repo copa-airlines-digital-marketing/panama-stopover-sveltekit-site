@@ -16,6 +16,7 @@ jobs:
     secrets: inherit
     with:
       environment: production
+      env: prod
       environment_url: https://panamav2-prod-cdn.d6nfe7i1.monks.zone
       aws_role: arn:aws:iam::637423230985:role/github-actions-prod
       production_flag: "true"

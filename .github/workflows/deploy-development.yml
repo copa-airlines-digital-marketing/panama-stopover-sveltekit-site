@@ -17,6 +17,7 @@ jobs:
     secrets: inherit
     with:
       environment: development
+      env: dev
       environment_url: https://panamav2-dev-cdn.d6nfe7i1.monks.zone
       aws_role: arn:aws:iam::637423230985:role/github-actions-dev
       production_flag: ""

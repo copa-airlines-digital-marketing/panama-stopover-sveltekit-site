@@ -1,0 +1,43 @@
+{
+  "containerDefinitions": [
+    {
+      "cpu": 0,
+      "environment": [],
+      "essential": true,
+      "image": "637423230985.dkr.ecr.sa-east-1.amazonaws.com/panamav2-${ENV}:latest",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/mm/panamav2-${ENV}/fargate",
+          "awslogs-region": "sa-east-1",
+          "awslogs-stream-prefix": "ecs"
+        },
+        "secretOptions": []
+      },
+      "mountPoints": [],
+      "name": "panamav2-${ENV}",
+      "portMappings": [
+        {
+          "appProtocol": "http",
+          "containerPort": 80,
+          "hostPort": 80,
+          "name": "panamav2-${ENV}-80-tcp",
+          "protocol": "tcp"
+        }
+      ],
+      "systemControls": [],
+      "volumesFrom": []
+    }
+  ],
+  "cpu": "1024",
+  "executionRoleArn": "arn:aws:iam::637423230985:role/panamav2-${ENV}-EcsRole-MTBf7uWfSTVc",
+  "family": "panamav2-${ENV}-Fargate-Service",
+  "memory": "2048",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "taskRoleArn": "arn:aws:iam::637423230985:role/panamav2-${ENV}-FargateRole-Aji7H00pvMmc",
+  "volumes": [],
+  "tags": []
+}

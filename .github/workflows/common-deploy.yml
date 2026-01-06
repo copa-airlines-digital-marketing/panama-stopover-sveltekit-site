@@ -20,6 +20,10 @@ on:
         type: string
         default: ""
         description: 'Production environment flag'
+      env:
+        required: true
+        type: string
+        description: 'Short environment name (dev, test, prod)'
       build_environment:
         required: true
         type: string
@@ -100,14 +104,64 @@ jobs:
         docker push $ECR_REPOSITORY:${{ github.sha }}
         docker push $ECR_REPOSITORY:latest
 
+    - name: Render Task Definition
+      env:
+        DIRECTUS_REST_URL: ${{ vars.DIRECTUS_REST_URL }}
+        UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        UPSTASH_REDIS_REST_URL: ${{ vars.UPSTASH_REDIS_REST_URL }}
+        DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
+        PREVIEW_SECRET: ${{ secrets.PREVIEW_SECRET }}
+        DIRECTUS_PREVIEW_TOKEN: ${{ secrets.DIRECTUS_PREVIEW_TOKEN }}
+        SITE_ID: ${{ vars.SITE_ID }}
+        CATEGORIES_MAP: ${{ vars.CATEGORIES_MAP }}
+        PUBLIC_SUPPORTED_LANGUAGES: ${{ vars.PUBLIC_SUPPORTED_LANGUAGES }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        BASE_URL: ${{ vars.BASE_URL }}
+        IP_HASH_SALT: ${{ secrets.IP_HASH_SALT }}
+        CF_TURNSTILE_SITE_KEY: ${{ vars.CF_TURNSTILE_SITE_KEY }}
+        CF_TURNSTILE_SECRET_KEY: ${{ secrets.CF_TURNSTILE_SECRET_KEY }}
+        PORT: 80
+      run: |
+        VARS=(
+          "DIRECTUS_REST_URL"
+          "UPSTASH_REDIS_REST_TOKEN"
+          "UPSTASH_REDIS_REST_URL"
+          "DIRECTUS_TOKEN"
+          "PREVIEW_SECRET"
+          "DIRECTUS_PREVIEW_TOKEN"
+          "SITE_ID"
+          "CATEGORIES_MAP"
+          "PUBLIC_SUPPORTED_LANGUAGES"
+          "DATABASE_URL"
+          "BASE_URL"
+          "IP_HASH_SALT"
+          "CF_TURNSTILE_SITE_KEY"
+          "CF_TURNSTILE_SECRET_KEY"
+          "PORT"
+        )
+        ENV_JSON=$(jq -n '$ARGS.positional | map({name: ., value: env[.]}) | map(select(.value != null))' --args "${VARS[@]}")
+        sed "s/\${ENV}/${{ inputs.env }}/g" tools/deploy/task_definition_template.json | \
+        jq --argjson envs "$ENV_JSON" '.containerDefinitions[0].environment = $envs' > task-definition.json
+
+    - name: Register Task Definition
+      id: register-task-def
+      run: |
+        TASK_DEF_ARN=$(aws ecs register-task-definition \
+          --cli-input-json file://task-definition.json \
+          --query 'taskDefinition.taskDefinitionArn' \
+          --output text)
+        echo "task_definition_arn=$TASK_DEF_ARN" >> $GITHUB_OUTPUT
+
     - name: Update ECS service
       env:
         ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
         ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+        TASK_DEFINITION_ARN: ${{ steps.register-task-def.outputs.task_definition_arn }}
       run: |
         aws ecs update-service \
           --cluster $ECS_CLUSTER_NAME \
           --service $ECS_SERVICE_NAME \
+          --task-definition $TASK_DEFINITION_ARN \
           --force-new-deployment
 
     - name: Wait for ECS deployment to complete
