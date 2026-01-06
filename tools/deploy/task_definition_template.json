@@ -39,5 +39,18 @@
   ],
   "taskRoleArn": "arn:aws:iam::637423230985:role/panamav2-${ENV}-FargateRole-Aji7H00pvMmc",
   "volumes": [],
-  "tags": []
+  "tags": [
+      {
+        "key": "Project",
+        "value": "Copa"
+      },
+      {
+        "key": "Environment",
+        "value": "${ENV}"
+      },
+      {
+        "key": "ManagedBy",
+        "value": "GitHubActions"
+      }
+  ]
 }
