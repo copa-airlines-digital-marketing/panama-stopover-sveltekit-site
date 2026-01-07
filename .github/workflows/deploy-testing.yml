@@ -20,5 +20,7 @@ jobs:
       env: test
       environment_url: https://panamav2-test-cdn.d6nfe7i1.monks.zone
       aws_role: arn:aws:iam::637423230985:role/github-actions-test
+      execution_role_arn: "arn:aws:iam::637423230985:role/panamav2-test-EcsRole-N6ha4nP5Gilr"
+      task_role_arn: "arn:aws:iam::637423230985:role/panamav2-test-FargateRole-Ij0Wn46Y4WhS"
       production_flag: ""
       build_environment: staging

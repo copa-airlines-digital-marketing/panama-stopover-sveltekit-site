@@ -20,5 +20,7 @@ jobs:
       env: dev
       environment_url: https://panamav2-dev-cdn.d6nfe7i1.monks.zone
       aws_role: arn:aws:iam::637423230985:role/github-actions-dev
+      execution_role_arn: "arn:aws:iam::637423230985:role/panamav2-dev-EcsRole-MTBf7uWfSTVc"
+      task_role_arn: "arn:aws:iam::637423230985:role/panamav2-dev-FargateRole-Aji7H00pvMmc"
       production_flag: ""
       build_environment: production
