@@ -15,6 +15,14 @@ on:
         required: true
         type: string
         description: 'AWS IAM role ARN to assume'
+      execution_role_arn:
+        required: true
+        type: string
+        description: 'ECS execution role ARN'
+      task_role_arn:
+        required: true
+        type: string
+        description: 'ECS task role ARN'
       production_flag:
         required: false
         type: string
@@ -141,7 +149,10 @@ jobs:
         )
         ENV_JSON=$(jq -n '$ARGS.positional | map({name: ., value: env[.]}) | map(select(.value != null))' --args "${VARS[@]}")
         sed "s/\${ENV}/${{ inputs.env }}/g" tools/deploy/task_definition_template.json | \
-        jq --argjson envs "$ENV_JSON" '.containerDefinitions[0].environment = $envs' > task-definition.json
+        jq --argjson envs "$ENV_JSON" \
+           --arg execution_role "${{ inputs.execution_role_arn }}" \
+           --arg task_role "${{ inputs.task_role_arn }}" \
+           '.containerDefinitions[0].environment = $envs | .executionRoleArn = $execution_role | .taskRoleArn = $task_role' > task-definition.json
 
     - name: Register Task Definition
       id: register-task-def
