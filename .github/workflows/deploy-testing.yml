@@ -5,6 +5,7 @@ on:
   #  branches:
   #    - test
   workflow_dispatch:
+  push:
 
 permissions:
   id-token: write

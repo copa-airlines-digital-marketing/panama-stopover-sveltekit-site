@@ -53,56 +53,56 @@ jobs:
         role-to-assume: ${{ inputs.aws_role }}
         aws-region: ${{ vars.AWS_REGION }}
 
-    #- name: Login to Amazon ECR
-    #  id: login-ecr
-    #  uses: aws-actions/amazon-ecr-login@v2
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
 
-    #- name: Build Docker image
-    #  env:
-    #    ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
-    #    DIRECTUS_REST_URL: ${{ vars.DIRECTUS_REST_URL }}
-    #    UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
-    #    UPSTASH_REDIS_REST_URL: ${{ vars.UPSTASH_REDIS_REST_URL }}
-    #    DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
-    #    PREVIEW_SECRET: ${{ secrets.PREVIEW_SECRET }}
-    #    DIRECTUS_PREVIEW_TOKEN: ${{ secrets.DIRECTUS_PREVIEW_TOKEN }}
-    #    SITE_ID: ${{ vars.SITE_ID }}
-    #    CATEGORIES_MAP: ${{ vars.CATEGORIES_MAP }}
-    #    PUBLIC_SUPPORTED_LANGUAGES: ${{ vars.PUBLIC_SUPPORTED_LANGUAGES }}
-    #    DATABASE_URL: ${{ secrets.DATABASE_URL }}
-    #    BASE_URL: ${{ vars.BASE_URL }}
-    #    IP_HASH_SALT: ${{ secrets.IP_HASH_SALT }}
-    #    CF_TURNSTILE_SITE_KEY: ${{ vars.CF_TURNSTILE_SITE_KEY }}
-    #    CF_TURNSTILE_SECRET_KEY: ${{ secrets.CF_TURNSTILE_SECRET_KEY }}
-    #  run: |
-    #    docker build \
-    #     --build-arg PRODUCTION_ENVIRONMENT="${{ inputs.production_flag }}" \
-    #     --build-arg ENVIRONMENT="${{ inputs.build_environment }}" \
-    #     --build-arg DIRECTUS_REST_URL="$DIRECTUS_REST_URL" \
-    #     --build-arg UPSTASH_REDIS_REST_TOKEN="$UPSTASH_REDIS_REST_TOKEN" \
-    #     --build-arg UPSTASH_REDIS_REST_URL="$UPSTASH_REDIS_REST_URL" \
-    #     --build-arg DIRECTUS_TOKEN="$DIRECTUS_TOKEN" \
-    #     --build-arg PREVIEW_SECRET="$PREVIEW_SECRET" \
-    #     --build-arg DIRECTUS_PREVIEW_TOKEN="$DIRECTUS_PREVIEW_TOKEN" \
-    #     --build-arg SITE_ID="$SITE_ID" \
-    #     --build-arg CATEGORIES_MAP="$CATEGORIES_MAP" \
-    #     --build-arg PUBLIC_SUPPORTED_LANGUAGES="$PUBLIC_SUPPORTED_LANGUAGES" \
-    #     --build-arg DATABASE_URL="$DATABASE_URL" \
-    #     --build-arg BASE_URL="$BASE_URL" \
-    #     --build-arg IP_HASH_SALT="$IP_HASH_SALT" \
-    #     --build-arg CF_TURNSTILE_SITE_KEY="$CF_TURNSTILE_SITE_KEY" \
-    #     --build-arg CF_TURNSTILE_SECRET_KEY="$CF_TURNSTILE_SECRET_KEY" \
-    #     -t $ECR_REPOSITORY:${{ github.sha }} \
-    #     -t $ECR_REPOSITORY:latest \
-    #     .
+    - name: Build Docker image
+      env:
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+        DIRECTUS_REST_URL: ${{ vars.DIRECTUS_REST_URL }}
+        UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        UPSTASH_REDIS_REST_URL: ${{ vars.UPSTASH_REDIS_REST_URL }}
+        DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
+        PREVIEW_SECRET: ${{ secrets.PREVIEW_SECRET }}
+        DIRECTUS_PREVIEW_TOKEN: ${{ secrets.DIRECTUS_PREVIEW_TOKEN }}
+        SITE_ID: ${{ vars.SITE_ID }}
+        CATEGORIES_MAP: ${{ vars.CATEGORIES_MAP }}
+        PUBLIC_SUPPORTED_LANGUAGES: ${{ vars.PUBLIC_SUPPORTED_LANGUAGES }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        BASE_URL: ${{ vars.BASE_URL }}
+        IP_HASH_SALT: ${{ secrets.IP_HASH_SALT }}
+        CF_TURNSTILE_SITE_KEY: ${{ vars.CF_TURNSTILE_SITE_KEY }}
+        CF_TURNSTILE_SECRET_KEY: ${{ secrets.CF_TURNSTILE_SECRET_KEY }}
+      run: |
+        docker build \
+         --build-arg PRODUCTION_ENVIRONMENT="${{ inputs.production_flag }}" \
+         --build-arg ENVIRONMENT="${{ inputs.build_environment }}" \
+         --build-arg DIRECTUS_REST_URL="$DIRECTUS_REST_URL" \
+         --build-arg UPSTASH_REDIS_REST_TOKEN="$UPSTASH_REDIS_REST_TOKEN" \
+         --build-arg UPSTASH_REDIS_REST_URL="$UPSTASH_REDIS_REST_URL" \
+         --build-arg DIRECTUS_TOKEN="$DIRECTUS_TOKEN" \
+         --build-arg PREVIEW_SECRET="$PREVIEW_SECRET" \
+         --build-arg DIRECTUS_PREVIEW_TOKEN="$DIRECTUS_PREVIEW_TOKEN" \
+         --build-arg SITE_ID="$SITE_ID" \
+         --build-arg CATEGORIES_MAP="$CATEGORIES_MAP" \
+         --build-arg PUBLIC_SUPPORTED_LANGUAGES="$PUBLIC_SUPPORTED_LANGUAGES" \
+         --build-arg DATABASE_URL="$DATABASE_URL" \
+         --build-arg BASE_URL="$BASE_URL" \
+         --build-arg IP_HASH_SALT="$IP_HASH_SALT" \
+         --build-arg CF_TURNSTILE_SITE_KEY="$CF_TURNSTILE_SITE_KEY" \
+         --build-arg CF_TURNSTILE_SECRET_KEY="$CF_TURNSTILE_SECRET_KEY" \
+         -t $ECR_REPOSITORY:${{ github.sha }} \
+         -t $ECR_REPOSITORY:latest \
+         .
 
-    #- name: Push Docker image to ECR
-    #  env:
-    #    ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-    #    ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
-    #  run: |
-    #    docker push $ECR_REPOSITORY:${{ github.sha }}
-    #    docker push $ECR_REPOSITORY:latest
+    - name: Push Docker image to ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+      run: |
+        docker push $ECR_REPOSITORY:${{ github.sha }}
+        docker push $ECR_REPOSITORY:latest
 
     - name: Render Task Definition
       env:
