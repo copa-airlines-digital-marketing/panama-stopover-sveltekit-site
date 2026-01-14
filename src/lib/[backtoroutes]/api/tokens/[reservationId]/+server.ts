@@ -1,4 +1,4 @@
-import { prisma } from '$lib/server/prisma';
+import { prisma } from '$lib/infrastructure/prisma/client';
 import { AccessTokenStatus } from '@prisma/client';
 import type { RequestHandler } from '@sveltejs/kit';
 import { customAlphabet } from 'nanoid';

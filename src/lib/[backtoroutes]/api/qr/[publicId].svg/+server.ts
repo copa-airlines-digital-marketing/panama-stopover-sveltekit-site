@@ -1,5 +1,5 @@
 import { BASE_URL } from '$env/static/private';
-import { prisma } from '$lib/server/prisma';
+import { prisma } from '$lib/infrastructure/prisma/client';
 import QRCode from 'qrcode';
 
 export const GET = async ({ params, url }) => {

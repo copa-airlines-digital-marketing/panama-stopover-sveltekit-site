@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { prisma } from '$lib/server/prisma';
+import { prisma } from '$lib/infrastructure/prisma/client';
 import QRCode from 'qrcode';
 import { BASE_URL } from '$env/static/private';
 
