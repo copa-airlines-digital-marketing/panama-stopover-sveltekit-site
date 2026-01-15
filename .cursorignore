@@ -1,0 +1,12 @@
+node_modules/
+.pnpm-store/
+.svelte-kit/
+build/
+dist/
+.output/
+.wrangler/
+coverage/
+*.log
+.DS_Store
+.idea/
+.vscode/
