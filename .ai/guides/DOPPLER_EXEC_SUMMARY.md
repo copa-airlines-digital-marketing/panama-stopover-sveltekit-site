@@ -15,14 +15,20 @@
 doppler login
 
 # 2. Listo, ahora usa normalmente
-pnpm dev           # Automáticamente inyecta secrets desde Doppler
-pnpm build         # Build con secrets
-pnpm test          # Tests con secrets
+pnpm dev                # Dev con Doppler
+pnpm build:local        # Build con Doppler
+pnpm test:local         # Tests con Doppler
 ```
 
-### Para CI/CD
+### Para CI/CD y Cloudflare Pages
 
-Simplemente agrega `DOPPLER_TOKEN` como secret en tu repo y los workflows se encargan del resto.
+**Los comandos principales están LIMPIOS** (sin Doppler) para que funcionen con las variables de entorno nativas de cada plataforma:
+
+```bash
+pnpm build       # Limpio, usa variables de entorno del sistema
+pnpm test        # Limpio, usa variables de entorno del sistema
+pnpm lint        # Limpio, usa variables de entorno del sistema
+```
 
 ---
 
@@ -34,7 +40,6 @@ Simplemente agrega `DOPPLER_TOKEN` como secret en tu repo y los workflows se enc
 | **Scripts** | `scripts/doppler-run.sh` | Wrapper bash avanzado |
 | **Scripts** | `scripts/load-doppler.js` | Inyector Node.js |
 | **CI/CD** | `.github/workflows/build-doppler.yml` | GitHub Actions |
-| **CI/CD** | `.gitlab-ci.yml` | GitLab CI/CD |
 | **Docs** | `.ai/guides/DOPPLER_SETUP.md` | Guía técnica |
 | **Docs** | `.ai/guides/DOPPLER_QUICKSTART.md` | Quick start |
 | **Docs** | `.ai/refactor/DOPPLER_INTEGRATION_COMPLETE.md` | Este resumen |
@@ -75,6 +80,8 @@ pnpm dev
 
 ## 📋 Comandos Principales
 
+### Desarrollo Local (con Doppler)
+
 ```bash
 # Doppler Utilities
 pnpm run doppler:login      # Autenticarse
@@ -84,34 +91,71 @@ pnpm run doppler:download   # Descargar .env local
 
 # Development con Doppler
 pnpm dev                    # Dev (config: dev)
-pnpm build                  # Build (config: prod)
-pnpm test                   # Tests (config: prod)
-pnpm lint                   # Lint (config: prod)
+pnpm build:local            # Build (config: prod)
+pnpm test:local             # Tests (config: prod)
+pnpm lint:local             # Lint (config: prod)
+pnpm preview:local          # Preview con Doppler
+pnpm start:local            # Start con Doppler
+```
 
-# Sin Doppler (fallback)
-pnpm dev:no-doppler
-pnpm build:no-doppler
+### CI/CD / Cloudflare Pages (sin Doppler)
+
+```bash
+# Estos comandos están LIMPIOS
+# Usan variables de entorno del sistema (GitHub, Cloudflare, etc.)
+pnpm build          # Build sin Doppler
+pnpm test           # Tests sin Doppler
+pnpm lint           # Lint sin Doppler
+pnpm preview        # Preview sin Doppler
+pnpm start          # Start sin Doppler
+```
+
+---
+
+## 🏗️ Arquitectura de Comandos
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Desarrollo Local (con Doppler)                     │
+├─────────────────────────────────────────────────────┤
+│  pnpm dev              → doppler run -- vite dev    │
+│  pnpm build:local      → doppler run -- vite build  │
+│  pnpm test:local       → doppler run -- tests       │
+└─────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────┐
+│  CI/CD / Cloudflare (sin Doppler)                   │
+├─────────────────────────────────────────────────────┤
+│  pnpm build            → vite build                 │
+│  pnpm test             → tests                      │
+│  pnpm lint             → linters                    │
+│                                                      │
+│  Variables desde:                                   │
+│  - Cloudflare Pages Dashboard                       │
+│  - GitHub Secrets                                   │
+│  - Variables de entorno del sistema                 │
+└─────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## 🔧 Tres Formas de Usar
 
-### Opción 1: Doppler Directo (Recomendado ⭐)
+### Opción 1: Comandos con Doppler (⭐ Recomendado para local)
 ```bash
 pnpm dev
+pnpm build:local
 # ✅ Simple, integrado, automático
 ```
 
 ### Opción 2: Script Wrapper Bash
 ```bash
-./scripts/doppler-run.sh pnpm dev
-./scripts/doppler-run.sh -e staging pnpm build
-./scripts/doppler-run.sh --save-env pnpm dev
+./scripts/doppler-run.sh pnpm build
+./scripts/doppler-run.sh -e staging pnpm dev
 # ✅ Control total, opciones avanzadas
 ```
 
-### Opción 3: Script Node.js (CI/CD)
+### Opción 3: Script Node.js (CI/CD alternativo)
 ```bash
 DOPPLER_CONFIG=prod node scripts/load-doppler.js -- pnpm build
 # ✅ Cross-platform, CI/CD friendly
@@ -128,10 +172,10 @@ DOPPLER_CONFIG=prod node scripts/load-doppler.js -- pnpm build
 - `.gitignore` excluye todos los .env files
 
 ### ✅ CI/CD
-- Usa `DOPPLER_TOKEN` como secret en tu repo
-- Service Token (no personal token)
-- Token regenerable en cualquier momento
-- Workflows inyectan secrets automáticamente
+- **Cloudflare Pages:** Variables configuradas en Dashboard
+- **GitHub Actions:** Variables en GitHub Secrets
+- **GitLab CI:** Variables en GitLab CI/CD settings
+- No requiere Doppler en producción
 
 ---
 
@@ -167,9 +211,8 @@ Tres niveles de documentación disponibles:
 - [ ] El build es exitoso
 
 ### CI/CD Setup
-- [ ] Crear Service Token en Doppler Dashboard
-- [ ] Agregar `DOPPLER_TOKEN` en GitHub Secrets
-- [ ] Ejecutar workflow de test
+- [ ] Cloudflare Pages: Configurar variables en Dashboard
+- [ ] GitHub Actions: Configurar secrets en repo
 - [ ] Verificar que build es exitoso
 
 ---
@@ -218,9 +261,10 @@ Cada config debe tener:
    cat .gitignore | grep env
    ```
 
-5. **En CI/CD, siempre usar Service Tokens:**
-   - No usar personal tokens
-   - Regenerar tokens periódicamente
+5. **Para Cloudflare Pages:**
+   - No necesitas Doppler en Cloudflare
+   - Configura las variables directamente en el Dashboard
+   - Settings → Environment Variables
 
 ---
 
@@ -230,9 +274,8 @@ Cada config debe tener:
 |-------|----------|
 | "not authenticated" | `doppler login` |
 | "config not found" | Verifica que los configs existen en Doppler |
-| "forbidden / 403" | Verifica permisos en Doppler Dashboard |
-| Secrets no se cargan | `doppler secrets get` para debug |
-| CI/CD token inválido | Regenera el token en Doppler |
+| Build falla en Cloudflare | Verifica que las variables están en Cloudflare Dashboard |
+| Secrets no se cargan localmente | `doppler secrets get` para debug |
 
 ---
 
@@ -240,17 +283,17 @@ Cada config debe tener:
 
 ```
 package.json
-  + 8 scripts con doppler run
+  ~ Comandos principales LIMPIOS (sin Doppler)
+  + Comandos :local con Doppler
   + 4 utility scripts (doppler:*)
-  - Sin cambios en funcionalidad
-
+  
 Scripts
   + doppler-run.sh (bash wrapper)
   + load-doppler.js (Node.js inyector)
 
 CI/CD
   + .github/workflows/build-doppler.yml
-  + .gitlab-ci.yml (actualizado)
+  - .gitlab-ci.yml (eliminado, no necesario)
 
 Docs
   + 3 archivos de documentación
@@ -263,11 +306,13 @@ Docs
 
 Estás listo para:
 1. Usar Doppler en desarrollo local
-2. Ejecutar tests con secrets inyectados
-3. Deploy automático con CI/CD
-4. Mantener secrets seguros en producción
+2. Build limpio para Cloudflare Pages
+3. CI/CD con GitHub Actions
+4. Mantener secrets seguros
 
-**Próximo paso:** `doppler login` y `pnpm dev`
+**Próximo paso para local:** `doppler login` y `pnpm dev`
+
+**Para Cloudflare:** Configura variables en Dashboard y `pnpm build` funciona
 
 ---
 
@@ -281,4 +326,5 @@ Estás listo para:
 ---
 
 **Actualizado:** 2026-01-16  
-**Status:** ✅ Production Ready
+**Status:** ✅ Production Ready  
+**Cloudflare Compatible:** ✅ Yes
