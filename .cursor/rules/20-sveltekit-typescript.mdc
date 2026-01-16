@@ -1,0 +1,30 @@
+---
+description: SvelteKit (Svelte 4) + strict TypeScript conventions.
+globs: "**/*.{ts,svelte}"
+alwaysApply: false
+---
+
+# SvelteKit + TS Strict Rules
+
+## Svelte components
+- Use `<script lang="ts">`.
+- Strongly type props (`export let ...: Type`) and events where applicable.
+- Keep derived state explicit; avoid implicit `any` from destructuring.
+
+## Load functions and data boundaries
+- Treat external data (Directus) as **unknown** at the boundary.
+- Parse/validate before use; return fully typed data from `load`.
+- Prefer small mapping functions to normalize Directus payloads into view models.
+
+## Types
+- Prefer `type` for unions and `interface` for object shapes you expect to extend.
+- Avoid `as` casting unless you justify it and it’s provably safe.
+- Prefer `satisfies` for config objects and constants.
+
+## Error handling
+- Fail fast with clear errors at boundaries (fetch/parse).
+- For user-facing pages, return safe fallbacks instead of crashing render.
+
+## Code style
+- Keep functions small; avoid cleverness.
+- No unused exports; remove dead code.

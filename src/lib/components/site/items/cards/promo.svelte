@@ -2,20 +2,20 @@
 	import { PromoCard } from '$lib/components/ui/cards/promo';
 	import { SVG } from '$lib/components/ui/icon';
 	import { page } from '$app/stores';
-	import { isHotelSchema, type HotelSchema } from '$lib/directus/hotels';
-	import { isRestaurantSchema, type RestaurantSchema } from '$lib/directus/restaurants';
-	import { isPlaceSchema, type PlaceSchema } from '$lib/directus/place-to-visit';
-	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
-	import type { StopoverPackageQuery } from '$lib/directus/package/types';
-	import type { TransportationQuery } from '$lib/directus/transportation/types';
+	import { isHotelSchema, type HotelSchema } from '$lib/domain/hotels';
+	import { isRestaurantSchema, type RestaurantSchema } from '$lib/domain/restaurants';
+	import { isPlaceSchema, type PlaceSchema } from '$lib/domain/places';
+	import type { TourSchema } from '$lib/domain/tours';
+	import type { PackageSchema } from '$lib/domain/packages';
+	import type { TransportationSchema } from '$lib/domain/transportation';
 
 	export let item:
 		| HotelSchema
 		| RestaurantSchema
 		| PlaceSchema
-		| StopoverTour
-		| StopoverPackageQuery
-		| TransportationQuery;
+		| TourSchema
+		| PackageSchema
+		| TransportationSchema;
 
 	const { promo_discount_amount, promo_discount_percent, promo_code, translations } = item;
 

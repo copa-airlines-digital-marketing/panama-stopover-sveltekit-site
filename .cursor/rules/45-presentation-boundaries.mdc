@@ -1,0 +1,28 @@
+---
+description: Keep Directus shapes out of Svelte components. Pages/loaders return view models only.
+globs: "src/lib/components/**/*.{svelte,ts},src/routes/**/*.{svelte,ts}"
+alwaysApply: false
+---
+
+# Presentation boundaries (hard rule)
+
+## No Directus shapes in components
+- Components under `src/lib/components/**` must NOT:
+  - import Directus collection types directly (`$cms/...`) for props
+  - depend on Directus response shapes (raw payloads)
+  - perform Directus client calls
+  - perform Zod parsing/validation
+
+## Where Directus is allowed
+- Directus calls happen in `+page.server.ts` / `+layout.server.ts` and/or domain/data/infrastructure layers:
+  - `src/lib/infrastructure/directus/**` (client + low-level helpers)
+  - `src/lib/data/**` and `src/lib/domain/**` (query builders + mapping)
+
+## What components should receive
+- Components receive **narrow, app-owned types** (view models / domain models), shaped to the page needs.
+- Data is already normalized: required fields are guaranteed, optional fields are explicit.
+
+## What pages/loaders should return
+- `load()` returns only validated, mapped data:
+  - Query -> (optional) validate -> map -> return typed view model
+- If validation fails, fail fast in build (SSG) with a clear error, or return a safe fallback if the page can render without it.

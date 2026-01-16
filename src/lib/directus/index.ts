@@ -1,13 +1,13 @@
-import { type HotelSchema } from './hotels';
-import { type PageSchema } from './page';
-import { type PlaceSchema } from './place-to-visit';
-import { type RestaurantSchema } from './restaurants';
+import { type HotelSchema } from '../domain/hotels';
+import { type PageSchema } from '../domain/pages';
+import { type PlaceSchema } from '../domain/places';
+import { type RestaurantSchema } from '../domain/restaurants';
 import { getSiteSettings, type SiteSettingsSchema } from './site-settings';
-import type { DirectusRequestBody } from './utils';
+import type { DirectusRequestBody } from '../infrastructure/directus/utils';
 import { filter, head, includes, isNil, keys, pipe } from 'ramda';
 import { CATEGORIES_MAP } from '$env/static/private';
-import { say } from '$lib/utils';
-import { getSections, type SectionSchema } from './section';
+import { say } from '$lib/core/utils';
+import { getSections, type SectionSchema } from '../domain/sections';
 import { getPage } from './pageRequest';
 import { getHotel } from './hotelRequests';
 import { getRestaurant } from './restaurantRequest';
@@ -15,6 +15,9 @@ import { getPlace } from './placeRequest';
 import { getPublishedTours } from './tours';
 import { getPublishedPackages } from './package';
 import { getPublishedTransportation } from './transportation';
+import type { TourSchema } from '../domain/tours';
+import type { PackageSchema } from '../domain/packages';
+import type { TransportationSchema } from '../domain/transportation';
 
 type KeyToTypeMap = {
 	'site-settings': SiteSettingsSchema;
@@ -23,6 +26,9 @@ type KeyToTypeMap = {
 	stopover_hotels: HotelSchema;
 	stopover_restaurants: RestaurantSchema;
 	stopover_place_to_visit: PlaceSchema;
+	stopover_tour: TourSchema[];
+	stopover_package: PackageSchema[];
+	stopover_transportation: TransportationSchema[];
 };
 
 type DirectusDataKeys = keyof KeyToTypeMap;

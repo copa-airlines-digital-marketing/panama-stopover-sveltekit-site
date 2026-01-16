@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
+	import type { RestaurantSchema } from '$lib/domain/restaurants';
 	import { page } from '$app/stores';
 	import { getDirectusImage } from './utils';
 	import { Hero } from '$lib/components/site/items';

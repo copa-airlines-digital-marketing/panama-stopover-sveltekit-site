@@ -1,23 +1,23 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
+	import type { TourSchema } from '$lib/domain/tours';
 	import { Button } from '$ui/components/button';
-	import type { HotelSchema } from '$lib/directus/hotels';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
+	import type { HotelSchema } from '$lib/domain/hotels';
+	import type { PlaceSchema } from '$lib/domain/places';
+	import type { RestaurantSchema } from '$lib/domain/restaurants';
 	import { isNumberArray } from '$lib/utils';
 	import { Alert } from '$lib/components/ui/alerts/alert';
 	import { Pre } from '$lib/components/testing';
-	import type { StopoverPackageQuery } from '$lib/directus/package/types';
-	import type { TransportationQuery } from '$lib/directus/transportation/types';
+	import type { PackageSchema } from '$lib/domain/packages';
+	import type { TransportationSchema } from '$lib/domain/transportation';
 
 	export let item:
 		| HotelSchema
 		| RestaurantSchema
 		| PlaceSchema
-		| StopoverTour
-		| StopoverPackageQuery
-		| TransportationQuery;
+		| TourSchema
+		| PackageSchema
+		| TransportationSchema;
 
 	const { translations } = item;
 

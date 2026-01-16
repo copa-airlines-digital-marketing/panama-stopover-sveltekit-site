@@ -7,7 +7,7 @@
 	import { MainCallToAction } from '$lib/components/site/items/call-to-actions';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
 	import { Map } from '$lib/components/site/items/maps';
-	import type { PlaceSchema, PlacesPilar } from '$lib/directus/place-to-visit';
+	import type { PlaceSchema, PlacesPilar } from '$lib/domain/places';
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
 	import { Body } from '$ui/components/typography';
