@@ -1,0 +1,18 @@
+# Doppler Configuration
+# Este archivo configura Doppler para inyectar secrets en comandos
+# Documentación: https://docs.doppler.com/docs/cli-configuration
+
+# Entorno de desarrollo
+dev:
+  project: panama-stopover-site
+  config: dev
+
+# Entorno de producción
+production:
+  project: panama-stopover-site
+  config: prod
+
+# Entorno de staging
+staging:
+  project: panama-stopover-site
+  config: staging
