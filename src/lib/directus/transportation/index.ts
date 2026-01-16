@@ -1,6 +1,4 @@
-import { getTransportations } from '$cms/collections/stopover_transportation';
-import { DIRECTUS_REST_URL, DIRECTUS_TOKEN } from '$env/static/private';
-import { type DirectusRequestBody } from '../utils';
+import { getItems, type DirectusRequestBody } from '../../infrastructure/directus/utils';
 import { getTransportationQuery } from './types';
 
 function assertAllStrings<T extends Record<string, unknown>>(
@@ -27,11 +25,10 @@ const getParams = (filters: DirectusRequestBody) => {
 const getPublishedTransportation = async (filters: DirectusRequestBody) => {
 	const { locale, category, subCategory, article } = getParams(filters);
 
-	const transportation = await getTransportations(
-		DIRECTUS_REST_URL,
-		DIRECTUS_TOKEN,
-		getTransportationQuery(locale, category, subCategory, article)
-	);
+	const query = getTransportationQuery(locale, category, subCategory, article);
+	const transportation = await getItems('stopover_transportation', query, filters.preview);
+
+	if (!transportation) return null;
 
 	const [res] = transportation;
 

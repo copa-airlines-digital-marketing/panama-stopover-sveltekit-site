@@ -1,6 +1,6 @@
 import { isEmpty, isNil } from "ramda"
 import { isPageSettings, pageSchema, type PageSchema } from "./page"
-import { getItems, type DirectusRequestBody } from "./utils"
+import { getItems, type DirectusRequestBody } from "../infrastructure/directus/utils"
 import { say } from "$lib/utils"
 
 type NullishID = null | number | string | undefined

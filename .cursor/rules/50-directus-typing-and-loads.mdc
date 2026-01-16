@@ -1,0 +1,25 @@
+---
+description: Directus queries in +page.server.ts must return narrowed typed view models (fields-based), validated at boundaries.
+globs: "src/routes/**/+page.server.ts,src/routes/**/+layout.server.ts,src/lib/infrastructure/directus/**/*.{ts,d.ts},src/lib/domain/**/*.ts,src/lib/data/**/*.ts"
+alwaysApply: false
+---
+
+# Directus data + strict typing
+
+## Where data is fetched
+- Prefer data fetching in +page.server.ts / +layout.server.ts.
+- Use the shared Directus client from: src/lib/infrastructure/directus/
+
+## Typing philosophy
+- Do NOT type pages with full Directus collection types by default.
+- Define types per query based on "fields" actually requested (partial/narrow payloads).
+- Convert Directus payloads into domain/view models before components render.
+
+## Boundary safety
+- Treat Directus responses as unknown until validated.
+- Use Zod schemas matching the exact fields requested.
+- Keep mapping functions centralized (domain/data layer), not in Svelte components.
+
+## Submodule types
+- $cms types are reference/base schemas only. Do not modify submodule.
+- App should own request/result types derived from queries.

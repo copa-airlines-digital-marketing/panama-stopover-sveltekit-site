@@ -1,0 +1,33 @@
+---
+description: High-level project context and non-negotiable constraints.
+alwaysApply: true
+---
+
+# Project Overview
+
+This repository is a **static SvelteKit site** (Svelte 4) built/deployed on **Cloudflare Pages**.
+- Package manager: **pnpm**
+- Styling: **Tailwind CSS v4** using **presets imported from Git submodules**
+- Content/data: **Directus** (configuration/settings live in a **separate submodule**)
+
+## Non-negotiable constraints
+
+### Git submodules are read-only
+- **DO NOT modify files inside submodule directories.**
+- If changes are required in a submodule, propose changes in the submodule’s own repo.
+- In this repo, it is allowed to **update the submodule reference (gitlink SHA)** only.
+
+### Type safety is strict
+- Prefer **TypeScript-first** solutions; keep types explicit and narrow.
+- Avoid `any` and unsafe casts (`as unknown as`).
+- Prefer `satisfies`, discriminated unions, and typed helpers.
+- When consuming Directus data, validate/parse at boundaries (runtime + TS types).
+
+### Cloudflare + static output
+- No server-only runtime assumptions.
+- Prefer prerenderable routes; document if any route cannot be prerendered.
+
+## Working style for changes
+- Make minimal diffs; preserve existing architecture.
+- If you must change a config (Tailwind/SvelteKit/Cloudflare), explain the rationale and blast radius.
+- Never hand-edit lockfiles; use pnpm commands instead.

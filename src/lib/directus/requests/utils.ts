@@ -1,6 +1,6 @@
 import { say } from "$lib/utils";
 import { all, flatten, forEach, isNil, isNotNil, keys, map, values } from "ramda";
-import { getItems, type DirectusRequestBody } from "../utils";
+import { getItems, type DirectusRequestBody } from "../../infrastructure/directus/utils";
 import type { ZodSchema } from "zod";
 import type { Schema } from "../schema";
 import type { QueryItem } from "@directus/sdk";

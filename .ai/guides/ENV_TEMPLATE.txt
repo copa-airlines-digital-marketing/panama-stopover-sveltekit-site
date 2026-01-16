@@ -1,0 +1,71 @@
+# ============================================
+# DIRECTUS CMS CONFIGURATION
+# ============================================
+
+# URL de tu instancia de Directus (sin trailing slash)
+# Ejemplo: https://cms.example.com
+DIRECTUS_REST_URL=https://your-directus-instance.com
+
+# Token de acceso para Directus (producción)
+# Se obtiene desde Directus > Settings > Access Tokens
+DIRECTUS_TOKEN=your-production-directus-token-here
+
+# Token de acceso para preview/staging (opcional)
+# Usar un token diferente para preview si es necesario
+DIRECTUS_PREVIEW_TOKEN=your-preview-directus-token-here
+
+# Secret para habilitar preview mode
+# Cualquier string secreto que uses para activar preview
+PREVIEW_SECRET=your-preview-secret-here
+
+# ID del sitio en Directus
+# Ejemplo: 1 o el UUID de tu site
+SITE_ID=1
+
+# ============================================
+# APPLICATION CONFIGURATION
+# ============================================
+
+# URL base de tu aplicación (sin trailing slash)
+# Ejemplo: https://stopover.copa.com
+# En desarrollo: http://localhost:5173
+BASE_URL=http://localhost:5173
+
+# Mapeo de categorías (formato JSON string)
+# Este mapeo define la estructura de URLs del sitio
+CATEGORIES_MAP={"hotels":"stopover_hotels","restaurants":"stopover_restaurants","activities":"stopover_place_to_visit","tours":"stopover_tour","packages":"stopover_package","transportation":"stopover_transportation"}
+
+# ============================================
+# SECURITY
+# ============================================
+
+# Salt para hashear IPs en logs de verificación
+# Cualquier string aleatorio largo y secreto
+IP_HASH_SALT=your-random-salt-for-ip-hashing-here
+
+# ============================================
+# DATABASE (PostgreSQL via Prisma)
+# ============================================
+
+# Connection string para PostgreSQL
+# Formato: postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+# Ejemplo: postgresql://user:password@localhost:5432/stopover_db
+DATABASE_URL=postgresql://user:password@localhost:5432/stopover_db
+
+# ============================================
+# INTERNATIONALIZATION
+# ============================================
+
+# Idiomas soportados (separados por coma)
+# Ejemplo: es,en,pt
+PUBLIC_SUPPORTED_LANGUAGES=es,en,pt
+
+# ============================================
+# NOTAS IMPORTANTES
+# ============================================
+
+# 1. NO COMMITEAR este archivo con valores reales
+# 2. Crear .env copiando este archivo y llenando los valores
+# 3. .env está en .gitignore por seguridad
+# 4. Variables con PUBLIC_ son accesibles en el cliente
+# 5. Variables sin PUBLIC_ son solo para el servidor

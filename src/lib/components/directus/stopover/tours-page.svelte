@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
-	import type { StopoverTourTranslations } from '$cms/collections/stopover_tour_translations';
+	import type { TourSchema } from '$lib/domain/tours';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
@@ -21,7 +20,7 @@
 	import { Pill } from '$ui/components/pill';
 	import { MapContainer } from '$lib/components/site/items/maps';
 
-	export let stopover_tour: StopoverTour;
+	export let stopover_tour: TourSchema;
 
 	const {
 		main_image,
@@ -46,7 +45,7 @@
 
 	const translation = isStopoverTourTranslations(translations)
 		? translations.filter((t) => t.languages_code === $page.data.locale)
-		: [<StopoverTourTranslations>{}];
+		: [];
 
 	const { name, description, experience, included, not_included, promo_name, promo_description } =
 		translation[0];

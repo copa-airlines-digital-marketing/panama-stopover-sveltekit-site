@@ -1,5 +1,5 @@
 import { SITE_ID } from '$env/static/private';
-import { getItems } from '$lib/directus/utils';
+import { getItems } from '$lib/infrastructure/directus/utils';
 import { groupBy, map, path, reduce, unwind } from 'ramda';
 import {
 	getValueOfFulfilledPromise,

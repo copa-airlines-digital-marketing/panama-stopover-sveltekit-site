@@ -1,6 +1,6 @@
 import { getData } from '$lib/data/index.js';
 import { articleToKeyMap } from '$lib/directus/index.js';
-import { isPageSettings } from '$lib/directus/page.js';
+import { isPageSettings } from '$lib/domain/pages';
 import { isSectionSchema, sectionSchema, type SectionSchema } from '$lib/directus/section.js';
 import { isEmpty, isNil } from 'ramda';
 

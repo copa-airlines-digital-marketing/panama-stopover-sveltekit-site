@@ -1,6 +1,6 @@
 import { isNil } from "ramda"
 import { pagePathFields } from "./page"
-import { getItems, type DirectusRequestBody } from "./utils"
+import { getItems, type DirectusRequestBody } from "../infrastructure/directus/utils"
 import { say } from "$lib/utils"
 import { isRestaurantSchema, restaurantSchema } from "./restaurants"
 import type { Query } from "@directus/sdk"
