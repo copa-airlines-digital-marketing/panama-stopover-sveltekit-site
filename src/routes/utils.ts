@@ -1,4 +1,4 @@
-import { pagePathFields } from '$lib/directus/page';
+import { pagePathFields } from '$lib/domain/pages';
 import { isContentGroupSchema, type ContentGroupContent } from '$lib/directus/content-group';
 import type { SectionContentSchema, SectionSchema } from '$lib/directus/section';
 import {
@@ -7,8 +7,8 @@ import {
 } from '$lib/directus/stopover_hotel_module';
 import { isEmpty, isNil, isNotNil, pathOr } from 'ramda';
 import type { QueryItem } from '@directus/sdk';
-import type { Schema } from '$lib/directus/schema';
-import { getItems } from '$lib/directus/utils';
+import type { Schema } from '$lib/infrastructure/directus/schema';
+import { getItems } from '$lib/infrastructure/directus/utils';
 
 const getGroupContentModules =
 	(path: string[]) =>
@@ -110,14 +110,14 @@ const buildModuleQuery = (
 		'promo_discount_amount',
 		{ translations: ['name', 'path', 'promo_name'] },
 		{ parent_page: pagePathFields }
-	],
+	] as any,
 	filter: {
 		_and: [
 			promo_only ? promoOnlyFilter : undefined,
 			highlight_only ? { highlight: { _eq: true } } : undefined,
 			pilar ? { pilar: { _in: pilar } } : undefined
 		].filter((v) => isNotNil(v))
-	},
+	} as any,
 	deep: {
 		translations: {
 			_filter: getTranslationsFilter(collectionName, locale)
@@ -134,7 +134,7 @@ const buildModuleQuery = (
 				}
 			}
 		}
-	},
+	} as any,
 	sort: (sort && sort.map((v) => (v.order === 'asc' ? v.by : '-' + v.by))) || [],
 	limit: max_items
 });

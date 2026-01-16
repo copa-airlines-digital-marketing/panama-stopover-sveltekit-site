@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { HotelSchema } from '$lib/directus/hotels';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
+	import type { HotelSchema } from '$lib/domain/hotels';
+	import type { PlaceSchema } from '$lib/domain/places';
+	import type { RestaurantSchema } from '$lib/domain/restaurants';
 	import { page } from '$app/stores';
 	import { getTypography } from '$ui/components/typography';
 	import { Globe } from '$ui/components/icon';

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { HotelSchema } from '$lib/directus/hotels';
+	import type { HotelSchema } from '$lib/domain/hotels';
 	import { IconnedCTA } from '$lib/components/site/ui/icon-cta';
 	import { SVG } from '$lib/components/ui/icon';
 

@@ -1,3 +1,4 @@
+# Dependencies and build artifacts
 node_modules/
 .pnpm-store/
 .svelte-kit/
@@ -7,6 +8,42 @@ dist/
 .wrangler/
 coverage/
 *.log
+
+# IDE and OS
 .DS_Store
 .idea/
 .vscode/
+.cursor/
+
+# Git submodules (READ-ONLY - DO NOT ANALYZE)
+design-sytem-svelte-components/
+directus-cms-collections/
+
+# Environment files (sensitive)
+.env
+.env.local
+.env.*.local
+
+# Prisma generated files
+node_modules/.prisma/
+node_modules/@prisma/
+
+# Lockfiles (don't analyze)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Test artifacts
+.nyc_output/
+playwright-report/
+test-results/
+
+# Build artifacts
+static/build/
+.vercel/
+.netlify/

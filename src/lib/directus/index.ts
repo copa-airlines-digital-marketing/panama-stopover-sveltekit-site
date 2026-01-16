@@ -8,13 +8,16 @@ import { filter, head, includes, isNil, keys, pipe } from 'ramda';
 import { CATEGORIES_MAP } from '$env/static/private';
 import { say } from '$lib/core/utils';
 import { getSections, type SectionSchema } from '../domain/sections';
-import { getPage } from '../domain/pages';
-import { getHotel } from '../domain/hotels';
-import { getRestaurant } from '../domain/restaurants';
-import { getPlace } from '../domain/places';
-import { getPublishedTours } from '../domain/tours';
-import { getPublishedPackages } from '../domain/packages';
-import { getPublishedTransportation } from '../domain/transportation';
+import { getPage } from './pageRequest';
+import { getHotel } from './hotelRequests';
+import { getRestaurant } from './restaurantRequest';
+import { getPlace } from './placeRequest';
+import { getPublishedTours } from './tours';
+import { getPublishedPackages } from './package';
+import { getPublishedTransportation } from './transportation';
+import type { TourSchema } from '../domain/tours';
+import type { PackageSchema } from '../domain/packages';
+import type { TransportationSchema } from '../domain/transportation';
 
 type KeyToTypeMap = {
 	'site-settings': SiteSettingsSchema;
@@ -23,6 +26,9 @@ type KeyToTypeMap = {
 	stopover_hotels: HotelSchema;
 	stopover_restaurants: RestaurantSchema;
 	stopover_place_to_visit: PlaceSchema;
+	stopover_tour: TourSchema[];
+	stopover_package: PackageSchema[];
+	stopover_transportation: TransportationSchema[];
 };
 
 type DirectusDataKeys = keyof KeyToTypeMap;
