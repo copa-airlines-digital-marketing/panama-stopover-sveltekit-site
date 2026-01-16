@@ -4,25 +4,25 @@
 	import { Button } from '$ui/components/button';
 	import { KeyBoardArrowRight } from '$lib/components/ui/icon';
 	import { Breadcrum } from '$lib/components/ui/breadcrum';
-	import type { HotelSchema } from '$lib/directus/hotels';
-	import type { PageSchema } from '$lib/directus/page';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
-	import type { RestaurantSchema } from '$lib/directus/restaurants';
+	import type { HotelSchema } from '$lib/domain/hotels';
+	import type { PageSchema } from '$lib/domain/pages';
+	import type { PlaceSchema } from '$lib/domain/places';
+	import type { RestaurantSchema } from '$lib/domain/restaurants';
 	import { getBreadcrumNames } from '$lib/i18n/cannonicals';
 	import { cn } from '$lib/utils';
 	import { isNotEmpty, mapAccum } from 'ramda';
-	import type { StopoverTour } from '$cms/collections/stopover_tours/stopover_tours';
-	import type { StopoverPackageQuery } from '$lib/directus/package/types';
-	import type { TransportationQuery } from '$lib/directus/transportation/types';
+	import type { TourSchema } from '$lib/domain/tours';
+	import type { PackageSchema } from '$lib/domain/packages';
+	import type { TransportationSchema } from '$lib/domain/transportation';
 
 	export let item:
 		| PageSchema
 		| HotelSchema
 		| RestaurantSchema
 		| PlaceSchema
-		| StopoverTour
-		| StopoverPackageQuery
-		| TransportationQuery;
+		| TourSchema
+		| PackageSchema
+		| TransportationSchema;
 
 	export let variant: 'primary' | 'invert' = 'primary';
 

@@ -1,0 +1,22 @@
+name: Deploy to Testing
+
+on:
+  #push:
+  #  branches:
+  #    - test
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/common-deploy.yml
+    secrets: inherit
+    with:
+      environment: testing
+      environment_url: https://panamav2-test-cdn.d6nfe7i1.monks.zone
+      aws_role: arn:aws:iam::637423230985:role/github-actions-test
+      production_flag: ""
+      build_environment: staging

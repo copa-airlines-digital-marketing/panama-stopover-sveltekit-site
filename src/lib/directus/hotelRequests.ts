@@ -1,6 +1,6 @@
 import type { QueryItem } from "@directus/sdk"
 import { pagePathFields } from "./page"
-import { getItems, type DirectusRequestBody } from "./utils"
+import { getItems, type DirectusRequestBody } from "../infrastructure/directus/utils"
 import type { Schema } from "zod"
 import { say } from "$lib/utils"
 import { getHotelAmenities } from "./hotel-amenities"

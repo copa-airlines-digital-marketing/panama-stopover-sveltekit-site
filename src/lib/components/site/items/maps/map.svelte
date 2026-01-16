@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { Button } from '$ui/components/button';
-	import { isHotelSchema, type HotelSchema } from '$lib/directus/hotels';
-	import type { PlaceSchema } from '$lib/directus/place-to-visit';
-	import { isRestaurantSchema, type RestaurantSchema } from '$lib/directus/restaurants';
+	import { isHotelSchema, type HotelSchema } from '$lib/domain/hotels';
+	import type { PlaceSchema } from '$lib/domain/places';
+	import { isRestaurantSchema, type RestaurantSchema } from '$lib/domain/restaurants';
 	import { onMount } from 'svelte';
 	import { getTypographyVariant } from '$ui/components/typography';
 

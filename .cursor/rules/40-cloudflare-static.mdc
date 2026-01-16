@@ -1,0 +1,20 @@
+---
+description: Cloudflare Pages + static SvelteKit build conventions.
+globs: "**/*.{js,ts,svelte,md}"
+alwaysApply: false
+---
+
+# Cloudflare Pages + Static SvelteKit
+
+## Static build expectations
+- Prefer prerendered routes.
+- Avoid Node-only APIs at runtime.
+- Keep environment usage compatible with Cloudflare Pages build/runtime.
+
+## When adding routes
+- Ensure new routes can be prerendered or clearly document why not.
+- For dynamic routes, provide a strategy (e.g., known entries list or CMS-driven build-time generation).
+
+## Build behavior
+- Keep adapter/static conventions intact.
+- Avoid introducing server endpoints unless the project explicitly supports them.
