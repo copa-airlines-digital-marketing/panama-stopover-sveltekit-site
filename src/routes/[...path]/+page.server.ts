@@ -102,4 +102,12 @@ export async function load(event) {
 }
 
 export const trailingSlash = 'always';
-export const prerender = true;
+// ⚠️ PRERENDERING DISABLED - Causes memory issues in Cloudflare Pages
+// With many pages (hotels, restaurants, tours, etc.), prerendering all pages
+// exceeds Cloudflare's memory limit during build.
+// 
+// Options to re-enable:
+// 1. Upgrade to Cloudflare Pages Pro (more memory)
+// 2. Implement incremental prerendering (only critical pages)
+// 3. Use on-demand rendering (current approach)
+export const prerender = false;
