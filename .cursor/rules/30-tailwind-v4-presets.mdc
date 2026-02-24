@@ -1,0 +1,18 @@
+---
+description: Tailwind v4 preset comes from design-system submodule; parent only extends.
+globs: "src/app.css,tailwind.config.*,postcss.config.*,src/**/*.svelte,src/**/*.css"
+alwaysApply: false
+---
+
+# Tailwind v4 + preset policy
+
+Preset source of truth (read-only):
+- design-sytem-svelte-components/tailwind-presets/v4/theme.css
+
+Parent repo may:
+- add local theme tokens via @theme in src/app.css
+- add local @layer components/utilities only in src/app.css or src/ styles
+- adjust Tailwind tooling config in parent (postcss/vite) without touching submodule
+
+Never:
+- edit anything inside design-sytem-svelte-components/** (submodule)

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageSchema } from '$lib/directus/page';
+	import type { PageSchema } from '$lib/domain/pages';
 	import type { TextContentSchema } from '$lib/directus/text-content';
 	import { filter, propEq } from 'ramda';
 	import { cn } from '$lib/utils';

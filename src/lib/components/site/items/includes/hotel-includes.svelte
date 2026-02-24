@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SVG } from '$lib/components/ui/icon';
 	import type { HotelAmenity } from '$lib/directus/hotel-amenities';
-	import type { HotelSchema } from '$lib/directus/hotels';
+	import type { HotelSchema } from '$lib/domain/hotels';
 	import { getTypography } from '$ui/components/typography';
 	import { IconList } from '../../ui/icon-list';
 

@@ -1,0 +1,19 @@
+---
+description: Submodules are read-only. Only submodule pointer updates are allowed in parent repo.
+alwaysApply: true
+---
+
+# Submodules are read-only
+
+This repo includes git submodules:
+- design-sytem-svelte-components/
+- directus-cms-collections/
+(and a nested submodule: design-sytem-svelte-components/tailwind-presets/)
+
+## Hard rule
+- DO NOT edit any files under those submodule directories.
+- The only allowed change related to submodules in this repo is updating the recorded gitlink SHA (submodule reference) and, if needed, .gitmodules.
+
+## If a change is needed in a submodule
+- Provide a plan: implement in the submodule’s own repository → bump the submodule pointer here.
+- In this repo, prefer adapter/wrapper code outside the submodule to integrate changes.

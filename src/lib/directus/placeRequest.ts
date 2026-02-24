@@ -1,7 +1,7 @@
 import { say } from "$lib/utils"
 import { isNil } from "ramda"
 import { textContentQuery } from "./text-content"
-import { getItems, type DirectusRequestBody } from "./utils"
+import { getItems, type DirectusRequestBody } from "../infrastructure/directus/utils"
 import { isPlaceSchema, placeSchema } from "./place-to-visit"
 import { pagePathFields } from "./page"
 

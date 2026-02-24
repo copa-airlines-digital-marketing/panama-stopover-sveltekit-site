@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { StopoverPackageQuery } from '$lib/directus/package/types';
-	import type { StopoverPackageTranslation } from '$cms/collections/stopover_package';
+	import type { PackageSchema } from '$lib/domain/packages';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
@@ -21,13 +20,13 @@
 	import { Pill } from '$ui/components/pill';
 	import Icon from '$ui/components/pill/icon.svelte';
 
-	export let stopover_package: StopoverPackageQuery;
+	export let stopover_package: PackageSchema;
 
 	const { main_image, nights, contact, translations, gallery, stay_region } = stopover_package;
 
 	const translation = isStopoverTourTranslations(translations)
 		? translations.filter((t) => t.languages_code === $page.data.locale)
-		: [<StopoverPackageTranslation>{}];
+		: [];
 
 	const { name, description, promo_name, promo_description, included, not_included } =
 		translation[0];
