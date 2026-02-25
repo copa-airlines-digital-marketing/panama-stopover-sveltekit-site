@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { HotelSchema } from '$lib/directus/hotels';
+	import type { HotelSchema } from '$lib/domain/hotels';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';

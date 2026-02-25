@@ -1,8 +1,5 @@
 <script lang="ts">
-	import type {
-		TransportationQuery,
-		TransportationTranslationQuery
-	} from '$lib/directus/transportation/types';
+	import type { TransportationSchema } from '$lib/domain/transportation';
 	import { Hero } from '$lib/components/site/items';
 	import { page } from '$app/stores';
 	import { StopoverPromoCard } from '$lib/components/site/items/cards';
@@ -19,13 +16,13 @@
 	import { NoIcon, Phone, Social } from '$ui/components/icon';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
 
-	export let stopover_transportation: TransportationQuery;
+	export let stopover_transportation: TransportationSchema;
 
 	const { main_image, contact, translations, gallery } = stopover_transportation;
 
 	const translation = isStopoverTourTranslations(translations)
 		? translations.filter((t) => t.languages_code === $page.data.locale)
-		: [<TransportationTranslationQuery>{}];
+		: [];
 
 	const { name, promo_name, promo_description } = translation[0];
 

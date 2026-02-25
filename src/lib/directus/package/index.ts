@@ -1,6 +1,4 @@
-import { getPackages } from '$cms/collections/stopover_package';
-import { DIRECTUS_REST_URL, DIRECTUS_TOKEN } from '$env/static/private';
-import { type DirectusRequestBody } from '../utils';
+import { getItems, type DirectusRequestBody } from '../../infrastructure/directus/utils';
 import { getPackageQuery } from './types';
 
 const paramExistAndIsString = ([key, value]: [string, string | number | null | undefined]) => {
@@ -22,11 +20,10 @@ const getPublishedPackages = async (filters: DirectusRequestBody) => {
 
 	if (!validateAllParameters({ locale, category, subCategory, article })) return null;
 
-	const packages = await getPackages(
-		DIRECTUS_REST_URL,
-		DIRECTUS_TOKEN,
-		getPackageQuery(locale, category, subCategory, article)
-	);
+	const query = getPackageQuery(locale, category, subCategory, article);
+	const packages = await getItems('stopover_package', query, filters.preview);
+
+	if (!packages) return null;
 
 	const [pkg] = packages;
 

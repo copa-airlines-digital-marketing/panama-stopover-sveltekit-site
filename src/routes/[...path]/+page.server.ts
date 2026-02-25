@@ -1,9 +1,9 @@
 import { getPageData } from '$lib/data/page.js';
-import type { HotelSchema } from '$lib/directus/hotels.js';
+import type { HotelSchema } from '$lib/domain/hotels';
 import { isNotFoundSchema } from '$lib/directus/not-found.js';
-import { isPageSettings, type PageSchema } from '$lib/directus/page.js';
-import type { PlaceSchema } from '$lib/directus/place-to-visit.js';
-import type { RestaurantSchema } from '$lib/directus/restaurants.js';
+import { isPageSettings, type PageSchema } from '$lib/domain/pages';
+import type { PlaceSchema } from '$lib/domain/places';
+import type { RestaurantSchema } from '$lib/domain/restaurants';
 import type { SectionSchema } from '$lib/directus/section.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';

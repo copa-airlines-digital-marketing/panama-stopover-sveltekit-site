@@ -6,7 +6,7 @@
 	import { getDirectusImage } from '../../stopover/utils';
 	import KeyboardArrowRight from '$lib/components/ui/icon/keyboard-arrow-right.svelte';
 	import { getPathRecursive } from '$lib/i18n/cannonicals';
-	import type { PathSchema } from '$lib/directus/page';
+	import type { PathSchema } from '$lib/domain/pages';
 
 	export let item: StopoverHotelModuleSchema;
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getDirectusImage } from '$lib/components/directus/stopover/utils';
-	import type { PageSchema } from '$lib/directus/page';
+	import type { PageSchema } from '$lib/domain/pages';
 	import type { SectionSchema } from '$lib/directus/section';
 	import { say } from '$lib/utils';
 	import { toString } from 'ramda';

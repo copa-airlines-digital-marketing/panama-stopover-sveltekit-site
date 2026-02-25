@@ -2,7 +2,7 @@
 
 import { error, redirect } from '@sveltejs/kit'
 import { isSiteSettings } from '$lib/directus/site-settings.js'
-import { isPageSettings } from '$lib/directus/page.js'
+import { isPageSettings } from '$lib/domain/pages'
 import { say } from '$lib/utils.js'
 import { isSectionSchema } from '$lib/directus/section.js'
 import { getPageData } from '$lib/data/page.js'

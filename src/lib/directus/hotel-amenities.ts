@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { logoQuery, logosSchema } from "./logos";
-import { getItems, getTranslationFilter, type DirectusRequestBody } from "./utils";
+import { getItems, getTranslationFilter, type DirectusRequestBody } from "../infrastructure/directus/utils";
 import type { QueryItem } from "@directus/sdk";
 import type { Schema } from "./schema";
 import { say } from "$lib/utils";

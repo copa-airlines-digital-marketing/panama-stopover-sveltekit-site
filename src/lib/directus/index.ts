@@ -23,6 +23,9 @@ type KeyToTypeMap = {
 	stopover_hotels: HotelSchema;
 	stopover_restaurants: RestaurantSchema;
 	stopover_place_to_visit: PlaceSchema;
+	stopover_tour: TourSchema[];
+	stopover_package: PackageSchema[];
+	stopover_transportation: TransportationSchema[];
 };
 
 type DirectusDataKeys = keyof KeyToTypeMap;
