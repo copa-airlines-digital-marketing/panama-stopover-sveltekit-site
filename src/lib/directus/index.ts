@@ -1,20 +1,20 @@
-import { type HotelSchema } from '../domain/hotels';
-import { type PageSchema } from '../domain/pages';
-import { type PlaceSchema } from '../domain/places';
-import { type RestaurantSchema } from '../domain/restaurants';
+import { type HotelSchema } from './hotels';
+import { type PageSchema } from './page';
+import { type PlaceSchema } from './place-to-visit';
+import { type RestaurantSchema } from './restaurants';
 import { getSiteSettings, type SiteSettingsSchema } from './site-settings';
 import type { DirectusRequestBody } from '../infrastructure/directus/utils';
 import { filter, head, includes, isNil, keys, pipe } from 'ramda';
 import { CATEGORIES_MAP } from '$env/static/private';
 import { say } from '$lib/core/utils';
 import { getSections, type SectionSchema } from '../domain/sections';
-import { getPage } from '../domain/pages';
-import { getHotel } from '../domain/hotels';
-import { getRestaurant } from '../domain/restaurants';
-import { getPlace } from '../domain/places';
-import { getPublishedTours } from '../domain/tours';
-import { getPublishedPackages } from '../domain/packages';
-import { getPublishedTransportation } from '../domain/transportation';
+import { getPage } from './pageRequest';
+import { getHotel } from './hotelRequests';
+import { getRestaurant } from './restaurantRequest';
+import { getPlace } from './placeRequest';
+import { getPublishedTours } from './tours';
+import { getPublishedPackages } from './package';
+import { getPublishedTransportation } from './transportation';
 
 type KeyToTypeMap = {
 	'site-settings': SiteSettingsSchema;

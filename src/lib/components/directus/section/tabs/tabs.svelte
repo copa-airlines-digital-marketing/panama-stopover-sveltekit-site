@@ -75,7 +75,7 @@
 									in:send={{ key: 'trigger' }}
 									out:receive={{ key: 'trigger' }}
 									class="absolute bottom-1 h-0.5 w-3/4 rounded-full bg-secondary"
-								/>
+								></div>
 							{/if}
 						</Tabs.Trigger>
 					{/each}
