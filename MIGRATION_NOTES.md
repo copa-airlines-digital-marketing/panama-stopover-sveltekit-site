@@ -74,3 +74,25 @@ pnpm check
 
 - No submodule source files were edited.
 - Lockfile priority remained with `pnpm-lock.yaml`.
+
+## Cloudflare Static Migration
+
+- ADAPTER_CHANGE: node -> static
+- OUTPUT_DIR: build
+- STATUS: issues
+
+### STATIC_BLOCKERS
+
+- `src/routes/healthcheck/+server.ts`
+- `src/lib/[backtoroutes]/api/reservations/bulk/+server.ts`
+- `src/lib/[backtoroutes]/api/tokens/[reservationId]/+server.ts`
+- `src/lib/[backtoroutes]/api/qr/[publicId].jpg/+server.ts`
+- `src/lib/[backtoroutes]/api/qr/[publicId].png/+server.ts`
+- `src/lib/[backtoroutes]/api/qr/[publicId].svg/+server.ts`
+- `src/lib/[backtoroutes]/api/qr/[publicId].webp/+server.ts`
+
+### Validation (No Build)
+
+- `pnpm install`: OK
+- `pnpm exec svelte-check`: fails (`288 errors in 92 files`)
+- `pnpm dev`: starts successfully (Vite ready, served on `http://localhost:1615/`)

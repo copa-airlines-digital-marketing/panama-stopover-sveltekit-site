@@ -19,7 +19,6 @@
   "devDependencies": {
     "@directus/sdk": "^18.0.3",
     "@playwright/test": "^1.28.1",
-    "@sveltejs/adapter-node": "^5.2.14",
     "@sveltejs/adapter-static": "^3.0.8",
     "@sveltejs/adapter-vercel": "^5.4.3",
     "@sveltejs/kit": "^2.53.2",
