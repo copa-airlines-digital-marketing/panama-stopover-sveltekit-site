@@ -1,4 +1,4 @@
-import { Dialog, type DialogContentProps, type ScrollAreaContentProps } from 'bits-ui';
+import { Dialog, type DialogContentProps } from 'bits-ui';
 
 import Content from './modal-content.svelte';
 import Body from './modal-body.svelte';
@@ -67,7 +67,7 @@ type ModalProps = DialogContentProps & {
 	size?: ModalSize;
 };
 
-type BodyProps = ScrollAreaContentProps & {
+type BodyProps = HTMLAttributes<HTMLDivElement> & {
 	size?: BodySize;
 };
 
