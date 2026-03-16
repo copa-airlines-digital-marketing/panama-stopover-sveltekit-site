@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ScrollArea } from 'bits-ui';
 	import { getModalContext, modalBodyVariants, type BodyProps } from '.';
-	import { cn, say } from '$lib/utils';
+	import { cn } from '$lib/utils';
 
 	type $$Props = BodyProps;
 
@@ -16,12 +16,9 @@
 
 <ScrollArea.Root type="auto" dir="ltr">
 	<ScrollArea.Viewport class="h-full w-full">
-		<ScrollArea.Content
-			class={cn(modalBodyVariants({ size: size || props?.size }), className)}
-			{...$$restProps}
-		>
+		<div class={cn(modalBodyVariants({ size: size || props?.size }), className)} {...$$restProps}>
 			<slot />
-		</ScrollArea.Content>
+		</div>
 	</ScrollArea.Viewport>
 	<ScrollArea.Scrollbar
 		orientation="vertical"
