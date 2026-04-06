@@ -6,6 +6,7 @@ import { isTextContentSchema, type TextContentSchema } from "$lib/directus/text-
 import { Header } from "./blocks/header";
 import { ContentGroup } from "./general-components/content-group";
 import { HotelModule } from "./general-components/hotel-module";
+import { MixedExperienceModule } from './general-components/mixed-experience-module';
 import Logo from "./general-components/logo.svelte";
 import Navigation from "./general-components/navigation.svelte";
 import TextContent from "./general-components/text-content.svelte";
@@ -66,6 +67,12 @@ const collectionToComponent = (collection: SectionContentSchema['collection']) =
 
   if (collection === 'stopover_hotel_module')
     return HotelModule
+
+  if (collection === 'stopover_mixed_experience_module')
+    return MixedExperienceModule
+
+  if (collection === 'stopover_mixed_experiece_module')
+    return MixedExperienceModule
 
   return null
 }
