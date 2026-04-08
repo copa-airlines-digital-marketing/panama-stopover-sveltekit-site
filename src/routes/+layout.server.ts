@@ -7,18 +7,21 @@ import { say } from '$lib/utils.js'
 import { isSectionSchema } from '$lib/directus/section.js'
 import { getPageData } from '$lib/data/page.js'
 import { getSiteSettings } from '$lib/data/site-settings.js'
-import { getPreferredLocale } from '$lib/i18n/index.js'
+import { getPreferredLocale, isSupportedLocale } from '$lib/i18n/index.js'
 
 export async function load(event) {
 
   const { url: { pathname }, request: { headers } } = event
   
   const pahtLocale = pathname.split('/')[1]
+  const preferredLocale = getPreferredLocale(event) || 'es'
+  const hasPathLocale = Boolean(pahtLocale)
+  const hasSupportedPathLocale = hasPathLocale && isSupportedLocale(pahtLocale)
   
-  const locale = pahtLocale || getPreferredLocale(event) || 'es'
+  const locale = hasSupportedPathLocale ? pahtLocale : preferredLocale
 
-  if(!pahtLocale)
-    return redirect(307, '/'+locale)
+  if (hasPathLocale && !hasSupportedPathLocale)
+    return redirect(307, '/' + locale)
 
   const preview = null
 
