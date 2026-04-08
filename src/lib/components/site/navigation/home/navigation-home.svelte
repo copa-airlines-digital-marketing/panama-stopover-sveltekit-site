@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { Button } from '$ui/components/button';
 	import { SVG } from '$lib/components/ui/icon';
 	import type { NavigationSchema } from '$lib/directus/navigation';
@@ -11,6 +12,26 @@
 			0: { links }
 		}
 	} = navigation;
+
+	const hasProtocol = (href: string) => /^(https?:)?\/\//.test(href);
+	const isSpecialHref = (href: string) =>
+		href.startsWith('mailto:') ||
+		href.startsWith('tel:') ||
+		href.startsWith('#') ||
+		hasProtocol(href);
+
+	const normalizeInternalHref = (href: string) => {
+		const locale = $page.data.locale || '';
+		if (!locale || isSpecialHref(href)) return href;
+
+		const normalized = href.startsWith('/') ? href : `/${href}`;
+		const localePrefix = `/${locale}`;
+
+		if (normalized === '/' || normalized === '') return localePrefix;
+		if (normalized === localePrefix || normalized.startsWith(`${localePrefix}/`)) return normalized;
+
+		return `${localePrefix}${normalized}`;
+	};
 </script>
 
 <nav aria-label={navigation.translations[0].title}>
@@ -19,7 +40,7 @@
 			{@const { icon, href, text, target } = link.links_id}
 			<li>
 				<Button
-					{href}
+					href={normalizeInternalHref(href)}
 					{target}
 					size="slim"
 					variant="transparent-primary-main"

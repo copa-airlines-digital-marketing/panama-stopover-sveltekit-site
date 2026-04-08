@@ -8,6 +8,9 @@ import { say } from '$lib/core/utils';
 import { groupsSchema } from './groups';
 import { contentGroupQueryFields, contentGroupSchema } from './content-group';
 import { stopoverHotelModuleQueryFields, stopoverHotelModuleSchema } from './stopover_hotel_module';
+import {
+	stopoverMixedExperienceModuleSchema
+} from './stopover_mixed_experience_module';
 import { formSchema } from './forms';
 
 const horizontal_alignment = z.union([z.literal('left'), z.literal('center'), z.literal('right')]);
@@ -44,6 +47,8 @@ const directusSectionItemName = z.union([
 	z.literal('groups'),
 	z.literal('content_group'),
 	z.literal('stopover_hotel_module'),
+	z.literal('stopover_mixed_experience_module'),
+	z.literal('stopover_mixed_experiece_module'),
 	z.literal('form')
 ]);
 
@@ -56,6 +61,7 @@ const sectionContentSchema = z.object({
 		.or(groupsSchema)
 		.or(contentGroupSchema)
 		.or(stopoverHotelModuleSchema)
+		.or(stopoverMixedExperienceModuleSchema)
 		.or(formSchema),
 	collection: directusSectionItemName,
 	component_name: z.string().nullable(),

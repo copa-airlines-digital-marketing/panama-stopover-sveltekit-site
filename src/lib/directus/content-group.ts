@@ -2,6 +2,10 @@ import { z } from "zod";
 import { navigationQuery, navigationSchema } from "./navigation";
 import { textContentQuery, textContentSchema } from "./text-content";
 import { stopoverHotelModuleQueryFields, stopoverHotelModuleSchema } from "./stopover_hotel_module";
+import {
+	stopoverMixedExperienceModuleQueryFields,
+	stopoverMixedExperienceModuleSchema
+} from './stopover_mixed_experience_module';
 import { formQueryFields, formSchema } from "./forms";
 
 const contentGroupTranslation = z.object({
@@ -14,10 +18,18 @@ const contentGroupCollectionName = z.union([
   z.literal('Text_Content'),
   z.literal('form'),
   z.literal('content_group'),
-  z.literal('stopover_hotel_module')
+  z.literal('stopover_hotel_module'),
+  z.literal('stopover_mixed_experience_module'),
+  z.literal('stopover_mixed_experiece_module')
 ])
 
-const contentGroupItems = z.union([navigationSchema, textContentSchema, stopoverHotelModuleSchema, formSchema])
+const contentGroupItems = z.union([
+	navigationSchema,
+	textContentSchema,
+	stopoverHotelModuleSchema,
+	stopoverMixedExperienceModuleSchema,
+	formSchema
+])
 
 const contentGroupContentSchema = z.object({
   item: contentGroupItems,
@@ -43,7 +55,8 @@ const contentGroupQueryFields = [
           'navigation': navigationQuery,
           'Text_Content': textContentQuery,
           'form': formQueryFields,
-          'stopover_hotel_module': stopoverHotelModuleQueryFields
+          'stopover_hotel_module': stopoverHotelModuleQueryFields,
+          'stopover_mixed_experience_module': stopoverMixedExperienceModuleQueryFields
         }
       }
     ]

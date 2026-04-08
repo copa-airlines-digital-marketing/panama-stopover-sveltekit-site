@@ -10,48 +10,26 @@
 
 	export let item: StopoverHotelModuleSchema;
 
-	const { items, sort } = item;
+	const { items } = item;
 
 	const cta =
 		$page.data.siteSettings.translations?.[0]?.labels?.filter((v) => v.name === 'view-more')?.[0] ||
 		'Add view more label';
+	const ctaText = typeof cta === 'string' ? cta : cta.value;
 
 	function calculatePath(schema: PathSchema) {
 		const path = map(replace(/\/\//g, '/'), getPathRecursive(schema));
-		return path[$page.data.locale];
+		return ((path as unknown) as Record<string, string>)[$page.data.locale] || '';
 	}
-
-	const sortByProperty = (order: 'asc' | 'desc', prop: string, a: any, b: any) => {
-		const aProp = typeof a[prop] != null ? a[prop] : 0;
-		const bProp = typeof b[prop] != null ? b[prop] : 0;
-
-		const orderFactor = order === 'desc' ? -1 : 1;
-
-		return orderFactor * (aProp - bProp);
-	};
-
-	const sortMultiple = (sorting: typeof sort) => (a: any, b: any) => {
-		if (!sorting) return a - b;
-
-		let i = 0;
-		let order = 0;
-		do {
-			order = sortByProperty(sorting[i].order, sorting[i].by, a, b);
-			i += 1;
-		} while (order === 0 && i < sorting.length);
-
-		return order;
-	};
-
-	const moduleItems = items?.sort(sortMultiple(sort));
+	const moduleItems = items;
 </script>
 
 {#if isNil(moduleItems)}
 	<div
 		class="my-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] items-stretch gap-2 md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] md:gap-4"
 	>
-		{#each new Array(4) as skeli}
-			<PromoShow let:Children>
+		{#each new Array(4) as skeli, idx (idx)}
+			<PromoShow let:Children data-skeleton={skeli}>
 				<Children.Image class="aspect-video bg-grey-100" />
 				<Children.Discount class="h-4 w-10 animate-pulse justify-self-end bg-grey-300" />
 				<Children.Title class="h-5 animate-pulse rounded-sm bg-grey-300" />
@@ -70,7 +48,7 @@
 				<li class="max-w-[398px]">
 					<PromoShow
 						let:Children
-						href="{calculatePath(promo.parent_page)}/{promo.translations[0].path}"
+						href={`${calculatePath(promo.parent_page)}/${promo.translations[0].path}`}
 					>
 						<Children.Image>
 							<img
@@ -94,7 +72,7 @@
 							<Children.Name>{promo.translations[0].promo_name}</Children.Name>
 						{/if}
 						<Children.CallToAction>
-							{cta.value}
+							{ctaText}
 							<KeyboardArrowRight class="size-3 fill-current md:size-4" />
 						</Children.CallToAction>
 					</PromoShow>
