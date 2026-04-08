@@ -13,6 +13,7 @@ import type { TourSchema } from '../../directus/schemas/tours';
 import type { TransportationSchema } from '../../directus/schemas/transportation';
 import type { SectionContentSchema, SectionSchema } from '../../domain/sections';
 import type { SiteSettingsSchema } from '../../directus/site-settings';
+import type { StopoverMixedExperienceModuleSchema } from '../../directus/stopover_mixed_experience_module';
 import type { TextContentSchema } from '../../directus/text-content';
 
 interface Schema {
@@ -40,6 +41,8 @@ interface Schema {
 	stopover_tour_operator: TourOperatorSchema;
 	stopover_package: PackageSchema;
 	stopover_transportation: TransportationSchema;
+	stopover_mixed_experience_module: StopoverMixedExperienceModuleSchema;
+	stopover_mixed_experiece_module: StopoverMixedExperienceModuleSchema;
 }
 
 export type { Schema };
