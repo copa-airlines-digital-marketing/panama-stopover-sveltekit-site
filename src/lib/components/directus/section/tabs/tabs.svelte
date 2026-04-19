@@ -10,6 +10,8 @@
 	import { buttonVariants } from '$ui/components/button';
 	import { crossfade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	export let section: SectionSchema;
 
@@ -39,7 +41,35 @@
 
 	let tabNames = setTabContext();
 
-	let value = [section_id, id, 0].join('-');
+	// Each tabs section uses its own query param key so multiple tab blocks
+	// on the same page don't collide: ?tab_<section_id>=<index>
+	const paramKey = `tab_${section_id ?? id}`;
+
+	function makeTabValue(index: number) {
+		return [section_id, id, index].join('-');
+	}
+
+	function getInitialValue(): string {
+		const raw = $page.url.searchParams.get(paramKey);
+		const idx = raw !== null ? parseInt(raw, 10) : NaN;
+		const tabCount = section_content?.length ?? 0;
+		if (!Number.isNaN(idx) && idx >= 0 && idx < tabCount) {
+			return makeTabValue(idx);
+		}
+		return makeTabValue(0);
+	}
+
+	let value = getInitialValue();
+
+	function onTabChange(newValue: string) {
+		value = newValue;
+		// Derive the index back from the composite value so we store a simple number.
+		const parts = newValue.split('-');
+		const idx = parseInt(parts[parts.length - 1], 10);
+		const url = new URL($page.url);
+		url.searchParams.set(paramKey, String(idx));
+		goto(url.toString(), { replaceState: true, keepFocus: true, noScroll: true });
+	}
 
 	const [send, receive] = crossfade({
 		duration: 250,
@@ -59,7 +89,7 @@
 			class={cn(sectionVariants(variantObject), 'relative')}
 			class:col-start-2={horizontal_behaviour === 'container-grid'}
 		>
-			<Tabs.Root class="col-span-full mb-normal" bind:value>
+			<Tabs.Root class="col-span-full mb-normal" bind:value onValueChange={onTabChange}>
 				<Tabs.List class="flex flex-wrap content-start justify-around gap-2">
 					{#each $tabNames as tabName, i}
 						<Tabs.Trigger
