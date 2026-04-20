@@ -31,7 +31,6 @@
 	const {
 		main_image,
 		duration,
-		experience_category,
 		start_time,
 		meeting_point,
 		end_point,
@@ -175,15 +174,6 @@
 		<Heading tag="h2" class="text-primary lg:my-0 lg:[grid-area:title]" {customcn}>
 			{labels?.get('tour-experience')}
 		</Heading>
-		<ul class="flex flex-wrap gap-2 lg:[grid-area:categories]">
-			{#if experience_category?.translations?.[0]?.label}
-				<li>
-					<Pill thickness="slim" class="bg-grey-100">
-						<PillText class="text-grey-600">{experience_category.translations[0].label}</PillText>
-					</Pill>
-				</li>
-			{/if}
-		</ul>
 		<div class="my-6 space-y-4 lg:my-0 lg:[grid-area:details]">
 			<div class="flex items-center-safe gap-2 md:gap-4">
 				<Globe class="size-6 fill-secondary" title={labels?.get('languages')} />

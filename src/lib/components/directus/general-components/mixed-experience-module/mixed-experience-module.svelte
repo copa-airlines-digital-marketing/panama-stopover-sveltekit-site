@@ -14,6 +14,7 @@
 	import { getPathRecursive } from '$lib/i18n/cannonicals';
 	import { isNotNil, map, replace } from 'ramda';
 	import { getDirectusImage } from '../../stopover/utils';
+	import { cn } from '$lib/utils';
 	import {
 		applyFilters,
 		applySourceCaps,
@@ -216,10 +217,10 @@
 		distance: moduleConfig?.filter_distance_enabled ?? true
 	};
 
-	// Only render filter UI if at least one filter is enabled AND has facets worth showing.
+	// Category is shown as immediate-apply chips above the grid (not inside the modal).
+	// The modal only handles language, discount, duration, and distance.
 	const hasAnyFilter =
 		(filterToggles.language && availableLanguages.length > 0) ||
-		(filterToggles.category && availableCategories.length > 0) ||
 		filterToggles.discount ||
 		filterToggles.duration ||
 		filterToggles.distance;
@@ -388,6 +389,15 @@
 		};
 	}
 
+	// Category chips apply immediately (bypass modal pending/apply flow)
+	function toggleCategoryImmediate(id: number) {
+		const next = activeFilters.categories.includes(id)
+			? activeFilters.categories.filter((c) => c !== id)
+			: [...activeFilters.categories, id];
+		activeFilters = { ...activeFilters, categories: next };
+		pendingFilters = { ...pendingFilters, categories: next };
+	}
+
 	// Discount slider → pendingFilters (0 = no filter)
 	$: {
 		const next = discountSliderValue > 0 ? discountSliderValue : null;
@@ -425,7 +435,7 @@
 	function countActive(filters: MixedFilterState): number {
 		let n = 0;
 		if (filters.languages.length > 0) n++;
-		if (filters.categories.length > 0) n++;
+		// categories are counted separately (shown as chips outside the modal)
 		if (filters.discountMin != null) n++;
 		if (filters.durationMin != null || filters.durationMax != null) n++;
 		if (filters.distanceMaxKm != null) n++;
@@ -488,8 +498,30 @@
 </script>
 
 <div data-items-count={displayedItems.length}>
+	<!-- Category chips: always-visible multi-select above the grid -->
+	{#if filterToggles.category && availableCategories.length > 0 && normalizedPool.length > 0}
+		<nav aria-label={filterLabels.category} class="mb-4 mt-4 flex flex-wrap gap-2">
+			{#each availableCategories as cat (cat.id)}
+				{@const isSelected = activeFilters.categories.includes(cat.id)}
+				<button
+					type="button"
+					aria-pressed={isSelected}
+					onclick={() => toggleCategoryImmediate(cat.id)}
+					class={cn(
+						'rounded-full border px-4 py-1 text-d1 transition-colors',
+						isSelected
+							? 'border-primary bg-primary text-common-white'
+							: 'border-grey-300 bg-common-white text-grey-700 hover:border-primary hover:text-primary'
+					)}
+				>
+					{cat.label}
+				</button>
+			{/each}
+		</nav>
+	{/if}
+
 	{#if hasAnyFilter && normalizedPool.length > 0}
-		<div class="mb-4 mt-4 flex justify-end py-1">
+		<div class="mb-4 mt-2 flex justify-end py-1">
 			<div class="flex items-center gap-2">
 				<button
 					type="button"
@@ -582,27 +614,7 @@
 					</fieldset>
 				{/if}
 
-				<!-- Category (multi-select → checkboxes, horizontal wrap) -->
-				{#if filterToggles.category && availableCategories.length > 0}
-					<fieldset class="flex flex-col gap-2">
-						<legend class="mb-1 text-d1 font-medium text-grey-700">
-							{filterLabels.category}
-						</legend>
-						<div class="flex flex-wrap gap-x-4 gap-y-2">
-							{#each availableCategories as cat (cat.id)}
-								<label class="flex cursor-pointer items-center gap-2 text-b text-grey-700">
-									<Checkbox
-										checked={pendingFilters.categories.includes(cat.id)}
-										onCheckedChange={() => toggleCategory(cat.id)}
-									/>
-									<span>{cat.label}</span>
-								</label>
-							{/each}
-						</div>
-					</fieldset>
-				{/if}
-
-				<!-- Discount (slider, step 5) -->
+			<!-- Discount (slider, step 5) -->
 				{#if filterToggles.discount}
 					<fieldset class="flex flex-col gap-2">
 						<legend class="text-d1 font-medium text-grey-700">
