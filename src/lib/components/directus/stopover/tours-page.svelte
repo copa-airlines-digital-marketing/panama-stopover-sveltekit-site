@@ -9,7 +9,13 @@
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
 	import { isStopoverTourTranslations } from '$lib/directus/tours/utlis';
-	import { InformativeBoxContainer } from '$ui/components/boxes/informative';
+	import {
+		InformativeBoxContainer,
+		InformativeBox,
+		InformativeBoxIcon,
+		InformativeBoxTitle,
+		InformativeBoxDescription
+	} from '$ui/components/boxes/informative';
 	import { AnunciosImportantes, CheckIn, Tiquetes } from '$ui/components/pictograms';
 	import { Body, Heading } from '$ui/components/typography';
 	import { ContactCard } from '$lib/components/site/items/cards/contact';
@@ -333,34 +339,34 @@
 		{/if}
 	</div>
 	<div>
-		<InformativeBoxContainer let:Box>
-			<Box alignment="center" class="border-primary bg-primary" let:Icon let:Title let:Description>
-				<Icon>
-					<CheckIn style="transparent" />
-				</Icon>
-				<Title theme="invert">
-					{labels?.get('included')}
-				</Title>
-				<Description tag="ul" theme="invert">
-					<ul>
-						{#each included?.map((i) => i.name) || [] as item}
-							<li>{item}</li>
-						{/each}
-					</ul>
-				</Description>
-			</Box>
-			<Box alignment="center" class="bg-grey-700" let:Icon let:Title let:Description>
-				<Icon>
-					<AnunciosImportantes style="monochrome" />
-				</Icon>
-				<Title theme="invert">{labels?.get('not-included')}</Title>
-				<Description tag="ul" theme="invert">
-					{#each not_included?.map((i) => i.name) || [] as item}
+	<InformativeBoxContainer>
+		<InformativeBox alignment="center" class="border-primary bg-primary">
+			<InformativeBoxIcon>
+				<CheckIn style="transparent" />
+			</InformativeBoxIcon>
+			<InformativeBoxTitle theme="invert">
+				{labels?.get('included')}
+			</InformativeBoxTitle>
+			<InformativeBoxDescription tag="ul" theme="invert">
+				<ul>
+					{#each included?.map((i) => i.name) || [] as item}
 						<li>{item}</li>
 					{/each}
-				</Description>
-			</Box>
-		</InformativeBoxContainer>
+				</ul>
+			</InformativeBoxDescription>
+		</InformativeBox>
+		<InformativeBox alignment="center" class="bg-grey-700">
+			<InformativeBoxIcon>
+				<AnunciosImportantes style="monochrome" />
+			</InformativeBoxIcon>
+			<InformativeBoxTitle theme="invert">{labels?.get('not-included')}</InformativeBoxTitle>
+			<InformativeBoxDescription tag="ul" theme="invert">
+				{#each not_included?.map((i) => i.name) || [] as item}
+					<li>{item}</li>
+				{/each}
+			</InformativeBoxDescription>
+		</InformativeBox>
+	</InformativeBoxContainer>
 	</div>
 	{#if operator}
 		{@const { name, main_image, contact, network } = operator}
