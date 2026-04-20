@@ -14,7 +14,6 @@
 	import { getPathRecursive } from '$lib/i18n/cannonicals';
 	import { isNotNil, map, replace } from 'ramda';
 	import { getDirectusImage } from '../../stopover/utils';
-	import { cn } from '$lib/utils';
 	import {
 		applyFilters,
 		applySourceCaps,
@@ -217,10 +216,10 @@
 		distance: moduleConfig?.filter_distance_enabled ?? true
 	};
 
-	// Category is shown as immediate-apply chips above the grid (not inside the modal).
-	// The modal only handles language, discount, duration, and distance.
+	// Only render filter UI if at least one filter is enabled AND has facets worth showing.
 	const hasAnyFilter =
 		(filterToggles.language && availableLanguages.length > 0) ||
+		(filterToggles.category && availableCategories.length > 0) ||
 		filterToggles.discount ||
 		filterToggles.duration ||
 		filterToggles.distance;
@@ -389,15 +388,6 @@
 		};
 	}
 
-	// Category chips apply immediately (bypass modal pending/apply flow)
-	function toggleCategoryImmediate(id: number) {
-		const next = activeFilters.categories.includes(id)
-			? activeFilters.categories.filter((c) => c !== id)
-			: [...activeFilters.categories, id];
-		activeFilters = { ...activeFilters, categories: next };
-		pendingFilters = { ...pendingFilters, categories: next };
-	}
-
 	// Discount slider → pendingFilters (0 = no filter)
 	$: {
 		const next = discountSliderValue > 0 ? discountSliderValue : null;
@@ -435,7 +425,7 @@
 	function countActive(filters: MixedFilterState): number {
 		let n = 0;
 		if (filters.languages.length > 0) n++;
-		// categories are counted separately (shown as chips outside the modal)
+		if (filters.categories.length > 0) n++;
 		if (filters.discountMin != null) n++;
 		if (filters.durationMin != null || filters.durationMax != null) n++;
 		if (filters.distanceMaxKm != null) n++;
@@ -498,30 +488,8 @@
 </script>
 
 <div data-items-count={displayedItems.length}>
-	<!-- Category chips: always-visible multi-select above the grid -->
-	{#if filterToggles.category && availableCategories.length > 0 && normalizedPool.length > 0}
-		<nav aria-label={filterLabels.category} class="mb-4 mt-4 flex flex-wrap gap-2">
-			{#each availableCategories as cat (cat.id)}
-				{@const isSelected = activeFilters.categories.includes(cat.id)}
-				<button
-					type="button"
-					aria-pressed={isSelected}
-					onclick={() => toggleCategoryImmediate(cat.id)}
-					class={cn(
-						'rounded-full border px-4 py-1 text-d1 transition-colors',
-						isSelected
-							? 'border-primary bg-primary text-common-white'
-							: 'border-grey-300 bg-common-white text-grey-700 hover:border-primary hover:text-primary'
-					)}
-				>
-					{cat.label}
-				</button>
-			{/each}
-		</nav>
-	{/if}
-
 	{#if hasAnyFilter && normalizedPool.length > 0}
-		<div class="mb-4 mt-2 flex justify-end py-1">
+		<div class="mb-4 mt-4 flex justify-end py-1">
 			<div class="flex items-center gap-2">
 				<button
 					type="button"
@@ -613,6 +581,40 @@
 						</div>
 					</fieldset>
 				{/if}
+
+			<!-- Category (multi-select listbox with checkboxes) -->
+			{#if filterToggles.category && availableCategories.length > 0}
+				<fieldset class="flex flex-col gap-2">
+					<legend class="mb-1 text-d1 font-medium text-grey-700">
+						{filterLabels.category}
+					</legend>
+					<div
+						role="listbox"
+						aria-multiselectable="true"
+						aria-label={filterLabels.category}
+						class="max-h-44 overflow-y-auto rounded-lg border border-grey-300 bg-common-white"
+					>
+						{#each availableCategories as cat (cat.id)}
+							{@const isChecked = pendingFilters.categories.includes(cat.id)}
+							<label
+								class="flex cursor-pointer select-none items-center gap-3 px-3 py-2.5 transition-colors hover:bg-background-lightblue {isChecked ? 'bg-background-lightblue' : ''}"
+							>
+								<Checkbox
+									checked={isChecked}
+									onCheckedChange={() => toggleCategory(cat.id)}
+								/>
+								<span class="text-b text-grey-700">{cat.label}</span>
+							</label>
+						{/each}
+					</div>
+					{#if pendingFilters.categories.length > 0}
+						<p class="text-d3 text-grey-500">
+							{pendingFilters.categories.length}
+							{pendingFilters.categories.length === 1 ? 'seleccionada' : 'seleccionadas'}
+						</p>
+					{/if}
+				</fieldset>
+			{/if}
 
 			<!-- Discount (slider, step 5) -->
 				{#if filterToggles.discount}
