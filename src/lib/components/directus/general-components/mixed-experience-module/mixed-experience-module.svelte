@@ -216,10 +216,12 @@
 		distance: moduleConfig?.filter_distance_enabled ?? true
 	};
 
-	// Only render filter UI if at least one filter is enabled AND has facets worth showing.
+	// Only render filter UI if at least one filter is enabled.
+	// Category shows even with 0 items (displays an empty-state message) so it's
+	// always reachable for debugging while Directus data is being populated.
 	const hasAnyFilter =
 		(filterToggles.language && availableLanguages.length > 0) ||
-		(filterToggles.category && availableCategories.length > 0) ||
+		filterToggles.category ||
 		filterToggles.discount ||
 		filterToggles.duration ||
 		filterToggles.distance;
@@ -523,6 +525,46 @@
 			onSecondaryAction={resetAll}
 		>
 			<div class="flex flex-col gap-6">
+				<!-- Category (multi-select listbox – first for visibility) -->
+				{#if filterToggles.category}
+					<fieldset class="flex flex-col gap-2">
+						<legend class="mb-1 text-d1 font-medium text-grey-700">
+							{filterLabels.category}
+						</legend>
+						{#if availableCategories.length > 0}
+							<div
+								role="listbox"
+								aria-multiselectable="true"
+								aria-label={filterLabels.category}
+								class="max-h-44 overflow-y-auto rounded-lg border border-grey-300 bg-common-white"
+							>
+								{#each availableCategories as cat (cat.id)}
+									{@const isChecked = pendingFilters.categories.includes(cat.id)}
+									<label
+										class="flex cursor-pointer select-none items-center gap-3 px-3 py-2.5 transition-colors hover:bg-background-lightblue {isChecked ? 'bg-background-lightblue' : ''}"
+									>
+										<Checkbox
+											checked={isChecked}
+											onCheckedChange={() => toggleCategory(cat.id)}
+										/>
+										<span class="text-b text-grey-700">{cat.label}</span>
+									</label>
+								{/each}
+							</div>
+							{#if pendingFilters.categories.length > 0}
+								<p class="text-d3 text-grey-500">
+									{pendingFilters.categories.length}
+									{pendingFilters.categories.length === 1 ? 'seleccionada' : 'seleccionadas'}
+								</p>
+							{/if}
+						{:else}
+							<p class="text-d3 text-grey-400 italic">
+								Sin categorías disponibles — asigna <code>experience_category</code> en Directus.
+							</p>
+						{/if}
+					</fieldset>
+				{/if}
+
 				<!-- Sort section -->
 				<div>
 					<p class="mb-2 text-d1 font-medium text-grey-700">{filterLabels.sort}</p>
@@ -581,40 +623,6 @@
 						</div>
 					</fieldset>
 				{/if}
-
-			<!-- Category (multi-select listbox with checkboxes) -->
-			{#if filterToggles.category && availableCategories.length > 0}
-				<fieldset class="flex flex-col gap-2">
-					<legend class="mb-1 text-d1 font-medium text-grey-700">
-						{filterLabels.category}
-					</legend>
-					<div
-						role="listbox"
-						aria-multiselectable="true"
-						aria-label={filterLabels.category}
-						class="max-h-44 overflow-y-auto rounded-lg border border-grey-300 bg-common-white"
-					>
-						{#each availableCategories as cat (cat.id)}
-							{@const isChecked = pendingFilters.categories.includes(cat.id)}
-							<label
-								class="flex cursor-pointer select-none items-center gap-3 px-3 py-2.5 transition-colors hover:bg-background-lightblue {isChecked ? 'bg-background-lightblue' : ''}"
-							>
-								<Checkbox
-									checked={isChecked}
-									onCheckedChange={() => toggleCategory(cat.id)}
-								/>
-								<span class="text-b text-grey-700">{cat.label}</span>
-							</label>
-						{/each}
-					</div>
-					{#if pendingFilters.categories.length > 0}
-						<p class="text-d3 text-grey-500">
-							{pendingFilters.categories.length}
-							{pendingFilters.categories.length === 1 ? 'seleccionada' : 'seleccionadas'}
-						</p>
-					{/if}
-				</fieldset>
-			{/if}
 
 			<!-- Discount (slider, step 5) -->
 				{#if filterToggles.discount}
