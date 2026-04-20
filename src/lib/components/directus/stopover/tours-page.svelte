@@ -17,7 +17,7 @@
 	import { Alert } from '$lib/components/ui/alerts/alert';
 	import { buttonVariants } from '$ui/components/button';
 	import { Globe, NoIcon, Phone, Filled, Regular, Social } from '$ui/components/icon';
-	import { Pill } from '$ui/components/pill';
+	import { Pill, Text as PillText, Icon as PillIcon } from '$ui/components/pill';
 	import { MapContainer } from '$lib/components/site/items/maps';
 
 	export let stopover_tour: TourSchema;
@@ -172,9 +172,9 @@
 		<ul class="flex flex-wrap gap-2 lg:[grid-area:categories]">
 			{#each category || [] as cat}
 				<li>
-					<Pill thickness="slim" class="bg-grey-100" let:Text>
-						<Text class="text-grey-600">{labels?.get(`tour-category-${cat}`)}</Text>
-					</Pill>
+				<Pill thickness="slim" class="bg-grey-100">
+					<PillText class="text-grey-600">{labels?.get(`tour-category-${cat}`)}</PillText>
+				</Pill>
 				</li>
 			{:else}
 				<li>
@@ -247,56 +247,54 @@
 					<Body class="mb-4">{description}</Body>
 					<ul class="flex flex-wrap gap-2 md:gap-4">
 						<li>
-							<Pill
-								let:Text
-								let:Icon
-								class={includes_admission ? 'bg-system-success-faded' : 'bg-grey-700'}
-							>
-								{#if includes_admission}
-									<Icon>
-										<Regular.Check
-											class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
-										/>
-									</Icon>
-								{:else}
-									<Icon>
-										<Regular.Close
-											class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
-										/>
-									</Icon>
-								{/if}
-								<Text class={includes_admission ? 'text-system-success' : 'text-common-white'}>
-									{includes_admission
-										? labels?.get('admision-included')
-										: labels?.get('admision-not-included')}
-								</Text>
-								<Icon>
-									<Filled.Ticket
+						<Pill
+							class={includes_admission ? 'bg-system-success-faded' : 'bg-grey-700'}
+						>
+							{#if includes_admission}
+								<PillIcon>
+									<Regular.Check
 										class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
 									/>
-								</Icon>
-							</Pill>
+								</PillIcon>
+							{:else}
+								<PillIcon>
+									<Regular.Close
+										class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
+									/>
+								</PillIcon>
+							{/if}
+							<PillText class={includes_admission ? 'text-system-success' : 'text-common-white'}>
+								{includes_admission
+									? labels?.get('admision-included')
+									: labels?.get('admision-not-included')}
+							</PillText>
+							<PillIcon>
+								<Filled.Ticket
+									class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
+								/>
+							</PillIcon>
+						</Pill>
 						</li>
 						<li>
-							<Pill let:Text let:Icon class="bg-background-lightblue" theme="transparent">
-								<Icon>
-									<svelte:component this={getTourTypeIcon(type)} class="fill-primary" />
-								</Icon>
-								<Text class="text-primary">
-									{getTourTypeLabel(type)}
-								</Text>
-							</Pill>
+						<Pill class="bg-background-lightblue" theme="transparent">
+							<PillIcon>
+								<svelte:component this={getTourTypeIcon(type)} class="fill-primary" />
+							</PillIcon>
+							<PillText class="text-primary">
+								{getTourTypeLabel(type)}
+							</PillText>
+						</Pill>
 						</li>
 						<li>
-							<Pill let:Text let:Icon class="bg-background-lightblue" theme="transparent">
-								<Icon>
-									<Filled.Time class="fill-primary" title={labels?.get('duration')} />
-								</Icon>
-								<Text class="text-primary">
-									{duration}
-									{labels?.get('minutes')}
-								</Text>
-							</Pill>
+						<Pill class="bg-background-lightblue" theme="transparent">
+							<PillIcon>
+								<Filled.Time class="fill-primary" title={labels?.get('duration')} />
+							</PillIcon>
+							<PillText class="text-primary">
+								{duration}
+								{labels?.get('minutes')}
+							</PillText>
+						</Pill>
 						</li>
 					</ul>
 				</li>

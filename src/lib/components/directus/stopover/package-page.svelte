@@ -17,8 +17,7 @@
 	import { buttonVariants } from '$ui/components/button';
 	import { NoIcon, Phone, Social } from '$ui/components/icon';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
-	import { Pill } from '$ui/components/pill';
-	import Icon from '$ui/components/pill/icon.svelte';
+	import { Pill, Text as PillText, Icon as PillIcon } from '$ui/components/pill';
 
 	export let stopover_package: PackageSchema;
 
@@ -89,21 +88,21 @@
 		<Breadcrum item={stopover_package} />
 		<ul class="mb-gutter flex flex-wrap gap-2 md:gap-4">
 			<li>
-				<Pill class="bg-primary-ultralight" let:Icon let:Text>
-					<Icon class="text-d3">☀️</Icon>
-					<Text class="text-primary">{nights + 1} {labels?.get('label.day_plural')}</Text>
-				</Pill>
-			</li>
-			<li>
-				<Pill class="bg-primary-ultradark" let:Text let:Icon>
-					<Icon class="text-d3">🌑</Icon>
-					<Text>{nights} {labels?.get('label.night_plural')}</Text>
-				</Pill>
-			</li>
-			<li>
-				<Pill class="border-grey-600 bg-common-white " let:Text>
-					<Text class="text-grey-600">{labels?.get('option.stay_region.' + stay_region)}</Text>
-				</Pill>
+			<Pill class="bg-primary-ultralight">
+				<PillIcon class="text-d3">☀️</PillIcon>
+				<PillText class="text-primary">{nights + 1} {labels?.get('label.day_plural')}</PillText>
+			</Pill>
+		</li>
+		<li>
+			<Pill class="bg-primary-ultradark">
+				<PillIcon class="text-d3">🌑</PillIcon>
+				<PillText>{nights} {labels?.get('label.night_plural')}</PillText>
+			</Pill>
+		</li>
+		<li>
+			<Pill class="border-grey-600 bg-common-white ">
+				<PillText class="text-grey-600">{labels?.get('option.stay_region.' + stay_region)}</PillText>
+			</Pill>
 			</li>
 		</ul>
 		<Body size="body-large" class="mb-petit">
