@@ -55,7 +55,7 @@ export interface TourCardViewModel {
 	mainImage: string;
 	name: string;
 	duration?: string;
-	category?: string;
+	categoryLabel?: string;
 	operator?: {
 		name: string;
 		image?: string;
@@ -69,12 +69,15 @@ export function mapTourToCardViewModel(
 	locale: string
 ): TourCardViewModel {
 	const translation = getTourTranslation(tour, locale);
+	const categoryTranslation = tour.experience_category?.translations?.find(
+		(t) => t.languages_code === locale
+	) ?? tour.experience_category?.translations?.[0];
 
 	return {
 		mainImage: tour.main_image,
 		name: translation?.name || 'Tour',
 		duration: tour.duration ?? undefined,
-		category: tour.category ?? undefined,
+		categoryLabel: categoryTranslation?.label ?? undefined,
 		operator: tour.operator ? {
 			name: tour.operator.name,
 			image: tour.operator.main_image ?? undefined

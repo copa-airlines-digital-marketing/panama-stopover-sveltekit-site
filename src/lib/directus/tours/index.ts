@@ -21,12 +21,12 @@ const getTourQuery = ({ locale, category, subCategory, article }: DirectusReques
 		'start_time',
 		'meeting_point',
 		'end_point',
-		'category',
 		'supported_languages',
 		'pilar',
 		'promo_code',
 		'promo_discount_amount',
 		'promo_discount_percent',
+		{ experience_category: ['id', { translations: ['languages_code', 'label'] }] } as any,
 		{ gallery: ['directus_files_id'] },
 		{ operator: ['name', 'main_image', 'contact', 'network'] },
 		{
@@ -44,7 +44,7 @@ const getTourQuery = ({ locale, category, subCategory, article }: DirectusReques
 			]
 		},
 		{ parent_page: pagePathFields }
-	],
+	] as any,
 	filter: {
 		_and: [
 			{ translations: { languages_code: { _eq: locale } } },
@@ -58,7 +58,12 @@ const getTourQuery = ({ locale, category, subCategory, article }: DirectusReques
 			},
 			{ parent_page: { parent: { parent: { translations: { path: { _eq: locale } } } } } }
 		]
-	}
+	} as any,
+	deep: {
+		experience_category: {
+			translations: { _filter: { languages_code: { _eq: locale } } }
+		}
+	} as any
 });
 
 const getPublishedTours = async (filters: DirectusRequestBody) => {

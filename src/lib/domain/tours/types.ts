@@ -49,6 +49,17 @@ const parentPageSchema = z.object({
 
 type ParentPage = z.infer<typeof parentPageSchema>;
 
+// Experience category (M2O relation to a shared categories table)
+const experienceCategoryTranslationSchema = z.object({
+	languages_code: z.string().nullable().optional(),
+	label: z.string().nullable().optional()
+});
+
+const experienceCategorySchema = z.object({
+	id: z.number().nullable().optional(),
+	translations: experienceCategoryTranslationSchema.array().nullable().optional()
+});
+
 // Complete Tour Domain Model
 const tourSchema = z.object({
 	main_image: z.string(),
@@ -56,7 +67,7 @@ const tourSchema = z.object({
 	start_time: z.string().nullish(),
 	meeting_point: z.string().nullish(),
 	end_point: z.string().nullish(),
-	category: z.string().nullish(),
+	experience_category: experienceCategorySchema.nullable().optional(),
 	supported_languages: z.string().array().nullish(),
 	pilar: z.string().array().nullish(),
 	promo_code: z.string().nullish(),
@@ -80,7 +91,9 @@ export {
 	tourTranslationSchema,
 	tourOperatorSchema,
 	fileSchema,
-	parentPageSchema
+	parentPageSchema,
+	experienceCategorySchema,
+	experienceCategoryTranslationSchema
 };
 
 export type {

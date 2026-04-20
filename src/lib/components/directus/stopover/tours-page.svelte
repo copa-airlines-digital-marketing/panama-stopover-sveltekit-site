@@ -31,7 +31,7 @@
 	const {
 		main_image,
 		duration,
-		category,
+		experience_category,
 		start_time,
 		meeting_point,
 		end_point,
@@ -176,17 +176,13 @@
 			{labels?.get('tour-experience')}
 		</Heading>
 		<ul class="flex flex-wrap gap-2 lg:[grid-area:categories]">
-			{#each category || [] as cat}
+			{#if experience_category?.translations?.[0]?.label}
 				<li>
-				<Pill thickness="slim" class="bg-grey-100">
-					<PillText class="text-grey-600">{labels?.get(`tour-category-${cat}`)}</PillText>
-				</Pill>
+					<Pill thickness="slim" class="bg-grey-100">
+						<PillText class="text-grey-600">{experience_category.translations[0].label}</PillText>
+					</Pill>
 				</li>
-			{:else}
-				<li>
-					<Alert>Es necesario asociar el tour operador al tour</Alert>
-				</li>
-			{/each}
+			{/if}
 		</ul>
 		<div class="my-6 space-y-4 lg:my-0 lg:[grid-area:details]">
 			<div class="flex items-center-safe gap-2 md:gap-4">
