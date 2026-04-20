@@ -12,6 +12,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let section: SectionSchema;
 
@@ -50,6 +51,7 @@
 	}
 
 	function getInitialValue(): string {
+		if (!browser) return makeTabValue(0);
 		const raw = $page.url.searchParams.get(paramKey);
 		const idx = raw !== null ? parseInt(raw, 10) : NaN;
 		const tabCount = section_content?.length ?? 0;
