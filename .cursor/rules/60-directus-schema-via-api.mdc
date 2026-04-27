@@ -1,0 +1,80 @@
+﻿---
+description: When modifying Directus schema via the REST API (POST /fields, /relations, /collections), follow the patterns below to avoid silent misconfigurations.
+globs: ".ai/scripts/**/*.ps1,.ai/scripts/**/*.sh,.ai/scripts/**/*.ts"
+alwaysApply: false
+---
+
+# Directus schema changes via REST API
+
+Use `DIRECTUS_TOKEN` from `.env.agent`. The user's token needs a policy with
+`admin_access: true` attached to it - CRUD access to `directus_fields` alone is
+NOT enough for `POST /fields`. Verify with `GET /schema/snapshot` first (admin-only).
+
+## Golden rule: `one_field` must be re-linked after the alias exists
+
+When creating an O2M/M2M relation via `POST /relations` with
+`meta.one_field: "<alias_name>"`, Directus silently drops `one_field` if the
+alias field on the parent collection does not already exist at that moment.
+The relation appears created, but `GET /relations/...` returns `one_field: null`.
+
+The translations interface (and other interfaces that look up
+`many_collection.field` via the parent's `one_field`) will fail with:
+
+> Interface "translations" not found.
+
+Always do this in order:
+
+1. Create the junction collection (`POST /collections`) with at least the `id` PK field.
+2. Create the alias field on the parent FIRST:
+   ```
+   POST /fields/<parent_collection>
+   { field: "translations", type: "alias",
+     meta: { special: ["translations"], interface: "translations",
+             options: { languageField: "name", defaultOpenSplitView: true },
+             display: "translations", required: true, hidden: false } }
+   ```
+3. Create the two FK fields in the junction (content fields can come after).
+4. Create the two relations - the one pointing at the parent includes
+   `meta.one_field: "translations"`.
+5. Verify: `GET /relations/<junction>` must show `one_field: "translations"` on
+   the parent relation. If empty, `PATCH` the relation:
+   ```
+   PATCH /relations/<junction>/<fk_to_parent>
+   { meta: { one_field: "translations", junction_field: "languages_code",
+             one_deselect_action: "delete" } }
+   ```
+
+## Translations junction collection - canonical shape
+
+Mirror an existing working pair (e.g. `stopover_mixed_experience_module` +
+`stopover_mixed_experience_module_translations`) when creating new ones:
+
+- Junction collection: `hidden: true`, grouped under the parent.
+- Field sort order matters: `id` (1), FK to parent (2), `languages_code` (3),
+  then content fields (4+). FK fields should be `hidden: true`, `interface: null`,
+  `special: null` - let Directus infer the M2O interface from the schema FK.
+- Content fields use `interface: "input"` and typically `required: true`.
+- Parent alias is `required: true`, `display: "translations"`, not hidden.
+
+## Language codes
+
+The CMS uses short ISO codes (`en`, `es`, `pt`) - NOT regional variants like
+`es-PA` or `en-US`. The `languages` collection has `code` (PK) and `name`
+(display). The translations interface uses `languageField: "name"`.
+
+## Verification checklist after any schema change
+
+- `GET /fields/<collection>` - new fields present with expected `sort`, `hidden`, `required`.
+- `GET /relations/<junction>` - both sides present, `junction_field` cross-references
+  correct, `one_field` populated only on the parent side.
+- `GET /items/<parent>?fields=translations.languages_code,translations.<content_field>`
+  returns the expected tree.
+- Hard-refresh the Directus Studio (Ctrl+Shift+R) to flush the interface registry
+  cache before concluding a config is broken.
+
+## Scripts live in `.ai/scripts/`
+
+Idempotent PowerShell scripts that hit the Directus REST API. Naming convention:
+`add-*.ps1` (create fields), `create-*.ps1` (create collections), `seed-*.ps1`
+(insert data), `fix-*.ps1` (patch existing config). Keep the token at the top
+of the script as a local variable, reading from `.env.agent` which is gitignored.

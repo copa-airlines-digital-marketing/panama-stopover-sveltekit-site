@@ -9,7 +9,13 @@
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
 	import { isStopoverTourTranslations } from '$lib/directus/tours/utlis';
-	import { InformativeBoxContainer } from '$ui/components/boxes/informative';
+	import {
+		InformativeBoxContainer,
+		InformativeBox,
+		InformativeBoxIcon,
+		InformativeBoxTitle,
+		InformativeBoxDescription
+	} from '$ui/components/boxes/informative';
 	import { AnunciosImportantes, CheckIn } from '$ui/components/pictograms';
 	import { Body, Heading } from '$ui/components/typography';
 	import { ContactCard } from '$lib/components/site/items/cards/contact';
@@ -17,8 +23,7 @@
 	import { buttonVariants } from '$ui/components/button';
 	import { NoIcon, Phone, Social } from '$ui/components/icon';
 	import { SpokenLanguages } from '$lib/components/site/items/languages';
-	import { Pill } from '$ui/components/pill';
-	import Icon from '$ui/components/pill/icon.svelte';
+	import { Pill, Text as PillText, Icon as PillIcon } from '$ui/components/pill';
 
 	export let stopover_package: PackageSchema;
 
@@ -89,21 +94,21 @@
 		<Breadcrum item={stopover_package} />
 		<ul class="mb-gutter flex flex-wrap gap-2 md:gap-4">
 			<li>
-				<Pill class="bg-primary-ultralight" let:Icon let:Text>
-					<Icon class="text-d3">☀️</Icon>
-					<Text class="text-primary">{nights + 1} {labels?.get('label.day_plural')}</Text>
-				</Pill>
-			</li>
-			<li>
-				<Pill class="bg-primary-ultradark" let:Text let:Icon>
-					<Icon class="text-d3">🌑</Icon>
-					<Text>{nights} {labels?.get('label.night_plural')}</Text>
-				</Pill>
-			</li>
-			<li>
-				<Pill class="border-grey-600 bg-common-white " let:Text>
-					<Text class="text-grey-600">{labels?.get('option.stay_region.' + stay_region)}</Text>
-				</Pill>
+			<Pill class="bg-primary-ultralight">
+				<PillIcon class="text-d3">☀️</PillIcon>
+				<PillText class="text-primary">{nights + 1} {labels?.get('label.day_plural')}</PillText>
+			</Pill>
+		</li>
+		<li>
+			<Pill class="bg-primary-ultradark">
+				<PillIcon class="text-d3">🌑</PillIcon>
+				<PillText>{nights} {labels?.get('label.night_plural')}</PillText>
+			</Pill>
+		</li>
+		<li>
+			<Pill class="border-grey-600 bg-common-white ">
+				<PillText class="text-grey-600">{labels?.get('option.stay_region.' + stay_region)}</PillText>
+			</Pill>
 			</li>
 		</ul>
 		<Body size="body-large" class="mb-petit">
@@ -124,40 +129,34 @@
 	</div>
 	<SpokenLanguages item={stopover_package} />
 	<div>
-		<InformativeBoxContainer let:Box>
-			<Box
-				alignment="center"
-				class="max-h-full border-primary bg-primary"
-				let:Icon
-				let:Title
-				let:Description
-			>
-				<Icon>
-					<CheckIn style="transparent" />
-				</Icon>
-				<Title theme="invert">
-					{labels?.get('included')}
-				</Title>
-				<Description tag="ul" theme="invert">
-					<ul>
-						{#each included?.map((i) => i.name) || [] as item}
-							<li>{item}</li>
-						{/each}
-					</ul>
-				</Description>
-			</Box>
-			<Box alignment="center" class="max-h-full bg-grey-700" let:Icon let:Title let:Description>
-				<Icon>
-					<AnunciosImportantes style="monochrome" />
-				</Icon>
-				<Title theme="invert">{labels?.get('not-included')}</Title>
-				<Description tag="ul" theme="invert">
-					{#each not_included?.map((i) => i.name) || [] as item}
+	<InformativeBoxContainer>
+		<InformativeBox alignment="center" class="max-h-full border-primary bg-primary">
+			<InformativeBoxIcon>
+				<CheckIn style="transparent" />
+			</InformativeBoxIcon>
+			<InformativeBoxTitle theme="invert">
+				{labels?.get('included')}
+			</InformativeBoxTitle>
+			<InformativeBoxDescription tag="ul" theme="invert">
+				<ul>
+					{#each included?.map((i) => i.name) || [] as item}
 						<li>{item}</li>
 					{/each}
-				</Description>
-			</Box>
-		</InformativeBoxContainer>
+				</ul>
+			</InformativeBoxDescription>
+		</InformativeBox>
+		<InformativeBox alignment="center" class="max-h-full bg-grey-700">
+			<InformativeBoxIcon>
+				<AnunciosImportantes style="monochrome" />
+			</InformativeBoxIcon>
+			<InformativeBoxTitle theme="invert">{labels?.get('not-included')}</InformativeBoxTitle>
+			<InformativeBoxDescription tag="ul" theme="invert">
+				{#each not_included?.map((i) => i.name) || [] as item}
+					<li>{item}</li>
+				{/each}
+			</InformativeBoxDescription>
+		</InformativeBox>
+	</InformativeBoxContainer>
 	</div>
 	{#if contact}
 		<ContactCard let:Name class="bg-background-lightblue">

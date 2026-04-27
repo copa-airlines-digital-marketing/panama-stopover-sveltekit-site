@@ -9,7 +9,13 @@
 	import { BaseTextContent } from '$lib/components/site/text-content/base';
 	import { BannerAlert } from '$lib/components/site/text-content/banner-alert';
 	import { isStopoverTourTranslations } from '$lib/directus/tours/utlis';
-	import { InformativeBoxContainer } from '$ui/components/boxes/informative';
+	import {
+		InformativeBoxContainer,
+		InformativeBox,
+		InformativeBoxIcon,
+		InformativeBoxTitle,
+		InformativeBoxDescription
+	} from '$ui/components/boxes/informative';
 	import { AnunciosImportantes, CheckIn, Tiquetes } from '$ui/components/pictograms';
 	import { Body, Heading } from '$ui/components/typography';
 	import { ContactCard } from '$lib/components/site/items/cards/contact';
@@ -17,7 +23,7 @@
 	import { Alert } from '$lib/components/ui/alerts/alert';
 	import { buttonVariants } from '$ui/components/button';
 	import { Globe, NoIcon, Phone, Filled, Regular, Social } from '$ui/components/icon';
-	import { Pill } from '$ui/components/pill';
+	import { Pill, Text as PillText, Icon as PillIcon } from '$ui/components/pill';
 	import { MapContainer } from '$lib/components/site/items/maps';
 
 	export let stopover_tour: TourSchema;
@@ -25,7 +31,6 @@
 	const {
 		main_image,
 		duration,
-		category,
 		start_time,
 		meeting_point,
 		end_point,
@@ -169,19 +174,6 @@
 		<Heading tag="h2" class="text-primary lg:my-0 lg:[grid-area:title]" {customcn}>
 			{labels?.get('tour-experience')}
 		</Heading>
-		<ul class="flex flex-wrap gap-2 lg:[grid-area:categories]">
-			{#each category || [] as cat}
-				<li>
-					<Pill thickness="slim" class="bg-grey-100" let:Text>
-						<Text class="text-grey-600">{labels?.get(`tour-category-${cat}`)}</Text>
-					</Pill>
-				</li>
-			{:else}
-				<li>
-					<Alert>Es necesario asociar el tour operador al tour</Alert>
-				</li>
-			{/each}
-		</ul>
 		<div class="my-6 space-y-4 lg:my-0 lg:[grid-area:details]">
 			<div class="flex items-center-safe gap-2 md:gap-4">
 				<Globe class="size-6 fill-secondary" title={labels?.get('languages')} />
@@ -247,56 +239,54 @@
 					<Body class="mb-4">{description}</Body>
 					<ul class="flex flex-wrap gap-2 md:gap-4">
 						<li>
-							<Pill
-								let:Text
-								let:Icon
-								class={includes_admission ? 'bg-system-success-faded' : 'bg-grey-700'}
-							>
-								{#if includes_admission}
-									<Icon>
-										<Regular.Check
-											class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
-										/>
-									</Icon>
-								{:else}
-									<Icon>
-										<Regular.Close
-											class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
-										/>
-									</Icon>
-								{/if}
-								<Text class={includes_admission ? 'text-system-success' : 'text-common-white'}>
-									{includes_admission
-										? labels?.get('admision-included')
-										: labels?.get('admision-not-included')}
-								</Text>
-								<Icon>
-									<Filled.Ticket
+						<Pill
+							class={includes_admission ? 'bg-system-success-faded' : 'bg-grey-700'}
+						>
+							{#if includes_admission}
+								<PillIcon>
+									<Regular.Check
 										class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
 									/>
-								</Icon>
-							</Pill>
+								</PillIcon>
+							{:else}
+								<PillIcon>
+									<Regular.Close
+										class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
+									/>
+								</PillIcon>
+							{/if}
+							<PillText class={includes_admission ? 'text-system-success' : 'text-common-white'}>
+								{includes_admission
+									? labels?.get('admision-included')
+									: labels?.get('admision-not-included')}
+							</PillText>
+							<PillIcon>
+								<Filled.Ticket
+									class={includes_admission ? 'fill-system-success' : 'fill-common-white'}
+								/>
+							</PillIcon>
+						</Pill>
 						</li>
 						<li>
-							<Pill let:Text let:Icon class="bg-background-lightblue" theme="transparent">
-								<Icon>
-									<svelte:component this={getTourTypeIcon(type)} class="fill-primary" />
-								</Icon>
-								<Text class="text-primary">
-									{getTourTypeLabel(type)}
-								</Text>
-							</Pill>
+						<Pill class="bg-background-lightblue" theme="transparent">
+							<PillIcon>
+								<svelte:component this={getTourTypeIcon(type)} class="fill-primary" />
+							</PillIcon>
+							<PillText class="text-primary">
+								{getTourTypeLabel(type)}
+							</PillText>
+						</Pill>
 						</li>
 						<li>
-							<Pill let:Text let:Icon class="bg-background-lightblue" theme="transparent">
-								<Icon>
-									<Filled.Time class="fill-primary" title={labels?.get('duration')} />
-								</Icon>
-								<Text class="text-primary">
-									{duration}
-									{labels?.get('minutes')}
-								</Text>
-							</Pill>
+						<Pill class="bg-background-lightblue" theme="transparent">
+							<PillIcon>
+								<Filled.Time class="fill-primary" title={labels?.get('duration')} />
+							</PillIcon>
+							<PillText class="text-primary">
+								{duration}
+								{labels?.get('minutes')}
+							</PillText>
+						</Pill>
 						</li>
 					</ul>
 				</li>
@@ -335,34 +325,34 @@
 		{/if}
 	</div>
 	<div>
-		<InformativeBoxContainer let:Box>
-			<Box alignment="center" class="border-primary bg-primary" let:Icon let:Title let:Description>
-				<Icon>
-					<CheckIn style="transparent" />
-				</Icon>
-				<Title theme="invert">
-					{labels?.get('included')}
-				</Title>
-				<Description tag="ul" theme="invert">
-					<ul>
-						{#each included?.map((i) => i.name) || [] as item}
-							<li>{item}</li>
-						{/each}
-					</ul>
-				</Description>
-			</Box>
-			<Box alignment="center" class="bg-grey-700" let:Icon let:Title let:Description>
-				<Icon>
-					<AnunciosImportantes style="monochrome" />
-				</Icon>
-				<Title theme="invert">{labels?.get('not-included')}</Title>
-				<Description tag="ul" theme="invert">
-					{#each not_included?.map((i) => i.name) || [] as item}
+	<InformativeBoxContainer>
+		<InformativeBox alignment="center" class="border-primary bg-primary">
+			<InformativeBoxIcon>
+				<CheckIn style="transparent" />
+			</InformativeBoxIcon>
+			<InformativeBoxTitle theme="invert">
+				{labels?.get('included')}
+			</InformativeBoxTitle>
+			<InformativeBoxDescription tag="ul" theme="invert">
+				<ul>
+					{#each included?.map((i) => i.name) || [] as item}
 						<li>{item}</li>
 					{/each}
-				</Description>
-			</Box>
-		</InformativeBoxContainer>
+				</ul>
+			</InformativeBoxDescription>
+		</InformativeBox>
+		<InformativeBox alignment="center" class="bg-grey-700">
+			<InformativeBoxIcon>
+				<AnunciosImportantes style="monochrome" />
+			</InformativeBoxIcon>
+			<InformativeBoxTitle theme="invert">{labels?.get('not-included')}</InformativeBoxTitle>
+			<InformativeBoxDescription tag="ul" theme="invert">
+				{#each not_included?.map((i) => i.name) || [] as item}
+					<li>{item}</li>
+				{/each}
+			</InformativeBoxDescription>
+		</InformativeBox>
+	</InformativeBoxContainer>
 	</div>
 	{#if operator}
 		{@const { name, main_image, contact, network } = operator}

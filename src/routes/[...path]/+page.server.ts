@@ -138,6 +138,38 @@ const sortAndTrimPromoItems = <T extends SortablePromoItem>(items: T[], maxItems
 const isPromotionPrefilter = (prefilter: string | null | undefined) =>
 	(prefilter ?? '').toLocaleLowerCase() === 'promotions';
 
+// Per-collection extra fields needed for client-side filters and sorting.
+// Tours expose `meeting_point` (GeoJSON); places expose `location` (GeoJSON).
+// Keeping them per-collection avoids asking Directus for fields that don't exist.
+const getCollectionSpecificFields = (collection: string): string[] => {
+	const categoryFields = [
+		'experience_category.id',
+		'experience_category.translations.languages_code',
+		'experience_category.translations.label'
+	];
+	if (collection === 'stopover_tour') {
+		return [
+			'id',
+			'duration',
+			'meeting_point',
+			'supported_languages',
+			'date_created',
+			...categoryFields
+		];
+	}
+	if (collection === 'stopover_place_to_visit') {
+		return [
+			'id',
+			'duration',
+			'location',
+			'supported_languages',
+			'date_created',
+			...categoryFields
+		];
+	}
+	return ['id', 'date_created'];
+};
+
 const buildMixedPromoItemsQuery = (
 	locale: string,
 	collection: string,
@@ -148,6 +180,7 @@ const buildMixedPromoItemsQuery = (
 		'main_image',
 		'promo_discount_percent',
 		'promo_discount_amount',
+		...getCollectionSpecificFields(collection),
 		{ translations: ['name', 'path', 'promo_name'] },
 		{ parent_page: pagePathFields }
 	] as any,
@@ -157,6 +190,9 @@ const buildMixedPromoItemsQuery = (
 	deep: {
 		translations: {
 			_filter: getItemTranslationsFilter(collection, locale)
+		},
+		experience_category: {
+			translations: { _filter: { languages_code: { _eq: locale } } }
 		},
 		parent_page: {
 			translations: { _filter: { languages_code: { _eq: locale } } },
@@ -281,18 +317,38 @@ export async function load(event) {
 			'key',
 			'max_items',
 			'prefilter',
+			'filter_language_enabled',
+			'filter_category_enabled',
+			'filter_discount_enabled',
+			'filter_duration_enabled',
+			'filter_distance_enabled',
 			{
 				translations: [
 					'languages_code',
 					'title',
+					'description',
+					'disclaimer_text',
 					'primary_cta_label',
 					'primary_cta_url',
 					'secondary_cta_label',
-					'secondary_cta_url'
+					'secondary_cta_url',
+					'reference_point_label',
+					'filter_language_label',
+					'filter_category_label',
+					'filter_discount_label',
+					'filter_duration_label',
+					'filter_distance_label',
+					'filter_apply_label'
 				]
 			},
 			{
-				sources: ['entity_type']
+				sources: [
+					'id',
+					'entity_type',
+					'max_items',
+					'status',
+					{ translations: ['languages_code', 'label'] }
+				]
 			}
 		] as any,
 		deep: {
@@ -300,6 +356,15 @@ export async function load(event) {
 				_filter: {
 					languages_code: {
 						_eq: locale
+					}
+				}
+			},
+			sources: {
+				translations: {
+					_filter: {
+						languages_code: {
+							_eq: locale
+						}
 					}
 				}
 			}
@@ -366,13 +431,17 @@ export async function load(event) {
 				}))
 			);
 
+		// Mixed modules receive the full un-sorted, un-trimmed pool so the client
+		// component can apply filters, sorting and max_items caps on the client side
+		// without hitting the server again. `sorted_items` keeps its key for
+		// backwards compatibility but is no longer sorted nor capped here.
 		return {
 			module_key: (moduleConfig as Record<string, unknown>).key,
 			prefilter,
 			limit,
 			sources,
 			queries,
-			sorted_items: sortAndTrimPromoItems(mergedItems as SortablePromoItem[], limit)
+			sorted_items: mergedItems
 		};
 	})();
 
