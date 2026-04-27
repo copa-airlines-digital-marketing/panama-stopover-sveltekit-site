@@ -226,6 +226,78 @@ const mixedEntityTypeToCollectionMap: Record<string, keyof Schema> = {
 const getMixedSourceCollection = (entityType: string) =>
 	pathOr(null, [entityType], mixedEntityTypeToCollectionMap);
 
+// Shared field list for the mixed experience module detail queries.
+// Keep in sync with buildMixedConfigQuery in +page.server.ts.
+const mixedModuleDetailFields = [
+	'key',
+	'max_items',
+	'prefilter',
+	'filter_language_enabled',
+	'filter_category_enabled',
+	'filter_discount_enabled',
+	'filter_duration_enabled',
+	'filter_distance_enabled',
+	{
+		translations: [
+			'languages_code',
+			'title',
+			'description',
+			'disclaimer_text',
+			'primary_cta_label',
+			'primary_cta_url',
+			'secondary_cta_label',
+			'secondary_cta_url',
+			'reference_point_label',
+			'filter_language_label',
+			'filter_category_label',
+			'filter_discount_label',
+			'filter_duration_label',
+			'filter_distance_label',
+			'filter_apply_label'
+		]
+	},
+	{
+		sources: [
+			'id',
+			'entity_type',
+			'max_items',
+			'status',
+			{ translations: ['languages_code', 'label'] }
+		]
+	}
+];
+
+// Per-collection extra fields for source items, needed by client-side filters/sort.
+// Tours use `meeting_point`; places use `location`. Both are GeoJSON points.
+const getSourceItemExtraFields = (collectionName: string): string[] => {
+	const categoryFields = [
+		'experience_category.id',
+		'experience_category.translations.languages_code',
+		'experience_category.translations.label'
+	];
+	if (collectionName === 'stopover_tour') {
+		return [
+			'id',
+			'duration',
+			'meeting_point',
+			'supported_languages',
+			'date_created',
+			...categoryFields
+		];
+	}
+	if (collectionName === 'stopover_place_to_visit') {
+		return [
+			'id',
+			'duration',
+			'location',
+			'supported_languages',
+			'date_created',
+			...categoryFields
+		];
+	}
+	return ['id', 'date_created'];
+};
+
 const buildModuleQuery = (
 	{ max_items, highlight_only, sort, promo_only, pilar }: StopoverHotelModuleSchema,
 	collectionName: string,
@@ -269,9 +341,21 @@ const buildModuleQuery = (
 	limit: -1
 });
 
+const buildMixedModuleDeepFilter = (locale: string) => ({
+	translations: {
+		_filter: { languages_code: { _eq: locale } }
+	},
+	sources: {
+		translations: {
+			_filter: { languages_code: { _eq: locale } }
+		}
+	}
+});
+
 const getMixedModuleDetailsByKey = async (
 	moduleCollection: MixedModuleCollection,
-	moduleKey: string
+	moduleKey: string,
+	locale?: string
 ) => {
 	const collections = getMixedModuleCollections(moduleCollection);
 
@@ -279,31 +363,13 @@ const getMixedModuleDetailsByKey = async (
 		const response = await getItems(
 			collection,
 			{
-				fields: [
-					'key',
-					'max_items',
-					'prefilter',
-					{
-						translations: [
-							'languages_code',
-							'title',
-							'description',
-							'disclaimer_text',
-							'primary_cta_label',
-							'primary_cta_url',
-							'secondary_cta_label',
-							'secondary_cta_url'
-						]
-					},
-					{
-						sources: ['entity_type']
-					}
-				],
+				fields: mixedModuleDetailFields,
 				filter: {
 					key: {
 						_eq: moduleKey
 					}
 				},
+				deep: locale ? buildMixedModuleDeepFilter(locale) : undefined,
 				limit: 1
 			} as any,
 			null
@@ -319,7 +385,8 @@ const getMixedModuleDetailsByKey = async (
 };
 
 const getFirstMixedModule = async (
-	moduleCollection: MixedModuleCollection
+	moduleCollection: MixedModuleCollection,
+	locale?: string
 ) => {
 	const collections = getMixedModuleCollections(moduleCollection);
 
@@ -327,26 +394,8 @@ const getFirstMixedModule = async (
 		const response = await getItems(
 			collection,
 			{
-				fields: [
-					'key',
-					'max_items',
-					'prefilter',
-					{
-						translations: [
-							'languages_code',
-							'title',
-							'description',
-							'disclaimer_text',
-							'primary_cta_label',
-							'primary_cta_url',
-							'secondary_cta_label',
-							'secondary_cta_url'
-						]
-					},
-					{
-						sources: ['entity_type']
-					}
-				],
+				fields: mixedModuleDetailFields,
+				deep: locale ? buildMixedModuleDeepFilter(locale) : undefined,
 				limit: 1
 			} as any,
 			null
@@ -372,6 +421,7 @@ const buildMixedSourceItemsQuery = (
 		'main_image',
 		'promo_discount_percent',
 		'promo_discount_amount',
+		...getSourceItemExtraFields(collectionName),
 		{ translations: ['name', 'path', 'promo_name'] },
 		{ parent_page: pagePathFields }
 	] as any,
@@ -381,6 +431,9 @@ const buildMixedSourceItemsQuery = (
 	deep: {
 		translations: {
 			_filter: getTranslationsFilter(collectionName, locale)
+		},
+		experience_category: {
+			translations: { _filter: { languages_code: { _eq: locale } } }
 		},
 		parent_page: {
 			translations: { _filter: { languages_code: { _eq: locale } } },
@@ -403,7 +456,7 @@ const getMixedExperienceEntities = async (
 	let workingModule: StopoverMixedExperienceModuleSchema | null = module;
 
 	if ((isNil(workingModule.sources) || isEmpty(workingModule.sources)) && workingModule.key) {
-		workingModule = await getMixedModuleDetailsByKey(moduleCollection, workingModule.key);
+		workingModule = await getMixedModuleDetailsByKey(moduleCollection, workingModule.key, locale);
 	}
 
 	if (!workingModule || isNil(workingModule.sources) || isEmpty(workingModule.sources)) return [];
@@ -437,7 +490,9 @@ const getMixedExperienceEntities = async (
 			(entry.items as Array<Record<string, unknown>>).map((item) => ({ ...item, _collection: entry.collection }))
 		);
 
-	return sortAndTrimPromoItems(flattenedItems, maxItems);
+	// Mixed modules return the full pool; filtering, sorting and the max_items cap
+	// are applied client-side inside the mixed-experience-module component.
+	return flattenedItems;
 };
 
 const getStopoverHotelModuleById = async (moduleId: string | number) => {
@@ -474,7 +529,7 @@ const getModuleRequest = (sections: SectionContentSchema, locale: string) => (pa
 		moduleCollection === 'stopover_mixed_experiece_module'
 	) {
 		if (!isStopoverMixedExperienceModuleSchema(module)) {
-			return getFirstMixedModule(moduleCollection).then((mixedModule) => {
+			return getFirstMixedModule(moduleCollection, locale).then((mixedModule) => {
 				if (!mixedModule) return [];
 				return getMixedExperienceEntities(mixedModule, moduleCollection, locale);
 			});
