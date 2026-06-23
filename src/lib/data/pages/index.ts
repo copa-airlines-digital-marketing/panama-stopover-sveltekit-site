@@ -36,6 +36,16 @@ const moduleQuery2 = {
 	fields: ['id', 'status', 'parent_page', { translations: ['languages_code', 'path'] }]
 };
 
+const toRoutePath = (segments: unknown[]) =>
+	segments
+		.flatMap((segment) =>
+			String(segment ?? '')
+				.split('/')
+				.map((pathSegment) => pathSegment.trim())
+		)
+		.filter(Boolean)
+		.join('/');
+
 function getAllPages() {
 	return Promise.allSettled([
 		getItems('pages', pagesQuery, null),
@@ -71,8 +81,9 @@ async function getAllPagesParams() {
 	const pages = toFlattedTranslation(pageRequestValues.flat())
 		.filter((page) => ['en', 'es', 'pt'].includes(page.locale))
 		.map((page) => ({
-			path: [...(pagesPathFinder[page.locale][page.parent] || []), page.path].join('/')
-		}));
+			path: toRoutePath([...(pagesPathFinder[page.locale]?.[page.parent] || []), page.path])
+		}))
+		.filter((page) => page.path);
 
 	return pages;
 }
