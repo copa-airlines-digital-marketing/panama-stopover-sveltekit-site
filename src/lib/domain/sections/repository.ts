@@ -1,14 +1,55 @@
-import { getItems, getTranslationFilter, type DirectusRequestBody } from '../../infrastructure/directus/utils';
+import {
+	getItems,
+	getTranslationFilter,
+	type DirectusRequestBody
+} from '../../infrastructure/directus/utils';
 import { say } from '$lib/core/utils';
 import { groupsSchema } from '../../directus/groups';
 import { contentGroupQueryFields, contentGroupSchema } from '../../directus/content-group';
-import { stopoverHotelModuleQueryFields, stopoverHotelModuleSchema } from '../../directus/stopover_hotel_module';
-import { formSchema } from '../../directus/forms';
+import {
+	stopoverHotelModuleQueryFields,
+	stopoverHotelModuleSchema
+} from '../../directus/stopover_hotel_module';
+import { formQueryFields, formSchema } from '../../directus/forms';
 import { textContentQuery, textContentSchema } from '../../directus/text-content';
 import { navigationQuery, navigationSchema } from '../../directus/navigation';
 import { logoQuery, logosSchema } from '../../directus/logos';
 import { headerQuery, headerSchema } from '../../directus/header';
-import { isSectionSchema } from './types';
+import { stopoverMixedExperienceModuleQueryFields } from '../../directus/stopover_mixed_experience_module';
+import { isSectionSchema, sectionSchema } from './types';
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+	typeof value === 'object' && value !== null;
+
+const removeNullSectionContentItems = (sections: unknown) => {
+	if (!Array.isArray(sections)) return { sections, removedItems: [] };
+
+	const removedItems: unknown[] = [];
+
+	const sanitizedSections = sections.map((section, sectionIndex) => {
+		if (!isRecord(section) || !Array.isArray(section.section_content)) return section;
+
+		const sectionContent = section.section_content.filter((sectionContentItem, contentIndex) => {
+			if (!isRecord(sectionContentItem) || sectionContentItem.item !== null) return true;
+
+			removedItems.push({
+				section_index: sectionIndex,
+				section_id: section.id,
+				section_content_index: contentIndex,
+				section_content_id: sectionContentItem.id,
+				collection: sectionContentItem.collection
+			});
+			return false;
+		});
+
+		return {
+			...section,
+			section_content: sectionContent
+		};
+	});
+
+	return { sections: sanitizedSections, removedItems };
+};
 
 /**
  * Builds a Directus query for fetching sections
@@ -49,7 +90,9 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
 						icons: logoQuery,
 						header: headerQuery,
 						content_group: contentGroupQueryFields,
-						stopover_hotel_module: stopoverHotelModuleQueryFields
+						form: formQueryFields,
+						stopover_hotel_module: stopoverHotelModuleQueryFields,
+						stopover_mixed_experience_module: stopoverMixedExperienceModuleQueryFields
 					}
 				}
 			]
@@ -109,14 +152,22 @@ const getSections = async (filters: DirectusRequestBody) => {
 		sectionQuery(storefront, page, locale),
 		filters.preview
 	);
+	const { sections, removedItems } = removeNullSectionContentItems(sectionRequest);
 
-	if (isSectionSchema(sectionRequest)) {
-		return sectionRequest;
+	if (removedItems.length > 0) {
+		say('Ignoring section content entries without item', {
+			filters,
+			removedItems: removedItems.slice(0, 10)
+		});
 	}
 
-	const errors = isSectionSchema(sectionRequest) ? null : 'Schema validation failed';
+	if (isSectionSchema(sections)) {
+		return sections;
+	}
 
-	say('Sections did not comply with the schema', errors);
+	const errors = sectionSchema.array().safeParse(sections).error?.errors;
+
+	say('Sections did not comply with the schema', errors?.slice(0, 5));
 	return null;
 };
 

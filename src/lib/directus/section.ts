@@ -3,15 +3,20 @@ import { textContentQuery, textContentSchema } from './text-content';
 import { navigationQuery, navigationSchema } from './navigation';
 import { logoQuery, logosSchema } from './logos';
 import { headerQuery, headerSchema } from './header';
-import { getItems, getTranslationFilter, type DirectusRequestBody } from '../infrastructure/directus/utils';
+import {
+	getItems,
+	getTranslationFilter,
+	type DirectusRequestBody
+} from '../infrastructure/directus/utils';
 import { say } from '$lib/core/utils';
 import { groupsSchema } from './groups';
 import { contentGroupQueryFields, contentGroupSchema } from './content-group';
 import { stopoverHotelModuleQueryFields, stopoverHotelModuleSchema } from './stopover_hotel_module';
 import {
+	stopoverMixedExperienceModuleQueryFields,
 	stopoverMixedExperienceModuleSchema
 } from './stopover_mixed_experience_module';
-import { formSchema } from './forms';
+import { formQueryFields, formSchema } from './forms';
 
 const horizontal_alignment = z.union([z.literal('left'), z.literal('center'), z.literal('right')]);
 const vertical_alignment = z.union([
@@ -162,7 +167,9 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
 						icons: logoQuery,
 						header: headerQuery,
 						content_group: contentGroupQueryFields,
-						stopover_hotel_module: stopoverHotelModuleQueryFields
+						form: formQueryFields,
+						stopover_hotel_module: stopoverHotelModuleQueryFields,
+						stopover_mixed_experience_module: stopoverMixedExperienceModuleQueryFields
 					}
 				}
 			]
