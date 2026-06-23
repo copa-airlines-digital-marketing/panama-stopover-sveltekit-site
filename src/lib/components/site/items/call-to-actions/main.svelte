@@ -24,12 +24,25 @@
 	const labels = $page.data.siteSettings.translations?.[0]?.labels;
 
 	const mainCTAText = labels?.filter((label) => label.name === 'book-now')[0];
+
+	const normalizeHref = (href: string | null | undefined) => {
+		const value = href?.trim();
+		if (!value) return '';
+		if (/^(https?:|mailto:|tel:|\/|#)/i.test(value)) return value;
+		if (/^(www\.|[\w.-]+\.[a-z]{2,}(\/|$))/i.test(value)) return `https://${value}`;
+		return value;
+	};
 </script>
 
 {#if !!translations && typeof translations !== 'number' && !isNumberArray(translations)}
 	{@const trans = translations.filter((t) => t.lang_code || t.languages_code === $page.data.locale)}
 	{#if trans?.[0].url}
-		<Button href={trans?.[0].url} rel="noreferrer nofollow" target="_blank" {...$$restProps}>
+		<Button
+			href={normalizeHref(trans?.[0].url)}
+			rel="noreferrer nofollow"
+			target="_blank"
+			{...$$restProps}
+		>
 			{#if mainCTAText}
 				{mainCTAText.value}
 			{:else}
