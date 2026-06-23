@@ -246,14 +246,9 @@ const getItemTranslationsFilter = (collectionName: string, locale: string) => {
 export const entries: EntryGenerator = async () => {
 	const allPagesParams = await getAllPagesParams();
 	console.log(
-		`Sveltekit will render ${allPagesParams.length} pages`,
-		JSON.stringify(
-			allPagesParams.map((v) => v.path),
-			null,
-			2
-		)
+		`SvelteKit will prerender ${allPagesParams.length} CMS routes. See [prerender:routes] logs for source collections, locales and route samples.`
 	);
-	return allPagesParams;
+	return allPagesParams.map(({ path }) => ({ path }));
 };
 
 export async function load(event) {
