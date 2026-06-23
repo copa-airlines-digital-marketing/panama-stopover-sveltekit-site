@@ -64,6 +64,16 @@ const moduleQuery2 = {
 	fields: ['id', 'status', 'parent_page', { translations: ['languages_code', 'path'] }]
 };
 
+const toRoutePath = (segments: unknown[]) =>
+	segments
+		.flatMap((segment) =>
+			String(segment ?? '')
+				.split('/')
+				.map((pathSegment) => pathSegment.trim())
+		)
+		.filter(Boolean)
+		.join('/');
+
 const routeSources = [
 	{ collection: 'pages', query: pagesQuery },
 	{ collection: 'stopover_hotels', query: moduleQuery },
@@ -96,8 +106,10 @@ const getTranslationRows = (collection: SourceCollection, page: DirectusPageLike
 	}));
 
 const buildMainPageLookup = (pages: DirectusPageLike[]) => {
-	const lookup: Record<string, Record<string, { parent_id: string | number | null; raw_path: string }>> =
-		{};
+	const lookup: Record<
+		string,
+		Record<string, { parent_id: string | number | null; raw_path: string }>
+	> = {};
 
 	pages.forEach((page) => {
 		getTranslationRows('pages', page).forEach((translation) => {
@@ -142,7 +154,7 @@ const formatRouteDiagnostic = (entry: PagePathEntry) => ({
 	parent_segments: entry.parent_segments,
 	raw_path: entry.raw_path,
 	resolved_path: entry.path,
-	suggested_normalized_path: entry.path.split('/').filter(Boolean).join('/')
+	suggested_normalized_path: toRoutePath([entry.path])
 });
 
 const getInvalidRouteReason = (path: string) => {
@@ -227,7 +239,7 @@ async function getAllPagesParams(): Promise<PagePathEntry[]> {
 				...page,
 				locale,
 				parent_segments: parentSegments,
-				path: [...parentSegments, page.raw_path].join('/')
+				path: toRoutePath([...parentSegments, page.raw_path])
 			};
 		});
 

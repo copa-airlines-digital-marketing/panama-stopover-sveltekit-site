@@ -34,7 +34,9 @@ const targetModuleCollections = [
 const isRecord = (value: unknown): value is Record<string, unknown> =>
 	typeof value === 'object' && value !== null;
 
-const isTargetModuleCollection = (value: unknown): value is (typeof targetModuleCollections)[number] =>
+const isTargetModuleCollection = (
+	value: unknown
+): value is (typeof targetModuleCollections)[number] =>
 	typeof value === 'string' && targetModuleCollections.some((collection) => collection === value);
 
 const getModulesConfigList = (sections: SectionSchema[] | undefined) => {
@@ -158,14 +160,7 @@ const getCollectionSpecificFields = (collection: string): string[] => {
 		];
 	}
 	if (collection === 'stopover_place_to_visit') {
-		return [
-			'id',
-			'duration',
-			'location',
-			'supported_languages',
-			'date_created',
-			...categoryFields
-		];
+		return ['id', 'duration', 'location', 'supported_languages', 'date_created', ...categoryFields];
 	}
 	return ['id', 'date_created'];
 };
@@ -232,11 +227,7 @@ const mixedEntityTypeToCollectionMap: Record<string, string> = {
 
 const getItemTranslationsFilter = (collectionName: string, locale: string) => {
 	if (
-		[
-			'stopover_hotels',
-			'stopover_restaurants',
-			'stopover_place_to_visit'
-		].includes(collectionName)
+		['stopover_hotels', 'stopover_restaurants', 'stopover_place_to_visit'].includes(collectionName)
 	) {
 		return {
 			lang_code: {
@@ -282,6 +273,11 @@ export async function load(event) {
 		getPageData({ locale, preview, category, subCategory, article, home: category || 'true' }),
 		parent()
 	]);
+
+	if (!pageData) {
+		say('Page data request returned null', { path, locale, category, subCategory, article });
+		return error(500);
+	}
 
 	const { page, sections: pageSections } = pageData;
 
