@@ -43,6 +43,8 @@ const stopoverItemsCollections = z.union([
 ]);
 
 const stopoverHotelModuleSchema = z.object({
+	name: z.string().optional(),
+	status: z.string().optional(),
 	collection: stopoverItemsCollections,
 	sort: sortSchema.array().nullable().optional(),
 	max_items: z.number().optional(),
@@ -53,6 +55,7 @@ const stopoverHotelModuleSchema = z.object({
 });
 
 const stopoverHotelModuleQueryFields = [
+	'name',
 	'collection',
 	'highlight_only',
 	'max_items',
