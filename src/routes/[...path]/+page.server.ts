@@ -134,8 +134,10 @@ const comparePromoItems = (a: SortablePromoItem, b: SortablePromoItem) => {
 	return nameA.localeCompare(nameB);
 };
 
-const sortAndTrimPromoItems = <T extends SortablePromoItem>(items: T[], maxItems: number) =>
-	[...items].sort(comparePromoItems).slice(0, maxItems);
+const sortAndTrimPromoItems = <T extends SortablePromoItem>(items: T[], maxItems: number) => {
+	const sortedItems = [...items].sort(comparePromoItems);
+	return maxItems < 0 ? sortedItems : sortedItems.slice(0, maxItems);
+};
 
 const isPromotionPrefilter = (prefilter: string | null | undefined) =>
 	(prefilter ?? '').toLocaleLowerCase() === 'promotions';
