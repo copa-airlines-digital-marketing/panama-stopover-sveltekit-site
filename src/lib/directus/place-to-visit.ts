@@ -22,6 +22,7 @@ const placesPilar = z.union([
   z.literal("history"),
   z.literal("nature"),
   z.literal("beach"),
+  z.literal("canal"),
   z.literal("city")
 ])
 
@@ -40,7 +41,7 @@ const placeSchema = z.object({
   experiences: textContentPlace.array().nullish(),
   duration: z.string(),
   pilar: placesPilar.nullable(),
-  category: z.string().array(),
+  category: z.string().array().nullish(),
   location: locationSchema,
   use_name: z.boolean(),
   parent_page: pathSchema.optional()

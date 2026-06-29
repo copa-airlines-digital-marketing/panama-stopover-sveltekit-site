@@ -4,12 +4,20 @@ import {
 	PREVIEW_SECRET,
 	DIRECTUS_PREVIEW_TOKEN
 } from '$env/static/private';
-import { readItem, readItems, type QueryItem } from '@directus/sdk';
+import { readItem, readItems } from '@directus/sdk';
 import { getClient } from './client';
 import type { Schema } from './schema';
 import { replace } from 'ramda';
 
-type DirectusRequestBody = Record<string, string | number | undefined | null>;
+type DirectusRequestBody = Record<string, string | number | boolean | undefined | null> & {
+	article?: string | number | null | undefined;
+	category?: string | number | null | undefined;
+	locale?: string | number | null | undefined;
+	page?: string | number | null | undefined;
+	preview?: string | number | null | undefined;
+	storefront?: string | number | null | undefined;
+	subCategory?: string | number | null | undefined;
+};
 
 /**
  * Gets a single item from a Directus collection
@@ -19,22 +27,34 @@ type DirectusRequestBody = Record<string, string | number | undefined | null>;
  * @param preview - Preview secret or null
  * @returns Item data or null if error
  */
-const getItem = async <T>(
+async function getItem<Collection extends keyof Schema>(
+	collection: Collection,
+	id: string | number,
+	query: unknown,
+	preview: string | number | null | undefined
+): Promise<Schema[Collection] | null>;
+async function getItem<T>(
 	collection: keyof Schema,
 	id: string | number,
-	query: QueryItem<Schema, T>,
+	query: unknown,
 	preview: string | number | null | undefined
-) => {
+): Promise<T | null>;
+async function getItem(
+	collection: keyof Schema,
+	id: string | number,
+	query: unknown,
+	preview: string | number | null | undefined
+) {
 	const token = preview === PREVIEW_SECRET ? DIRECTUS_PREVIEW_TOKEN : DIRECTUS_TOKEN;
 	try {
 		const client = getClient(DIRECTUS_REST_URL, token);
-		const request = await client.request(readItem(collection, id, query));
+		const request = await client.request(readItem(collection as never, id, query as never));
 		return request;
 	} catch (error) {
 		console.log(`error while getting item: ${id} from collection: ${collection}`, error);
 		return null;
 	}
-};
+}
 
 /**
  * Gets multiple items from a Directus collection
@@ -43,15 +63,25 @@ const getItem = async <T>(
  * @param preview - Preview secret or null
  * @returns Array of items or null if error
  */
-const getItems = async <T>(
-	collection: keyof Schema,
-	query: QueryItem<Schema, T>,
+async function getItems<Collection extends keyof Schema>(
+	collection: Collection,
+	query: unknown,
 	preview: string | number | null | undefined
-) => {
+): Promise<Schema[Collection][] | null>;
+async function getItems<T>(
+	collection: keyof Schema,
+	query: unknown,
+	preview: string | number | null | undefined
+): Promise<T[] | null>;
+async function getItems(
+	collection: keyof Schema,
+	query: unknown,
+	preview: string | number | null | undefined
+) {
 	const token = preview === PREVIEW_SECRET ? DIRECTUS_PREVIEW_TOKEN : DIRECTUS_TOKEN;
 	try {
 		const client = getClient(DIRECTUS_REST_URL, token);
-		const request = await client.request(readItems(collection, query));
+		const request = await client.request(readItems(collection as never, query as never));
 		return request;
 	} catch (error) {
 		console.log(
@@ -60,7 +90,7 @@ const getItems = async <T>(
 		);
 		return null;
 	}
-};
+}
 
 /**
  * Creates a translation filter for Directus queries

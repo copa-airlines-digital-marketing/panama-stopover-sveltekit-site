@@ -18,19 +18,24 @@
 	} = section_content;
 
 	const collectionComponent = collectionToComponent(collection);
+	const componentItem = item as any;
 
-	const variant = { display, horizontal_alignment, vertical_alignment };
+	const variant = {
+		display: display ? Number(display) as 25 | 50 | 75 | 100 : undefined,
+		horizontal_alignment: horizontal_alignment || undefined,
+		vertical_alignment: vertical_alignment || undefined
+	};
 </script>
 
-{#if collectionComponent}
+{#if collectionComponent && componentItem}
 	<div
 		class={cn(contentVariant(variant))}
 		style="--theme:{theme === 'light' ? '#000000' : '#FFFFFF'};--theme-contrast:{theme === 'light'
 			? '#FFFFFF'
 			: '#000000'};{area ? `grid-area:${area};` : ''}"
 	>
-		<svelte:component this={collectionComponent} {item} component={component_name} />
+		<svelte:component this={collectionComponent} item={componentItem} component={component_name} />
 	</div>
 {:else}
-	{say('collection did not match a component', { collection, collectionComponent })}
+	{say('section content did not match a renderable component', { collection, collectionComponent, item })}
 {/if}

@@ -12,7 +12,7 @@ const setPageCannonicals = (cannonicals: Cannonicals) => {
 }
 
 const getPageCannonicals = () => {
-  return getContext<Writable<Cannonicals>>(CANNONICAL_KEY)
+  return getContext<Writable<Cannonicals> | undefined>(CANNONICAL_KEY) || writable<Cannonicals>({})
 }
 
 export {

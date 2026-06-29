@@ -27,6 +27,8 @@
 		pt: labels?.filter((label) => label.name === 'support-lang-pt')[0],
 		fr: labels?.filter((label) => label.name === 'support-lang-fr')[0]
 	};
+
+	const isKnownLang = (lang: string): lang is keyof typeof langs => lang in langs;
 </script>
 
 {#if supported_languages}
@@ -34,9 +36,11 @@
 		<Globe class="size-6 fill-primary" />
 		<ul class="flex gap-1">
 			{#each supported_languages as lang, i}
-				<li class={getTypography('body-large', 'body')}>
-					{langs[lang].value + `${i < supported_languages.length - 1 ? ',' : ''}`}
-				</li>
+				{#if isKnownLang(lang) && langs[lang]}
+					<li class={getTypography('body-large', 'body')}>
+						{langs[lang].value + `${i < supported_languages.length - 1 ? ',' : ''}`}
+					</li>
+				{/if}
 			{/each}
 		</ul>
 	</div>

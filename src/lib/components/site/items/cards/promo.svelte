@@ -17,10 +17,17 @@
 		| PackageSchema
 		| TransportationSchema;
 
+	type TranslationWithPromo = {
+		lang_code?: string;
+		languages_code?: string;
+		promo_name?: string | null;
+		promo_description?: string | null;
+	};
+
 	const { promo_discount_amount, promo_discount_percent, promo_code, translations } = item;
 
-	const currrentTranslation = translations.filter(
-		(t) => t.lang_code || t.languages_code === $page.data.locale
+	const currrentTranslation = (translations as TranslationWithPromo[]).filter(
+		(t) => (t.lang_code || t.languages_code) === $page.data.locale
 	);
 
 	const {
@@ -41,7 +48,12 @@
 
 	const copyErrroLabel = labels?.filter((label) => label.name === 'promo-code-copied-error')[0];
 
-	const category = isPlaceSchema(item) ? item.pilar : !!item.pilar ? item?.pilar[0] : null;
+	const itemWithPilar = item as { pilar?: string | string[] | null };
+	const category = isPlaceSchema(item)
+		? item.pilar
+		: Array.isArray(itemWithPilar.pilar)
+			? itemWithPilar.pilar[0]
+			: null;
 
 	const theme = isHotelSchema(item)
 		? 'DEFAULT'

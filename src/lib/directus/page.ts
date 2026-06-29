@@ -20,7 +20,7 @@ type PathSchema = {
 
 type PageSchema = {
 	id: number;
-	share_image: string;
+	share_image: string | null;
 	translations: PageTranslationSchema[];
 	index: boolean;
 	head_code: string | null;

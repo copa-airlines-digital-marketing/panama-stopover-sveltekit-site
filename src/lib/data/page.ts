@@ -1,5 +1,5 @@
 import { getData } from '$lib/data/index.js';
-import { articleToKeyMap } from '$lib/directus/index.js';
+import { articleToKeyMap, type KeyToTypeMap } from '$lib/directus/index.js';
 import { isPageSettings } from '$lib/domain/pages';
 import { isSectionSchema, sectionSchema, type SectionSchema } from '$lib/directus/section.js';
 import { isEmpty, isNil } from 'ramda';
@@ -13,7 +13,11 @@ type RequestBody = {
 	preview?: string | null | undefined;
 };
 
-export async function getPageData(body: RequestBody) {
+type PageDataResult = Partial<KeyToTypeMap> & {
+	sections?: SectionSchema[];
+};
+
+export async function getPageData(body: RequestBody): Promise<PageDataResult | null> {
 	const { locale, subCategory, article, preview } = body;
 
 	const storefront = 'gs';
@@ -49,5 +53,5 @@ export async function getPageData(body: RequestBody) {
 		sections = sectionsRequest;
 	}
 
-	return { [key]: data, sections };
+	return { [key]: data, sections } as PageDataResult;
 }

@@ -1,6 +1,6 @@
 import { SITE_ID } from '$env/static/private';
 import { getItems } from '$lib/infrastructure/directus/utils';
-import { groupBy, map, path, reduce, unwind } from 'ramda';
+import { groupBy, map, path, reduce } from 'ramda';
 import {
 	getValueOfFulfilledPromise,
 	isPromiseFulfilled,
@@ -9,6 +9,7 @@ import {
 	toFlattedTranslation,
 	searchParent
 } from './utils';
+import type { PageLike, PagesByLocale } from './utils';
 
 const pagesQuery = {
 	fields: ['id', 'status', 'parent', { translations: ['languages_code', 'path'] }],
@@ -51,30 +52,34 @@ function getAllPages() {
 async function getAllPagesParams() {
 	const pagesRequests = await getAllPages();
 
-	if (!pagesRequests.every(isPromiseFulfilled)) return [];
+	if (!pagesRequests.every((promise) => promise.status === 'fulfilled')) return [];
 
-	const pageRequestValues = pagesRequests.map(getValueOfFulfilledPromise);
-
-	const mainPages = map(
-		map(unifyPages),
-		map(
-			reduce(toIdObject, {}),
-			groupBy(
-				path(['translations', 'languages_code']),
-				pageRequestValues[0]?.flatMap(unwind('translations'))
-			)
-		)
+	const pageRequestValues = (pagesRequests as PromiseFulfilledResult<unknown>[]).map((promise) => promise.value) as Array<PageLike[] | null>;
+	const pageGroups = pageRequestValues.map((value) => value || []);
+	const mainPageTranslations = (pageGroups[0] || []).flatMap((page) =>
+		(page.translations || []).map((translation) => ({ ...page, translations: translation }))
 	);
 
-	const pagesPathFinder = map(map(searchParent(mainPages)), mainPages);
+	const mainPages = (map as any)(
+		map(unifyPages),
+		(map as any)(
+			reduce(toIdObject, {}),
+			(groupBy as any)(
+				path(['translations', 'languages_code']),
+				mainPageTranslations as PageLike[]
+			)
+		)
+	) as PagesByLocale;
 
-	const pages = toFlattedTranslation(pageRequestValues.flat())
-		.filter((page) => ['en', 'es', 'pt'].includes(page.locale))
+	const pagesPathFinder = (map as any)((map as any)(searchParent(mainPages)), mainPages) as unknown as Record<string, Record<string, string[]>>;
+
+	const pages = toFlattedTranslation(pageGroups.flat()) as Array<PageLike & { locale?: string }>;
+
+	return pages
+		.filter((page) => ['en', 'es', 'pt'].includes(page.locale || ''))
 		.map((page) => ({
-			path: [...(pagesPathFinder[page.locale][page.parent] || []), page.path].join('/')
+			path: [...(pagesPathFinder[page.locale || '']?.[String(page.parent || '')] || []), page.path].join('/')
 		}));
-
-	return pages;
 }
 
 export { getAllPagesParams };

@@ -8,6 +8,10 @@ export { default as Map } from './map.svelte';
 
 declare global {
 	var initMap: () => void;
+	interface Window {
+		initMap: () => void;
+		google: any;
+	}
 }
 
 type Coordinates = {
@@ -46,15 +50,15 @@ const initMap =
 		zoom?: number
 	) =>
 	(): void => {
-		const mapOptions: google.maps.MapOptions = {
+		const mapOptions = {
 			zoom: zoom || 17,
 			center: coordinates,
 			mapId
 		};
 
-		const map = new google.maps.Map(mapElement, mapOptions);
+		const map = new window.google.maps.Map(mapElement, mapOptions);
 
-		new google.maps.marker.AdvancedMarkerElement({
+		new window.google.maps.marker.AdvancedMarkerElement({
 			position: coordinates,
 			map,
 			title
@@ -68,7 +72,7 @@ const addGoogleMapsJS = (
 	mapId: string,
 	zoom?: number
 ) => {
-	if (typeof window.initMap === 'function' && google) return;
+	if (typeof window.initMap === 'function' && window.google) return;
 
 	window.initMap = initMap(coordinates, title, mapElement, mapId, zoom);
 

@@ -15,12 +15,19 @@ const validateAllParameters = (
 
 const getPublishedPackages = async (filters: DirectusRequestBody) => {
 	const { locale, category, subCategory, article } = filters;
+	const params = { locale, category, subCategory, article };
 
 	console.log('getting package', article);
 
-	if (!validateAllParameters({ locale, category, subCategory, article })) return null;
+	if (!validateAllParameters(params)) return null;
 
-	const query = getPackageQuery(locale, category, subCategory, article);
+	const queryParams = params as Record<'locale' | 'category' | 'subCategory' | 'article', string | number>;
+	const query = getPackageQuery(
+		queryParams.locale,
+		queryParams.category,
+		queryParams.subCategory,
+		queryParams.article
+	);
 	const packages = await getItems('stopover_package', query, filters.preview);
 
 	if (!packages) return null;

@@ -105,8 +105,8 @@ export function mapPlaceToDetailViewModel(
 		description: translation?.description || '',
 		phoneNumber: place.phone_number ?? undefined,
 		location: {
-			address: place.location.address,
-			city: place.location.city,
+			address: place.location.address || '',
+			city: place.location.city || '',
 			latitude: place.location.latitude ?? undefined,
 			longitude: place.location.longitude ?? undefined
 		},

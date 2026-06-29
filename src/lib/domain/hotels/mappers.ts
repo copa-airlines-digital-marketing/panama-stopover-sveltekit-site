@@ -114,8 +114,8 @@ export function mapHotelToDetailViewModel(
 		phoneNumber: hotel.phone_number,
 		bookingEmail: hotel.booking_email,
 		location: {
-			address: hotel.location.address,
-			city: hotel.location.city,
+			address: hotel.location.address || '',
+			city: hotel.location.city || '',
 			latitude: hotel.location.latitude ?? undefined,
 			longitude: hotel.location.longitude ?? undefined
 		},

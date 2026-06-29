@@ -12,6 +12,7 @@ import {
 	stopoverMixedExperienceModuleSchema
 } from './stopover_mixed_experience_module';
 import { formSchema } from './forms';
+import { flightSearchFormQueryFields, flightSearchFormSchema } from './flight-search-form';
 
 const horizontal_alignment = z.union([z.literal('left'), z.literal('center'), z.literal('right')]);
 const vertical_alignment = z.union([
@@ -49,7 +50,8 @@ const directusSectionItemName = z.union([
 	z.literal('stopover_hotel_module'),
 	z.literal('stopover_mixed_experience_module'),
 	z.literal('stopover_mixed_experiece_module'),
-	z.literal('form')
+	z.literal('form'),
+	z.literal('block_flight_search_form')
 ]);
 
 const sectionContentSchema = z.object({
@@ -62,7 +64,9 @@ const sectionContentSchema = z.object({
 		.or(contentGroupSchema)
 		.or(stopoverHotelModuleSchema)
 		.or(stopoverMixedExperienceModuleSchema)
-		.or(formSchema),
+		.or(formSchema)
+		.or(flightSearchFormSchema)
+		.nullable(),
 	collection: directusSectionItemName,
 	component_name: z.string().nullable(),
 	area: z.string().nullable(),
@@ -130,7 +134,7 @@ type SectionContentSchema = z.infer<typeof sectionContentSchema>;
 const isSectionSchema = (value: unknown): value is SectionSchema[] =>
 	sectionSchema.array().safeParse(value).success;
 
-const sectionQuery = (storefront: string, page: string, locale: string) => ({
+const sectionQuery = (storefront: string | number, page: string | number, locale: string | number) => ({
 	fields: [
 		'id',
 		'landmark',
@@ -162,7 +166,8 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
 						icons: logoQuery,
 						header: headerQuery,
 						content_group: contentGroupQueryFields,
-						stopover_hotel_module: stopoverHotelModuleQueryFields
+						stopover_hotel_module: stopoverHotelModuleQueryFields,
+						block_flight_search_form: flightSearchFormQueryFields
 					}
 				}
 			]
@@ -179,6 +184,7 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
 			'item:Text_Content': getTranslationFilter(locale),
 			'item:navigation': getTranslationFilter(locale),
 			'item:form': getTranslationFilter(locale),
+			'item:block_flight_search_form': getTranslationFilter(locale),
 			'item:stopover_hotel_module': {
 				filters: getTranslationFilter(locale)
 			},
@@ -193,6 +199,7 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
 					'item:navigation': getTranslationFilter(locale),
 					'item:Text_Content': getTranslationFilter(locale),
 					'item:form': getTranslationFilter(locale),
+					'item:block_flight_search_form': getTranslationFilter(locale),
 					'item:stopover_hotel_module': {
 						filters: getTranslationFilter(locale)
 					},

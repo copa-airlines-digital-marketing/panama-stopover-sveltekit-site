@@ -1,14 +1,12 @@
 <script lang="ts">
 	import type { MapProps } from '.';
-	import { Button, type ButtonEvents, type ButtonProps } from '$ui/components/button';
+	import { Button, type ButtonProps } from '$ui/components/button';
 	import { cn } from '$lib/utils';
 
 	type $$Props = ButtonProps &
 		MapProps & {
 			useName?: boolean;
 		};
-	type $$Events = ButtonEvents;
-
 	let className: $$Props['class'] = undefined;
 	export let variant: $$Props['variant'] = 'solid-primary-main';
 	export let size: $$Props['size'] = 'default';
@@ -41,7 +39,7 @@
 	class={cn('z-10 cursor-pointer self-end justify-self-end [grid-area:navigate]', className)}
 	customcn={cn}
 	{...$$restProps}
-	on:click={getURL}
+	onclick={getURL}
 >
 	<slot />
 </Button>

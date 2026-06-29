@@ -5,15 +5,41 @@ import { z } from 'zod';
  * View models for stopover tours
  */
 
+const namedItemSchema = z.object({
+	name: z.string()
+}).passthrough();
+
+const tourExperienceSchema = z.object({
+	title: z.string(),
+	description: z.string(),
+	type: z.string(),
+	duration: z.union([z.string(), z.number()]).nullish(),
+	includes_admission: z.boolean().nullish()
+}).passthrough();
+
+const contactSchema = z.object({
+	form: z.string(),
+	contact: z.string()
+}).passthrough();
+
+const networkSchema = z.object({
+	type: z.string(),
+	link: z.string()
+}).passthrough();
+
+const geoPointSchema = z.object({
+	coordinates: z.number().array()
+}).passthrough();
+
 // Tour translation
 const tourTranslationSchema = z.object({
 	languages_code: z.string(),
 	path: z.string(),
 	name: z.string(),
 	description: z.string(),
-	experience: z.string().nullish(),
-	included: z.string().nullish(),
-	not_included: z.string().nullish(),
+	experience: z.array(tourExperienceSchema).nullish(),
+	included: z.array(namedItemSchema).nullish(),
+	not_included: z.array(namedItemSchema).nullish(),
 	promo_name: z.string().nullish(),
 	promo_description: z.string().nullish(),
 	url: z.string().nullish()
@@ -25,8 +51,8 @@ type TourTranslation = z.infer<typeof tourTranslationSchema>;
 const tourOperatorSchema = z.object({
 	name: z.string(),
 	main_image: z.string().nullish(),
-	contact: z.string().nullish(),
-	network: z.string().nullish()
+	contact: z.array(contactSchema).nullish(),
+	network: z.array(networkSchema).nullish()
 });
 
 type TourOperator = z.infer<typeof tourOperatorSchema>;
@@ -65,8 +91,8 @@ const tourSchema = z.object({
 	main_image: z.string(),
 	duration: z.string().nullish(),
 	start_time: z.string().nullish(),
-	meeting_point: z.string().nullish(),
-	end_point: z.string().nullish(),
+	meeting_point: geoPointSchema.nullish(),
+	end_point: geoPointSchema.nullish(),
 	experience_category: experienceCategorySchema.nullable().optional(),
 	supported_languages: z.string().array().nullish(),
 	pilar: z.string().array().nullish(),

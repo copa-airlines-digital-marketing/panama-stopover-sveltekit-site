@@ -1,8 +1,6 @@
 import { z } from "zod";
 import { logoQuery, logosSchema } from "./logos";
 import { getItems, getTranslationFilter, type DirectusRequestBody } from "../infrastructure/directus/utils";
-import type { QueryItem } from "@directus/sdk";
-import type { Schema } from "./schema";
 import { say } from "$lib/utils";
 
 const hotelAmenityTranslation = z.object({
@@ -18,16 +16,16 @@ const hotelAmenities = z.object({
 
 type HotelAmenity = z.infer<typeof hotelAmenities>
 
-const hotelAmenityQuery = (locale: string | number): QueryItem<Schema, 'hotel_amenities'> => ({ 
-  fields: [ 
-    'name', 
-    { 'icon': logoQuery }, 
+const hotelAmenityQuery = (locale: string | number) => ({
+  fields: [
+    'name',
+    { 'icon': logoQuery },
     { 'translations': ['name'] }
   ],
   deep: {
     ...getTranslationFilter(locale)
   }
-})
+} as const)
 
 const isHotelAmenitiesArray = (value: unknown): value is HotelAmenity => hotelAmenities.array().safeParse(value).success
 

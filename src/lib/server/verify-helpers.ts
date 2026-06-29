@@ -1,6 +1,8 @@
 import { IP_HASH_SALT } from '$env/static/private';
-import { Prisma, type AccessTokenStatus, PrismaClient } from '@prisma/client';
+import type { PrismaClient } from '@prisma/client';
 import crypto from 'node:crypto';
+
+type AccessTokenStatus = 'active' | 'expired' | 'revoked';
 
 export type VerifyResult =
 	| { kind: 'not_found' }
@@ -82,7 +84,8 @@ export async function logVerifyAccess(
 }
 
 async function readReservationPublic(prisma: PrismaClient, reservationId: string) {
-	const rows = await prisma.$queryRaw<
+	const queryRaw = prisma.$queryRawUnsafe as <T = unknown>(query: string, ...values: unknown[]) => Promise<T>;
+	const rows = await queryRaw<
 		Array<{
 			reservation_id: string;
 			reservation_last_names: string | null;
@@ -90,12 +93,15 @@ async function readReservationPublic(prisma: PrismaClient, reservationId: string
 			departure_pty_at: string | Date;
 			phase: 'upcoming' | 'in_progress' | 'completed';
 		}>
-	>(Prisma.sql`
+	>(
+		`
     SELECT reservation_id, reservation_last_names, arrival_pty_at, departure_pty_at, phase
     FROM v_public_reservations
-    WHERE reservation_id = ${reservationId}::uuid
+    WHERE reservation_id = $1::uuid
     LIMIT 1
-    `);
+    `,
+		reservationId
+	);
 
 	const row = rows[0];
 
@@ -113,17 +119,21 @@ async function readReservationPublic(prisma: PrismaClient, reservationId: string
 }
 
 async function readTravelerPublic(prisma: PrismaClient, travelerId: string) {
-	const rows = await prisma.$queryRaw<
+	const queryRaw = prisma.$queryRawUnsafe as <T = unknown>(query: string, ...values: unknown[]) => Promise<T>;
+	const rows = await queryRaw<
 		Array<{
 			traveler_id: string;
 			display_traveler: string | null;
 		}>
-	>(Prisma.sql`
+	>(
+		`
     SElECT traveler_id, display_traveler
     FROM v_public_travelers
-    WHERE traveler_id = ${travelerId}::uuid
+    WHERE traveler_id = $1::uuid
     LIMIT 1  
-  `);
+  `,
+		travelerId
+	);
 
 	return rows[0]?.display_traveler ?? null;
 }
