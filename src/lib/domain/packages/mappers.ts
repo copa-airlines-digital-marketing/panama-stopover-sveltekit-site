@@ -80,9 +80,9 @@ export function mapPackageToCardViewModel(
  */
 export interface PackageDetailViewModel extends PackageCardViewModel {
 	description: string;
-	included?: string;
-	notIncluded?: string;
-	contact?: string;
+	included?: PackageTranslation['included'];
+	notIncluded?: PackageTranslation['not_included'];
+	contact?: PackageSchema['contact'];
 	languages?: string[];
 	gallery: Array<{ id: string; sort?: number }>;
 }

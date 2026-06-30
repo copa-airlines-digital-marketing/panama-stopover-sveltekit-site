@@ -107,8 +107,8 @@ export function mapRestaurantToDetailViewModel(
 		phoneNumber: restaurant.phone_number,
 		bookingEmail: restaurant.booking_email,
 		location: {
-			address: restaurant.location.address,
-			city: restaurant.location.city,
+			address: restaurant.location.address || '',
+			city: restaurant.location.city || '',
 			latitude: restaurant.location.latitude ?? undefined,
 			longitude: restaurant.location.longitude ?? undefined
 		},

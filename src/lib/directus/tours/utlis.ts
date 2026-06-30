@@ -1,8 +1,6 @@
-import type { StopoverTourTranslations } from "$cms/collections/stopover_tour_translations";
-import type { StopoverTour } from "$cms/collections/stopover_tours/stopover_tours";
 import { isNumberArray } from "$lib/utils";
 
-const isStopoverTourTranslations = (value: StopoverTour['translations']): value is StopoverTourTranslations[] => {
+const isStopoverTourTranslations = <T>(value: T[] | null | undefined): value is T[] => {
   if(value == null) {
     console.warn(`value is null or undefined`);
     return false;

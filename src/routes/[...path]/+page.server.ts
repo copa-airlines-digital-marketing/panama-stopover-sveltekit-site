@@ -1,25 +1,20 @@
 import { getPageData } from '$lib/data/page.js';
-import type { HotelSchema } from '$lib/domain/hotels';
 import { isNotFoundSchema } from '$lib/directus/not-found.js';
 import { isPageSettings, type PageSchema } from '$lib/domain/pages';
-import type { PlaceSchema } from '$lib/domain/places';
-import type { RestaurantSchema } from '$lib/domain/restaurants';
 import type { SectionSchema } from '$lib/directus/section.js';
 import { say } from '$lib/utils.js';
 import { error } from '@sveltejs/kit';
 import { getAllSectionModules, getModuleRequest, setToValue } from '../utils';
 import { isEmpty, isNil } from 'ramda';
-import type { EntryGenerator } from '../$types';
+import type { EntryGenerator } from './$types';
 import { getAllPagesParams } from '$lib/data/pages';
 import { getItems } from '$lib/infrastructure/directus/utils';
 import { pagePathFields } from '$lib/domain/pages';
 
 type DataTypeMap = {
+	[key: string]: unknown;
 	page: PageSchema | undefined;
 	pageSections: SectionSchema[] | undefined;
-	stopover_hotels: HotelSchema | undefined;
-	stopover_restaurants: RestaurantSchema | undefined;
-	stopover_place_to_visit: PlaceSchema | undefined;
 	mixed_experience_module_query: unknown;
 	mixed_items_query_output: unknown;
 	modules_config_list: unknown[];
@@ -61,7 +56,7 @@ const getModulesConfigList = (sections: SectionSchema[] | undefined) => {
 
 			if (sectionItem.collection !== 'content_group' || !isRecord(sectionItem.item)) return;
 
-			const content = sectionItem.item['content'];
+			const content = (sectionItem.item as Record<string, unknown>)['content'];
 
 			if (!Array.isArray(content)) return;
 
@@ -277,8 +272,8 @@ export async function load(event) {
 	]);
 
 	if (!pageData) {
-		say('Page data request returned null', { path, locale, category, subCategory, article });
-		return error(500);
+		say('Page requested not found', { route, path, locale, category, subCategory, article });
+		return error(404);
 	}
 
 	const { page, sections: pageSections } = pageData;

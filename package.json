@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
+		"prebuild": "pnpm run generate:stopover-routes",
 		"dev": "doppler run -- vite dev --host --port 1614",
 		"dev:local": "vite dev --host --port 1614",
 		"build": "vite build",
@@ -25,6 +26,7 @@
 		"test:unit:local": "doppler run -- vitest",
 		"start": "node build/index.js",
 		"start:local": "doppler run -- node build/index.js",
+		"generate:stopover-routes": "node scripts/generate-stopover-route-data.mjs",
 		"doppler:login": "doppler login",
 		"doppler:secrets": "doppler secrets get",
 		"doppler:download": "doppler secrets download --format env > .env.doppler.local",
@@ -33,7 +35,9 @@
 	"devDependencies": {
 		"@directus/sdk": "^18.0.3",
 		"@playwright/test": "^1.60.0",
+		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/adapter-static": "^3.0.10",
+		"@sveltejs/adapter-vercel": "^5.7.0",
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@tailwindcss/postcss": "^4.3.0",
@@ -44,6 +48,7 @@
 		"@types/qrcode": "^1.5.6",
 		"@types/ramda": "^0.30.2",
 		"@upstash/redis": "^1.38.0",
+		"autoprefixer": "^10.5.2",
 		"bits-ui": "^2.18.1",
 		"clsx": "^2.1.1",
 		"eslint": "^9.39.4",

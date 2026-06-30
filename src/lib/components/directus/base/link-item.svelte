@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SVG } from '$lib/components/icon';
+	import { SVG } from '$lib/components/ui/icon';
 	import { cn } from '$lib/utils';
 	import type { Props } from '.';
 

@@ -40,9 +40,11 @@
 		supported_languages
 	} = stopover_tour;
 
+	const supportedLanguages = supported_languages || [];
+
 	const {
 		coordinates: [meet_lng, meet_lat]
-	} = meeting_point;
+	} = meeting_point || { coordinates: [0, 0] };
 
 	const {
 		coordinates: [end_lng, end_lat]
@@ -55,7 +57,7 @@
 	const { name, description, experience, included, not_included, promo_name, promo_description } =
 		translation[0];
 
-	const galleryImages = true ? gallery.map((img) => img.directus_files_id) : gallery;
+	const galleryImages = gallery.map((img) => img.directus_files_id);
 
 	const disclaimer = $page.data.siteSettings.error_messages?.filter((v) => v.error_code === 600)[0];
 
@@ -181,7 +183,7 @@
 					<Body tag="li" class="mb-0">
 						{labels?.get('languages')}:
 					</Body>
-					{#each supported_languages as lang}
+					{#each supportedLanguages as lang}
 						<Body tag="li" class="mb-0">
 							{labels?.get(`support-lang-${lang}`)}
 						</Body>
@@ -359,7 +361,7 @@
 		<div>
 			<ContactCard let:Avatar let:Name class="bg-background-lightblue">
 				<Avatar let:Image let:Fallback>
-					<Image src={getDirectusImage(main_image)} alt={name} />
+					<Image src={getDirectusImage(main_image || '')} alt={name} />
 					<Fallback>{getTourOperatorInitials(name)}</Fallback>
 				</Avatar>
 				<Name class="my-0">
@@ -372,7 +374,7 @@
 						{labels?.get('tour-operator-contact')}
 					</Heading>
 					<ul class="flex gap-1 md:gap-2">
-						{#each contact as c}
+						{#each contact || [] as c}
 							<li>
 								<a
 									href={getConctactFormLink(c.form, c.contact)}
@@ -391,7 +393,7 @@
 						>{labels?.get('tour-operator-socials')}</Heading
 					>
 					<ul class="flex gap-1 md:gap-2">
-						{#each network as social}
+						{#each network || [] as social}
 							<li>
 								<a
 									href={social.link}

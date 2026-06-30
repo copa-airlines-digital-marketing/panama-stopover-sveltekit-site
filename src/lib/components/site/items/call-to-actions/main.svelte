@@ -20,6 +20,11 @@
 		| TransportationSchema;
 
 	const { translations } = item;
+	type TranslationWithUrl = {
+		lang_code?: string;
+		languages_code?: string;
+		url?: string | null;
+	};
 
 	const labels = $page.data.siteSettings.translations?.[0]?.labels;
 
@@ -28,6 +33,7 @@
 	const normalizeHref = (href: string | null | undefined) => {
 		const value = href?.trim();
 		if (!value) return '';
+		if (value.startsWith('//')) return `https:${value}`;
 		if (/^(https?:|mailto:|tel:|\/|#)/i.test(value)) return value;
 		if (/^(www\.|[\w.-]+\.[a-z]{2,}(\/|$))/i.test(value)) return `https://${value}`;
 		return value;
@@ -35,14 +41,10 @@
 </script>
 
 {#if !!translations && typeof translations !== 'number' && !isNumberArray(translations)}
-	{@const trans = translations.filter((t) => t.lang_code || t.languages_code === $page.data.locale)}
-	{#if trans?.[0].url}
-		<Button
-			href={normalizeHref(trans?.[0].url)}
-			rel="noreferrer nofollow"
-			target="_blank"
-			{...$$restProps}
-		>
+	{@const trans = (translations as TranslationWithUrl[]).filter((t) => (t.lang_code || t.languages_code) === $page.data.locale)}
+	{@const ctaHref = normalizeHref(trans?.[0].url)}
+	{#if ctaHref}
+		<Button href={ctaHref} rel="noreferrer nofollow" target="_blank" {...$$restProps}>
 			{#if mainCTAText}
 				{mainCTAText.value}
 			{:else}

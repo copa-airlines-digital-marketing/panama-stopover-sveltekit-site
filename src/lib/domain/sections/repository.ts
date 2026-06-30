@@ -6,6 +6,7 @@ import {
 import { say } from '$lib/core/utils';
 import { groupsSchema } from '../../directus/groups';
 import { contentGroupQueryFields, contentGroupSchema } from '../../directus/content-group';
+import { flightSearchFormQueryFields } from '../../directus/flight-search-form';
 import {
 	stopoverHotelModuleQueryFields,
 	stopoverHotelModuleSchema
@@ -21,7 +22,7 @@ import { isSectionSchema, sectionSchema } from './types';
 const isRecord = (value: unknown): value is Record<string, unknown> =>
 	typeof value === 'object' && value !== null;
 
-const sectionFilter = (storefront: string, page: string) => ({
+const sectionFilter = (storefront: string | number, page: string | number) => ({
 	_and: [
 		{ page_storefronts: { pages_storefronts_id: { storefronts_code: { _eq: storefront } } } },
 		{ page_storefronts: { pages_storefronts_id: { pages_id: { _eq: page } } } }
@@ -223,7 +224,7 @@ const hydrateNullStopoverHotelModules = async (sections: unknown, filters: Direc
  * @param locale - Locale code
  * @returns Query configuration for Directus
  */
-const sectionQuery = (storefront: string, page: string, locale: string) => ({
+const sectionQuery = (storefront: string | number, page: string | number, locale: string | number) => ({
 	fields: [
 		'id',
 		'landmark',
@@ -257,7 +258,8 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
 						content_group: contentGroupQueryFields,
 						form: formQueryFields,
 						stopover_hotel_module: stopoverHotelModuleQueryFields,
-						stopover_mixed_experience_module: stopoverMixedExperienceModuleQueryFields
+						stopover_mixed_experience_module: stopoverMixedExperienceModuleQueryFields,
+						block_flight_search_form: flightSearchFormQueryFields
 					}
 				}
 			]
@@ -269,6 +271,7 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
 			'item:Text_Content': getTranslationFilter(locale),
 			'item:navigation': getTranslationFilter(locale),
 			'item:form': getTranslationFilter(locale),
+			'item:block_flight_search_form': getTranslationFilter(locale),
 			'item:stopover_hotel_module': {
 				filters: getTranslationFilter(locale)
 			},
@@ -283,6 +286,7 @@ const sectionQuery = (storefront: string, page: string, locale: string) => ({
 					'item:navigation': getTranslationFilter(locale),
 					'item:Text_Content': getTranslationFilter(locale),
 					'item:form': getTranslationFilter(locale),
+					'item:block_flight_search_form': getTranslationFilter(locale),
 					'item:stopover_hotel_module': {
 						filters: getTranslationFilter(locale)
 					},
@@ -312,6 +316,22 @@ const getSections = async (filters: DirectusRequestBody) => {
 		sectionQuery(storefront, page, locale),
 		filters.preview
 	);
+
+	if (sectionRequest instanceof Response) {
+		const responseText = await sectionRequest
+			.clone()
+			.text()
+			.catch(() => null);
+
+		say('Sections request returned a raw Response', {
+			status: sectionRequest.status,
+			statusText: sectionRequest.statusText,
+			body: responseText?.slice(0, 1200)
+		});
+
+		return null;
+	}
+
 	const { sections: hydratedSections, hydratedItems } = await hydrateNullStopoverHotelModules(
 		sectionRequest,
 		filters

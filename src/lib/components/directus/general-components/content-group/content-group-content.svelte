@@ -8,10 +8,11 @@
 	const { collection, component, item } = content;
 
 	const collectionComponent = collectionToComponent(collection);
+	const componentItem = item as any;
 </script>
 
-{#if collectionComponent}
-	<svelte:component this={collectionComponent} {item} {component} />
+{#if collectionComponent && componentItem}
+	<svelte:component this={collectionComponent} item={componentItem} {component} />
 {:else}
-	{say('collection did not match a component', { collection, collectionComponent })}
+	{say('content group item did not match a renderable component', { collection, collectionComponent, item })}
 {/if}

@@ -7,6 +7,7 @@ import {
 	stopoverMixedExperienceModuleSchema
 } from './stopover_mixed_experience_module';
 import { formQueryFields, formSchema } from './forms';
+import { flightSearchFormQueryFields, flightSearchFormSchema } from './flight-search-form';
 
 const contentGroupTranslation = z.object({
 	languages_code: z.string().optional(),
@@ -20,7 +21,8 @@ const contentGroupCollectionName = z.union([
 	z.literal('content_group'),
 	z.literal('stopover_hotel_module'),
 	z.literal('stopover_mixed_experience_module'),
-	z.literal('stopover_mixed_experiece_module')
+	z.literal('stopover_mixed_experiece_module'),
+	z.literal('block_flight_search_form')
 ]);
 
 const contentGroupItems = z.union([
@@ -28,11 +30,12 @@ const contentGroupItems = z.union([
 	textContentSchema,
 	stopoverHotelModuleSchema,
 	stopoverMixedExperienceModuleSchema,
-	formSchema
+	formSchema,
+	flightSearchFormSchema
 ]);
 
 const contentGroupContentSchema = z.object({
-	item: contentGroupItems,
+	item: contentGroupItems.nullable(),
 	component: z.string().nullable(),
 	collection: contentGroupCollectionName
 });
@@ -56,7 +59,8 @@ const contentGroupQueryFields = [
 					Text_Content: textContentQuery,
 					form: formQueryFields,
 					stopover_hotel_module: stopoverHotelModuleQueryFields,
-					stopover_mixed_experience_module: stopoverMixedExperienceModuleQueryFields
+					stopover_mixed_experience_module: stopoverMixedExperienceModuleQueryFields,
+					block_flight_search_form: flightSearchFormQueryFields
 				}
 			}
 		]

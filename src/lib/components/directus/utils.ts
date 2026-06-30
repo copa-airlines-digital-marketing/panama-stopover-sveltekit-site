@@ -1,10 +1,11 @@
-import { isHeaderSchema, type HeaderSchema } from "$lib/directus/header";
-import { isLogoSchema, type LogoSchema } from "$lib/directus/logos";
-import { isNavigationSchema, type NavigationSchema } from "$lib/directus/navigation";
+import { isHeaderSchema } from "$lib/directus/header";
+import { isLogoSchema } from "$lib/directus/logos";
+import { isNavigationSchema } from "$lib/directus/navigation";
 import type { SectionContentSchema, SectionSchema } from "$lib/directus/section";
-import { isTextContentSchema, type TextContentSchema } from "$lib/directus/text-content";
+import { isTextContentSchema } from "$lib/directus/text-content";
 import { Header } from "./blocks/header";
 import { ContentGroup } from "./general-components/content-group";
+import { FlightSearchForm } from './general-components/flight-search-form';
 import { HotelModule } from "./general-components/hotel-module";
 import { MixedExperienceModule } from './general-components/mixed-experience-module';
 import Logo from "./general-components/logo.svelte";
@@ -16,14 +17,7 @@ import { SectionAsTab } from "./section/tabs";
 
 type DirectusCollectionItems = SectionContentSchema['collection']
 
-type DirectusCollectionToSchemaMap = {
-  'header': HeaderSchema,
-  'logos': LogoSchema,
-  'navigation': NavigationSchema
-  'Text_Content': TextContentSchema
-}
-
-const DirectusCollectionToValidationMap: Record<DirectusCollectionItems, (v: unknown) => v is DirectusCollectionToSchemaMap[DirectusCollectionItems]> = {
+const DirectusCollectionToValidationMap: Partial<Record<DirectusCollectionItems, (v: unknown) => boolean>> = {
   'header': isHeaderSchema,
   'logos': isLogoSchema,
   'navigation': isNavigationSchema,
@@ -73,6 +67,9 @@ const collectionToComponent = (collection: SectionContentSchema['collection']) =
 
   if (collection === 'stopover_mixed_experiece_module')
     return MixedExperienceModule
+
+  if (collection === 'block_flight_search_form')
+    return FlightSearchForm
 
   return null
 }

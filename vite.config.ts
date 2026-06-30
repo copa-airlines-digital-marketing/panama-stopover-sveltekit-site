@@ -6,7 +6,7 @@ import path from 'path';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
+		include: ['src/**/*.{test,spec}.{js,ts}', 'scripts/**/*.{test,spec}.{js,ts,mjs}']
 	},
 	server: {
 		allowedHosts: ['local-dev.panama-stopover.com'],
