@@ -1,0 +1,18 @@
+---
+description: Internal Digital Marketing policy reference for development work
+alwaysApply: true
+---
+
+# Internal Policies Reference
+
+Before development changes, review the internal policies wiki index:
+
+`C:\Users\cpatino\OneDrive - Compañía Panameña de Aviación, S.A\General - Digital Marketing\📜 Policies\wiki\index.md`
+
+Applicable notes for this repository:
+
+- Do not expose, commit, print, or document secrets from `.env`, Doppler, CMS tokens, database URLs, Redis credentials, API keys, or analytics credentials.
+- Escalate for review if a change introduces new vendor services, paid tools, contracts, PII exchange, PCI exposure, or new external data processors.
+- Treat reservation, traveler, consent, QR access log, IP hash, and user agent data as sensitive operational data.
+- Prefer local validation with existing project scripts before proposing deployment.
+- Do not run build/compile commands to discover errors in this project; builds are slow. Use the local dev server for validation, and rely on user-provided build errors when compilation fails in CI/deploy.

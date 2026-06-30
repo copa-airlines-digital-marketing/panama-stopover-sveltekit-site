@@ -1,4 +1,5 @@
 import type { HeaderSchema } from '../../directus/header';
+import type { FlightSearchFormSchema } from '../../directus/flight-search-form';
 import type { HotelAmenity } from '../../directus/hotel-amenities';
 import type { HotelSchema } from '../../domain/hotels';
 import type { LinkSchema } from '../../directus/links';
@@ -14,6 +15,7 @@ import type { TransportationSchema } from '../../domain/transportation';
 import type { SectionContentSchema, SectionSchema } from '../../domain/sections';
 import type { SiteSettingsSchema } from '../../directus/site-settings';
 import type { StopoverMixedExperienceModuleSchema } from '../../directus/stopover_mixed_experience_module';
+import type { StopoverHotelModuleSchema } from '../../directus/stopover_hotel_module';
 import type { TextContentSchema } from '../../directus/text-content';
 
 interface Schema {
@@ -28,6 +30,7 @@ interface Schema {
 	navigation: NavigationSchema;
 	//Blocks
 	header: HeaderSchema;
+	block_flight_search_form: FlightSearchFormSchema;
 	//Website
 	pages: PageSchema;
 	sections: SectionSchema;
@@ -41,6 +44,7 @@ interface Schema {
 	stopover_tour_operator: TourOperatorSchema;
 	stopover_package: PackageSchema;
 	stopover_transportation: TransportationSchema;
+	stopover_hotel_module: StopoverHotelModuleSchema;
 	stopover_mixed_experience_module: StopoverMixedExperienceModuleSchema;
 	stopover_mixed_experiece_module: StopoverMixedExperienceModuleSchema;
 }

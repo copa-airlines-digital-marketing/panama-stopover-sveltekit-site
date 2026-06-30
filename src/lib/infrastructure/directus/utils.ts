@@ -19,6 +19,44 @@ type DirectusRequestBody = Record<string, string | number | boolean | undefined 
 	subCategory?: string | number | null | undefined;
 };
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+	typeof value === 'object' && value !== null;
+
+const getErrorMessage = (error: unknown) => {
+	if (error instanceof Error) return error.message;
+	if (typeof error === 'string') return error;
+	return 'Unknown Directus error';
+};
+
+const getErrorDetails = (error: unknown) => {
+	if (!isRecord(error)) return undefined;
+
+	return {
+		name: typeof error.name === 'string' ? error.name : undefined,
+		message: getErrorMessage(error),
+		errors: error.errors,
+		response: error.response
+	};
+};
+
+const logDirectusError = (
+	operation: 'readItem' | 'readItems',
+	context: Record<string, unknown>,
+	error: unknown
+) => {
+	console.error(
+		`[directus:${operation}] Request failed`,
+		JSON.stringify(
+			{
+				...context,
+				error: getErrorDetails(error) ?? getErrorMessage(error)
+			},
+			null,
+			2
+		)
+	);
+};
+
 /**
  * Gets a single item from a Directus collection
  * @param collection - Collection name
@@ -51,7 +89,16 @@ async function getItem(
 		const request = await client.request(readItem(collection as never, id, query as never));
 		return request;
 	} catch (error) {
-		console.log(`error while getting item: ${id} from collection: ${collection}`, error);
+		logDirectusError(
+			'readItem',
+			{
+				collection,
+				id,
+				preview: preview === PREVIEW_SECRET,
+				query
+			},
+			error
+		);
 		return null;
 	}
 }
@@ -84,9 +131,14 @@ async function getItems(
 		const request = await client.request(readItems(collection as never, query as never));
 		return request;
 	} catch (error) {
-		console.log(
-			`error while getting items from collection: ${collection}`,
-			JSON.stringify(error, null, 2)
+		logDirectusError(
+			'readItems',
+			{
+				collection,
+				preview: preview === PREVIEW_SECRET,
+				query
+			},
+			error
 		);
 		return null;
 	}

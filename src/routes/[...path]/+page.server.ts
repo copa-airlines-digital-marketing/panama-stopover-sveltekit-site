@@ -29,7 +29,9 @@ const targetModuleCollections = [
 const isRecord = (value: unknown): value is Record<string, unknown> =>
 	typeof value === 'object' && value !== null;
 
-const isTargetModuleCollection = (value: unknown): value is (typeof targetModuleCollections)[number] =>
+const isTargetModuleCollection = (
+	value: unknown
+): value is (typeof targetModuleCollections)[number] =>
 	typeof value === 'string' && targetModuleCollections.some((collection) => collection === value);
 
 const getModulesConfigList = (sections: SectionSchema[] | undefined) => {
@@ -127,8 +129,10 @@ const comparePromoItems = (a: SortablePromoItem, b: SortablePromoItem) => {
 	return nameA.localeCompare(nameB);
 };
 
-const sortAndTrimPromoItems = <T extends SortablePromoItem>(items: T[], maxItems: number) =>
-	[...items].sort(comparePromoItems).slice(0, maxItems);
+const sortAndTrimPromoItems = <T extends SortablePromoItem>(items: T[], maxItems: number) => {
+	const sortedItems = [...items].sort(comparePromoItems);
+	return maxItems < 0 ? sortedItems : sortedItems.slice(0, maxItems);
+};
 
 const isPromotionPrefilter = (prefilter: string | null | undefined) =>
 	(prefilter ?? '').toLocaleLowerCase() === 'promotions';
@@ -153,14 +157,7 @@ const getCollectionSpecificFields = (collection: string): string[] => {
 		];
 	}
 	if (collection === 'stopover_place_to_visit') {
-		return [
-			'id',
-			'duration',
-			'location',
-			'supported_languages',
-			'date_created',
-			...categoryFields
-		];
+		return ['id', 'duration', 'location', 'supported_languages', 'date_created', ...categoryFields];
 	}
 	return ['id', 'date_created'];
 };
@@ -227,11 +224,7 @@ const mixedEntityTypeToCollectionMap: Record<string, string> = {
 
 const getItemTranslationsFilter = (collectionName: string, locale: string) => {
 	if (
-		[
-			'stopover_hotels',
-			'stopover_restaurants',
-			'stopover_place_to_visit'
-		].includes(collectionName)
+		['stopover_hotels', 'stopover_restaurants', 'stopover_place_to_visit'].includes(collectionName)
 	) {
 		return {
 			lang_code: {
@@ -250,14 +243,9 @@ const getItemTranslationsFilter = (collectionName: string, locale: string) => {
 export const entries: EntryGenerator = async () => {
 	const allPagesParams = await getAllPagesParams();
 	console.log(
-		`Sveltekit will render ${allPagesParams.length} pages`,
-		JSON.stringify(
-			allPagesParams.map((v) => v.path),
-			null,
-			2
-		)
+		`SvelteKit will prerender ${allPagesParams.length} CMS routes. See [prerender:routes] logs for source collections, locales and route samples.`
 	);
-	return allPagesParams;
+	return allPagesParams.map(({ path }) => ({ path }));
 };
 
 export async function load(event) {
@@ -284,7 +272,7 @@ export async function load(event) {
 	]);
 
 	if (!pageData) {
-		say('Page requested not found', route);
+		say('Page requested not found', { route, path, locale, category, subCategory, article });
 		return error(404);
 	}
 

@@ -34,8 +34,9 @@
 		const value = href?.trim();
 		if (!value) return '';
 		if (value.startsWith('//')) return `https:${value}`;
-		if (/^(https?:|mailto:|tel:|#|\/)/.test(value)) return value;
-		return `https://${value}`;
+		if (/^(https?:|mailto:|tel:|\/|#)/i.test(value)) return value;
+		if (/^(www\.|[\w.-]+\.[a-z]{2,}(\/|$))/i.test(value)) return `https://${value}`;
+		return value;
 	};
 </script>
 
