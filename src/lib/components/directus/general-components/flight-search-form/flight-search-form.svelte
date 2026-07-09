@@ -44,7 +44,7 @@
 		isValidStopoverRoute,
 		type StopoverRouteIndex
 	} from '$lib/flight-search/stopover-routes';
-	import { buildStopoverBookingUrl } from '$lib/flight-search/booking-url';
+	import { bookingSourceOrigin, buildStopoverBookingUrl } from '$lib/flight-search/booking-url';
 
 	type PickerDateValue = NonNullable<DatePickerProps['value']>;
 	type PickerDateRange = NonNullable<DateRangePickerProps['value']>;
@@ -92,6 +92,7 @@
 	let departureDateValue = $state<PickerDateValue | undefined>(undefined);
 	let returnDateValue = $state<PickerDateValue | undefined>(undefined);
 	let stopoverNightCount = $state(3);
+	let miniDatesOpen = $state(false);
 	let miniPassengersOpen = $state(false);
 	let miniPassengersFocused = $state(false);
 	let adults = $state(1);
@@ -113,6 +114,7 @@
 	const subtitle = $derived(translation?.subtitle || getDefaultSubtitle());
 	const modalActionLabel = $derived(translation?.cta_label || getDefaultSearchActionLabel());
 	const expandedSearchLabel = $derived(getExpandedSearchLabel());
+	const miniDateDoneLabel = $derived(getMiniDateDoneLabel());
 	const modalCloseLabel = $derived(getLocalizedControlLabel('close'));
 	const clearSelectionLabel = $derived(getLocalizedControlLabel('clearSelection'));
 	const passengerCounterAriaLabels = $derived(getPassengerCounterAriaLabels());
@@ -410,6 +412,7 @@
 		params.append('stopoverNights', 'null');
 		params.append('stopoverLegNumber', 'null');
 		params.append('stopover', 'false');
+		params.append('origin', bookingSourceOrigin);
 		params.append('cabinType', 'Y');
 		params.append('stopoverType', 'origin');
 
@@ -454,6 +457,13 @@
 		if (languageCode === 'en') return 'Expanded search';
 		if (languageCode === 'pt') return 'Busca expandida';
 		return 'Búsqueda ampliada';
+	}
+
+	function getMiniDateDoneLabel() {
+		const languageCode = getLanguageCode();
+		if (languageCode === 'en') return 'Done';
+		if (languageCode === 'pt') return 'Pronto';
+		return 'Listo';
 	}
 
 	function getLocalizedControlLabel(
@@ -1574,8 +1584,8 @@
 {/snippet}
 
 {#snippet miniStopoverPopoverFooter()}
-	{#if stopoverAvailable}
-		<div class="mt-5 border-t border-grey-200 pt-4">
+	<div class="mt-5 border-t border-grey-200 pt-4">
+		{#if stopoverAvailable}
 			<div class="grid min-w-0 gap-4 md:grid-cols-[minmax(0,14rem)_minmax(0,1fr)]">
 				{#if selectedTripType === 'roundtrip'}
 					<ButtonGroup
@@ -1621,8 +1631,18 @@
 					/>
 				</div>
 			</div>
+		{/if}
+
+		<div class="mt-4 flex justify-end">
+			<button
+				type="button"
+				class={buttonVariants({ variant: 'solid-primary-main', size: 'slim' }) + ' min-h-10 px-5'}
+				onclick={() => (miniDatesOpen = false)}
+			>
+				{miniDateDoneLabel}
+			</button>
 		</div>
-	{/if}
+	</div>
 {/snippet}
 
 {#snippet miniBookingBar()}
@@ -1747,6 +1767,7 @@
 						<DateRangePicker
 							id={getControlId('mini-travel-dates')}
 							value={travelDateRange}
+							bind:open={miniDatesOpen}
 							onValueChange={setTravelDateRange}
 							startName="mini_departure_date"
 							endName="mini_return_date"
@@ -1771,6 +1792,7 @@
 						<DatePicker
 							id={getControlId('mini-departure-date')}
 							bind:value={departureDateValue}
+							bind:open={miniDatesOpen}
 							name="mini_departure_date"
 							label={departureDateDisplayLabel}
 							placeholder={datePlaceholderLabel}

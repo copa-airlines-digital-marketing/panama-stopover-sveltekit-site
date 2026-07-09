@@ -72,6 +72,7 @@ describe('stopover booking URL builder', () => {
 		expect(params.get('stopoverNights')).toBe('3');
 		expect(params.get('stopoverLegNumber')).toBe('1');
 		expect(params.get('stopover')).toBe('true');
+		expect(params.get('origin')).toBe('stopoverinpanama');
 		expect(params.get('stopoverType')).toBe('origin');
 		expect(params.get('cabinType')).toBe('Y');
 		expect(params.get('isMiles')).toBe('false');
@@ -105,6 +106,7 @@ describe('stopover booking URL builder', () => {
 		expect(params.get('area5')).toBe('MIA');
 		expect(params.get('area6')).toBe('GRU');
 		expect(params.get('stopoverLegNumber')).toBe('1');
+		expect(params.get('origin')).toBe('stopoverinpanama');
 		expect(params.get('stopoverType')).toBe('origin');
 		expect(params.get('cabinType')).toBe('C');
 		expect(params.get('sf')).toBe('br');
@@ -135,6 +137,7 @@ describe('stopover booking URL builder', () => {
 		expect(params.get('area5')).toBe('PTY');
 		expect(params.get('area6')).toBe('BOG');
 		expect(params.get('stopoverLegNumber')).toBe('2');
+		expect(params.get('origin')).toBe('stopoverinpanama');
 		expect(params.get('stopoverType')).toBe('arrival');
 		expect(params.get('promocode')).toBe('SO25');
 		expect(params.get('sf')).toBe('us');

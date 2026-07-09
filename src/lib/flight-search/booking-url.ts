@@ -34,6 +34,7 @@ type FlightSegment = {
 
 const defaultShoppingBaseUrl = 'https://shopping.copaair.com';
 const defaultHubIata = 'PTY';
+const bookingSourceOrigin = 'stopoverinpanama';
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const iataPattern = /^[A-Z]{3}$/;
 const millisecondsPerDay = 86_400_000;
@@ -173,6 +174,7 @@ function buildStopoverBookingUrl(input: StopoverBookingUrlInput) {
 	params.append('stopoverNights', String(input.stopoverNights));
 	params.append('stopoverLegNumber', effectiveStopoverPlacement === 'return' ? '2' : '1');
 	params.append('stopover', 'true');
+	params.append('origin', bookingSourceOrigin);
 	params.append('cabinType', input.cabinType);
 	params.append('stopoverType', effectiveStopoverPlacement === 'return' ? 'arrival' : 'origin');
 	params.append('isMiles', 'false');
@@ -184,5 +186,5 @@ function buildStopoverBookingUrl(input: StopoverBookingUrlInput) {
 	return url.toString();
 }
 
-export { addDays, buildStopoverBookingUrl, getBookingLocaleParams };
+export { addDays, bookingSourceOrigin, buildStopoverBookingUrl, getBookingLocaleParams };
 export type { CabinType, StopoverBookingTripType, StopoverBookingUrlInput, StopoverPlacement };
