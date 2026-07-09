@@ -4,10 +4,15 @@ import { getItems, type DirectusRequestBody } from "../infrastructure/directus/u
 import { say } from "$lib/utils"
 
 type NullishID = null | number | string | undefined
+type DirectusFilter = Record<string, unknown>
 
 const translatedPathField = { 'translations': ['path', 'languages_code', 'title_tag']}
 
-const getTranslatedPageFilterRecursive = (locale: NullishID, path: NullishID, totalParents: number ) => {
+const getTranslatedPageFilterRecursive = (
+  locale: NullishID,
+  path: NullishID,
+  totalParents: number
+): DirectusFilter[] => {
   if (totalParents < 1) 
     return ([
       {
@@ -22,7 +27,7 @@ const getTranslatedPageFilterRecursive = (locale: NullishID, path: NullishID, to
       }
     ])
   
-  return getTranslatedPageFilterRecursive(locale, path, totalParents - 1 ).map(value => ({parent: value}))
+  return getTranslatedPageFilterRecursive(locale, path, totalParents - 1 ).map((value) => ({parent: value}))
 } 
 
 const getPageFilter = ( filter: DirectusRequestBody ) => {

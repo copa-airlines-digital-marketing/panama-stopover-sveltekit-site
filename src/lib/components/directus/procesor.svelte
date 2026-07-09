@@ -63,7 +63,7 @@
 		stopover_package ||
 		stopover_transportation;
 
-	$: cannonicals = item && getCannonicals(item);
+	$: cannonicals = item && getCannonicals(item as any);
 
 	$: cannonicals && setPageCannonicals(cannonicals);
 
@@ -110,11 +110,11 @@
 		{:else if isNotNil(stopover_hotels)}
 			<HotelPage {stopover_hotels} />
 		{:else if isNotNil(stopover_restaurants)}
-			<RestaurantPage {siteSettings} {layout} {stopover_restaurants} />
+			<RestaurantPage {stopover_restaurants} />
 		{:else if isNotNil(stopover_place_to_visit)}
-			<PlacePage {siteSettings} {layout} {stopover_place_to_visit} />
+			<PlacePage {stopover_place_to_visit} />
 		{:else if isNotNil(stopover_tour)}
-			<TourPage {siteSettings} {layout} {stopover_tour} />
+			<TourPage {stopover_tour} />
 		{:else if isNotNil(stopover_package)}
 			<PackagePage {stopover_package} />
 		{:else if isNotNil(stopover_transportation)}

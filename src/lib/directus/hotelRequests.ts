@@ -1,13 +1,11 @@
-import type { QueryItem } from "@directus/sdk"
 import { pagePathFields } from "./page"
 import { getItems, type DirectusRequestBody } from "../infrastructure/directus/utils"
-import type { Schema } from "zod"
 import { say } from "$lib/utils"
 import { getHotelAmenities } from "./hotel-amenities"
 import { isNil } from "ramda"
 import { hotelSchema, isHotelSchema } from "./hotels"
 
-const getHotelQuery = ({locale, category, subCategory, article}: DirectusRequestBody): QueryItem<Schema, 'stopover_hotels'> => ({
+const getHotelQuery = ({locale, category, subCategory, article}: DirectusRequestBody) => ({
   fields: [
     'main_image',
     'promo_code',
@@ -44,7 +42,7 @@ const getHotelQuery = ({locale, category, subCategory, article}: DirectusRequest
       { parent_page: { parent: { parent: {translations: { path: { _eq: locale } } } } } },
     ]
   },
-})
+} as const)
 
 const getHotel = async (filters: DirectusRequestBody) => {
   const { article, locale } = filters
@@ -81,7 +79,7 @@ const getHotel = async (filters: DirectusRequestBody) => {
     return null
   }
 
-  return {hotel, amenities}
+  return {hotel, amenities: amenities || []}
 }
 
 export { 

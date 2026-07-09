@@ -1,51 +1,14 @@
-import type {
-	StopoverPackage,
-	StopoverPackageFiles,
-	StopoverPackageTranslation
-} from '$cms/collections/stopover_package';
-import type { Query } from '@directus/sdk';
 import { pagePathFields } from '../page';
+import type { PackageSchema } from '$lib/domain/packages';
 
-type StopoverPackageFilesQuery = Pick<StopoverPackageFiles, 'directus_files_id' | 'sort'>;
-
-type StopoverPackageTranslationQuery = Pick<
-	StopoverPackageTranslation,
-	| 'languages_code'
-	| 'name'
-	| 'description'
-	| 'included'
-	| 'not_included'
-	| 'promo_name'
-	| 'promo_description'
-	| 'url'
->;
-
-type StopoverPackageQuery = Pick<
-	StopoverPackage,
-	| 'parent_page'
-	| 'name'
-	| 'nights'
-	| 'main_image'
-	| 'gallery'
-	| 'contact'
-	| 'supported_languages'
-	| 'stay_region'
-	| 'promo_code'
-	| 'promo_discount_amount'
-	| 'promo_discount_percent'
-	| 'translations'
-> & {
-	gallery: StopoverPackageFilesQuery;
-	translations: StopoverPackageTranslationQuery;
-	parent_page: typeof pagePathFields;
-};
+type StopoverPackageQuery = PackageSchema;
 
 const getPackageQuery = (
-	locale: string,
-	category: string,
-	subCategory: string,
-	article: string
-): Query<Schema, StopoverPackage> => ({
+	locale: string | number,
+	category: string | number,
+	subCategory: string | number,
+	article: string | number
+) => ({
 	fields: [
 		'parent_page',
 		'name',
@@ -87,7 +50,7 @@ const getPackageQuery = (
 			{ parent_page: { parent: { parent: { translations: { path: { _eq: locale } } } } } }
 		]
 	}
-});
+} as const);
 
 export type { StopoverPackageQuery };
 

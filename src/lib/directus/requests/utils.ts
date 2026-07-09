@@ -4,6 +4,7 @@ import { getItems, type DirectusRequestBody } from "../../infrastructure/directu
 import type { ZodSchema } from "zod";
 import type { Schema } from "../schema";
 import type { QueryItem } from "@directus/sdk";
+import { tourSchema } from "$lib/domain/tours";
 
 type SchemaKeys = keyof Schema
 

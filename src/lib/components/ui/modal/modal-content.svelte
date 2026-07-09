@@ -4,22 +4,22 @@
 	import { ModalOverlay, ModalPortal, modalVariants, setModalContext, type ModalProps } from '.';
 
 	type $$Props = ModalProps;
-	type $$Events = Dialog.ContentEvents;
 
 	let className: $$Props['class'] = undefined;
 	export let size: $$Props['size'] = 'normal';
 	export { className as class };
 
 	$: size && setModalContext({ size });
+	$: contentProps = {
+		transition: flyAndScale,
+		class: cn(modalVariants({ size }), className),
+		...$$restProps
+	} as any;
 </script>
 
 <ModalPortal>
 	<ModalOverlay />
-	<Dialog.Content
-		transition={flyAndScale}
-		class={cn(modalVariants({ size }), className)}
-		{...$$restProps}
-	>
+	<Dialog.Content {...contentProps}>
 		<slot />
 	</Dialog.Content>
 </ModalPortal>

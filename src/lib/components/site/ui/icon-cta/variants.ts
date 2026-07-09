@@ -1,6 +1,6 @@
 import { tv } from "$lib/utils";
 import { getTypographyVariant } from "$ui/components/typography";
-import type { ButtonProps } from "bits-ui";
+import type { ButtonProps } from "$ui/components/button";
 import type { VariantProps } from "tailwind-variants";
 
 const iconnedVariants = tv({

@@ -33,7 +33,12 @@ export async function load(event) {
   ])
 
   const [siteSettings, layoutPage] = layoutDataRequest
-    
+
+  if (!layoutPage) {
+    say('error ocurred while getting layout page info')
+    return error(500)
+  }
+
   const { page: layout, sections: layoutSections } = layoutPage
 
   if (!isSiteSettings(siteSettings) || !isPageSettings(layout) || !isSectionSchema(layoutSections)) {

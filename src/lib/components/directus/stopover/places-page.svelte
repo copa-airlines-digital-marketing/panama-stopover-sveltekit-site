@@ -28,6 +28,7 @@
 
 	const bgClassname: Record<PlacesPilar, string> = {
 		beach: 'bg-stopover-nature',
+		canal: 'bg-stopover-canal',
 		city: 'bg-stopover-culture',
 		culture: 'bg-stopover-culture',
 		gastronomy: 'bg-stopover-gastronomy',
@@ -36,6 +37,9 @@
 		'panama-canal': 'bg-stopover-canal',
 		shopping: 'bg-stopover-gastronomy'
 	};
+
+	const getPilarClassname = (value: string | null | undefined) =>
+		value && value in bgClassname ? bgClassname[value as PlacesPilar] : 'bg-secondary';
 
 	const disclaimer = $page.data.siteSettings.error_messages?.filter((v) => v.error_code === 600)[0];
 
@@ -54,7 +58,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
-<Hero {galleryImages} {main_image} {name} class={pilar ? bgClassname[pilar] : 'bg-secondary'} />
+<Hero {galleryImages} {main_image} {name} class={getPilarClassname(pilar)} />
 <div class="container mx-auto my-8 space-y-normal">
 	<div>
 		<Breadcrum {item} />
