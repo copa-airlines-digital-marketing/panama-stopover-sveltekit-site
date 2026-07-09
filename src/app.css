@@ -68,6 +68,13 @@
 	font-style: normal;
 }
 
+@layer base {
+	html,
+	body {
+		overflow-x: hidden;
+	}
+}
+
 @layer components {
 	.experience-layout {
 		@variant lg {

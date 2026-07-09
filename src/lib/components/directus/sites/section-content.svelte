@@ -19,17 +19,18 @@
 
 	const collectionComponent = collectionToComponent(collection);
 	const componentItem = item as any;
+	const shouldSpanFullContainer = collection === 'block_flight_search_form';
 
 	const variant = {
-		display: display ? Number(display) as 25 | 50 | 75 | 100 : undefined,
-		horizontal_alignment: horizontal_alignment || undefined,
+		display: shouldSpanFullContainer ? 100 : display ? Number(display) as 25 | 50 | 75 | 100 : undefined,
+		horizontal_alignment: shouldSpanFullContainer ? undefined : horizontal_alignment || undefined,
 		vertical_alignment: vertical_alignment || undefined
 	};
 </script>
 
 {#if collectionComponent && componentItem}
 	<div
-		class={cn(contentVariant(variant))}
+		class={cn(contentVariant(variant), shouldSpanFullContainer && 'justify-self-stretch')}
 		style="--theme:{theme === 'light' ? '#000000' : '#FFFFFF'};--theme-contrast:{theme === 'light'
 			? '#FFFFFF'
 			: '#000000'};{area ? `grid-area:${area};` : ''}"

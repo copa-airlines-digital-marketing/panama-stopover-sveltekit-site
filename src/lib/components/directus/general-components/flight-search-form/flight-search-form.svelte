@@ -81,7 +81,7 @@
 	const miniLineFieldClass =
 		'min-w-0 max-w-full py-0 [&>label]:sr-only [&>div]:!min-w-0 [&>div]:!max-w-full [&>div]:!rounded-none [&>div]:!border-0 [&>div]:!border-b [&>div]:!border-grey-200 [&>div]:!bg-transparent [&>div]:!px-0 [&>div]:!py-2 [&>div]:hover:!border-primary-light [&>div]:focus-within:!border-primary [&_input]:!min-w-0 [&_input]:!font-normal [&_input]:!text-grey-600 [&_input]:text-b [&_input]:placeholder:!text-grey-600';
 	const miniDateFieldClass =
-		'min-w-0 max-w-full py-0 md:col-span-2 min-[1180px]:col-span-1 [&>label]:sr-only [&>button]:!min-h-0 [&>button]:!min-w-0 [&>button]:!max-w-full [&>button]:!rounded-none [&>button]:!border-0 [&>button]:!border-b [&>button]:!border-grey-200 [&>button]:!bg-transparent [&>button]:!px-0 [&>button]:!py-2 [&>button]:!font-normal [&>button]:!text-grey-600 [&>button]:hover:!border-primary-light [&>button]:focus-visible:!border-primary [&_span[data-date-trigger-text=true]]:!min-w-0 [&_span[data-date-trigger-text=true]]:!truncate [&_span[data-date-trigger-text=true][data-has-value=true]]:!text-common-black';
+		'min-w-0 max-w-full py-0 sm:col-span-2 min-[1180px]:col-span-1 [&>label]:sr-only [&>button]:!min-h-0 [&>button]:!min-w-0 [&>button]:!max-w-full [&>button]:!rounded-none [&>button]:!border-0 [&>button]:!border-b [&>button]:!border-grey-200 [&>button]:!bg-transparent [&>button]:!px-0 [&>button]:!py-2 [&>button]:!font-normal [&>button]:!text-grey-600 [&>button]:hover:!border-primary-light [&>button]:focus-visible:!border-primary [&_span[data-date-trigger-text=true]]:!min-w-0 [&_span[data-date-trigger-text=true]]:!truncate [&_span[data-date-trigger-text=true][data-has-value=true]]:!text-common-black';
 
 	let modalOpen = $state(false);
 	let selectedTripType = $state<TripTypeSchema>('roundtrip');
@@ -309,7 +309,7 @@
 	$effect(() => {
 		if (!browser) return;
 
-		const mediaQuery = window.matchMedia('(max-width: 767px)');
+		const mediaQuery = window.matchMedia('(max-width: 959px)');
 		const updateCompactViewport = () => {
 			isMiniCompactViewport = mediaQuery.matches;
 		};
@@ -1633,7 +1633,7 @@
 			</div>
 		{/if}
 
-		<div class="mt-4 flex justify-end">
+		<div class="sticky bottom-0 z-10 mt-4 flex justify-end bg-common-white pt-3 pb-3">
 			<button
 				type="button"
 				class={buttonVariants({ variant: 'solid-primary-main', size: 'slim' }) + ' min-h-10 px-5'}
@@ -1647,7 +1647,7 @@
 
 {#snippet miniBookingBar()}
 	<div
-		class="my-6 w-full overflow-visible rounded-xl border border-grey-100 bg-common-white shadow-[0_10px_24px_rgba(0,0,0,0.16)] md:w-[calc(100vw-9rem)] md:max-w-[1224px]"
+		class="my-6 w-full max-w-full overflow-visible rounded-xl border border-grey-100 bg-common-white shadow-[0_10px_24px_rgba(0,0,0,0.16)]"
 		data-flight-search-bar
 		data-component={component}
 		role="group"
@@ -1659,7 +1659,7 @@
 				class="grid min-w-0 items-center gap-4 min-[1180px]:grid-cols-[minmax(0,33rem)_max-content] min-[1180px]:justify-between"
 			>
 				<div
-					class="grid min-w-0 items-center justify-start gap-4 md:inline-grid md:grid-cols-[11rem_11rem_11rem]"
+					class="grid w-full min-w-0 items-center gap-4 sm:grid-cols-3 min-[1180px]:inline-grid min-[1180px]:w-auto min-[1180px]:grid-cols-[11rem_11rem_11rem]"
 				>
 					<div class="min-w-0" data-mini-tab-step="trip-type">
 						<Select
@@ -1728,7 +1728,7 @@
 			class="grid w-full min-w-0 gap-4 px-4 py-5 min-[1180px]:grid-cols-[minmax(0,1fr)_max-content] min-[1180px]:items-end min-[1180px]:px-8"
 		>
 			<div
-				class="grid min-w-0 items-end gap-4 md:grid-cols-2 min-[1180px]:grid-cols-[minmax(0,14rem)_minmax(0,14rem)_minmax(20rem,28rem)] min-[1180px]:justify-start"
+				class="grid min-w-0 items-end gap-4 sm:grid-cols-2 min-[1180px]:grid-cols-[minmax(0,14rem)_minmax(0,14rem)_minmax(20rem,28rem)] min-[1180px]:justify-start"
 			>
 				<div class="min-w-0" data-mini-tab-step="origin">
 					<Autocomplete
