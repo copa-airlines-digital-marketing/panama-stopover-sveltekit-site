@@ -1,7 +1,5 @@
 import { pagePathFields } from '../page';
 import { getItems, type DirectusRequestBody } from '../../infrastructure/directus/utils';
-import type { QueryItem } from '@directus/sdk';
-import type { Schema } from '../schema';
 
 const paramExistAndIsString = ([key, value]: [string, string | number | null | undefined]) => {
 	if ((typeof value === 'string' || typeof value === 'number') && !!value) return true;
@@ -14,7 +12,7 @@ const paramExistAndIsString = ([key, value]: [string, string | number | null | u
 const validateAllParameters = (params: Record<string, string | number | null | undefined>) =>
 	Object.entries(params).every(paramExistAndIsString);
 
-const getTourQuery = ({ locale, category, subCategory, article }: DirectusRequestBody): QueryItem<Schema, 'stopover_tour'> => ({
+const getTourQuery = ({ locale, category, subCategory, article }: DirectusRequestBody) => ({
 	fields: [
 		'main_image',
 		'duration',
@@ -64,16 +62,17 @@ const getTourQuery = ({ locale, category, subCategory, article }: DirectusReques
 			translations: { _filter: { languages_code: { _eq: locale } } }
 		}
 	} as any
-});
+} as const);
 
 const getPublishedTours = async (filters: DirectusRequestBody) => {
 	const { locale, category, subCategory, article } = filters;
+	const params = { locale, category, subCategory, article };
 
 	console.log('getting tour', article);
 
-	if (!validateAllParameters({ locale, category, subCategory, article })) return null;
+	if (!validateAllParameters(params)) return null;
 
-	const tours = await getItems('stopover_tour', getTourQuery(filters), filters.preview);
+	const tours = await getItems('stopover_tour', getTourQuery(params), filters.preview);
 
 	if (!tours) return null;
 

@@ -5,13 +5,22 @@ import { z } from 'zod';
  * View models for stopover packages
  */
 
+const namedItemSchema = z.object({
+	name: z.string()
+}).passthrough();
+
+const contactSchema = z.object({
+	form: z.string(),
+	contact: z.string()
+}).passthrough();
+
 // Package translation
 const packageTranslationSchema = z.object({
 	languages_code: z.string(),
 	name: z.string(),
 	description: z.string(),
-	included: z.string().nullish(),
-	not_included: z.string().nullish(),
+	included: z.array(namedItemSchema).nullish(),
+	not_included: z.array(namedItemSchema).nullish(),
 	promo_name: z.string().nullish(),
 	promo_description: z.string().nullish(),
 	url: z.string().nullish(),
@@ -44,7 +53,7 @@ const packageSchema = z.object({
 	name: z.string(),
 	nights: z.number(),
 	main_image: z.string(),
-	contact: z.string().nullish(),
+	contact: z.array(contactSchema).nullish(),
 	supported_languages: z.string().array().nullish(),
 	stay_region: z.string().nullish(),
 	promo_code: z.string().nullish(),

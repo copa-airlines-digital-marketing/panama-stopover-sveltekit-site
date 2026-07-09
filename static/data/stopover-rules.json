@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "hubIata": "PTY",
+  "excludedEndpointIatas": [
+    "PTY",
+    "DAV"
+  ],
+  "stopover": {
+    "required": true,
+    "minNights": 1,
+    "maxNights": 15,
+    "milesSupported": false,
+    "multicitySegmentStopoverSupported": false
+  },
+  "passengers": {
+    "maxTotal": 8,
+    "infantRequiresAdult": true
+  },
+  "dates": {
+    "bookingWindowDays": 330,
+    "minDestinationNights": 1
+  },
+  "routes": {
+    "indexPath": "/data/stopover-route-index.json",
+    "validRouteCount": 6440,
+    "originCount": 87,
+    "destinationCount": 87,
+    "activeDestinationEndpointCount": 89,
+    "routeEndpointCount": 87,
+    "excludedEndpointCount": 0,
+    "excludedPtyEndpointCount": 0,
+    "excludedInactiveEndpointCount": 0,
+    "selfRouteCount": 0
+  },
+  "booking": {
+    "baseUrl": "https://shopping.copaair.com",
+    "stopoverFlow": "/multicity",
+    "currencyQueryParamSupported": false
+  }
+}

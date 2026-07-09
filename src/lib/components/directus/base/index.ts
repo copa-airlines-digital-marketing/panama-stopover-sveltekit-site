@@ -3,7 +3,7 @@ import type { HTMLAnchorAttributes } from "svelte/elements";
 import Root from './link-item.svelte'
 
 type Props = HTMLAnchorAttributes & {
-  item: NavigationSchema['translations'][0]['items'][0]
+  item: NavigationSchema['translations'][0]['links'][0]['links_id']
 }
 
 export {

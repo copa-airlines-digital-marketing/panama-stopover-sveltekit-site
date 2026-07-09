@@ -10,7 +10,7 @@
 	import type { RestaurantSchema } from '$lib/domain/restaurants';
 	import { getBreadcrumNames } from '$lib/i18n/cannonicals';
 	import { cn } from '$lib/utils';
-	import { isNotEmpty, mapAccum } from 'ramda';
+	import { isNotEmpty } from 'ramda';
 	import type { TourSchema } from '$lib/domain/tours';
 	import type { PackageSchema } from '$lib/domain/packages';
 	import type { TransportationSchema } from '$lib/domain/transportation';
@@ -30,12 +30,15 @@
 
 	let cannonicals = getPageCannonicals();
 
-	const appender = (a: string, b: string) => [`${a}/${b}`, `${a}/${b}`];
+	$: breadcrumLinks = ($cannonicals?.[locale] || '')
+		.split('/')
+		.filter(isNotEmpty)
+		.reduce((acc, segment) => {
+			const previous = acc[acc.length - 1] || '';
+			return [...acc, `${previous}/${segment}`];
+		}, [] as string[]);
 
-	$: [, breadcrumLinks] =
-		$cannonicals && mapAccum(appender, '', $cannonicals[locale].split('/').filter(isNotEmpty));
-
-	$: breadcrumNames = locale && item && getBreadcrumNames(item)[locale].split('/').slice(1);
+	$: breadcrumNames = locale && item && (getBreadcrumNames(item as any)[locale] || '').split('/').slice(1);
 </script>
 
 {#if Array.isArray(breadcrumLinks) && isNotEmpty(breadcrumLinks) && Array.isArray(breadcrumNames) && isNotEmpty(breadcrumNames) && breadcrumLinks.length > 1}

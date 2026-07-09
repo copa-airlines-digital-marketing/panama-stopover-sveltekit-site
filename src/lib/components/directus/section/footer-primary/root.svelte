@@ -40,7 +40,9 @@
 	style="background-color:{background_color || 'transparent'};"
 >
 	{#if isNotNil(section_content)}
-		<div class="[grid-template-areas:'logo''lang''legal''social''copyright'] container mx-auto grid justify-items-center gap-4">
+		<div
+			class="container mx-auto grid w-full max-w-full justify-items-center gap-4 [grid-template-areas:'logo''lang''legal''social''copyright']"
+		>
 			{#each section_content as item}
 				<SectionContent section_content={item} />
 			{:else}

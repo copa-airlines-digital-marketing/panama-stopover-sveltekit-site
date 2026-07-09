@@ -3,6 +3,7 @@ import { isContentGroupSchema, type ContentGroupContent } from '$lib/directus/co
 import type { SectionContentSchema, SectionSchema } from '$lib/directus/section';
 import {
 	isStopoverModuleSchema,
+	stopoverHotelModuleQueryFields,
 	type StopoverHotelModuleSchema
 } from '$lib/directus/stopover_hotel_module';
 import {
@@ -225,8 +226,8 @@ const mixedEntityTypeToCollectionMap: Record<string, keyof Schema> = {
 	stopover_transportation: 'stopover_transportation'
 };
 
-const getMixedSourceCollection = (entityType: string) =>
-	pathOr(null, [entityType], mixedEntityTypeToCollectionMap);
+const getMixedSourceCollection = (entityType: string): keyof Schema | null =>
+	pathOr(null, [entityType], mixedEntityTypeToCollectionMap) as keyof Schema | null;
 
 // Shared field list for the mixed experience module detail queries.
 // Keep in sync with buildMixedConfigQuery in +page.server.ts.
@@ -518,7 +519,7 @@ const getStopoverHotelModuleById = async (moduleId: string | number) => {
 	return isStopoverModuleSchema(module) ? module : null;
 };
 
-const getModuleRequest = (sections: SectionContentSchema, locale: string) => (path: string[]) => {
+const getModuleRequest = (sections: SectionSchema[], locale: string) => (path: string[]) => {
 	const module = pathOr({}, path, sections);
 	const moduleCollection = pathOr(
 		null,

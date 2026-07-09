@@ -20,20 +20,17 @@ type KeyToTypeMap = {
 	'site-settings': SiteSettingsSchema;
 	page: PageSchema;
 	sections: SectionSchema[];
-	stopover_hotels: HotelSchema;
+	stopover_hotels: NonNullable<Awaited<ReturnType<typeof getHotel>>>;
 	stopover_restaurants: RestaurantSchema;
 	stopover_place_to_visit: PlaceSchema;
-	stopover_tour: TourSchema[];
-	stopover_package: PackageSchema[];
-	stopover_transportation: TransportationSchema[];
+	stopover_tour: NonNullable<Awaited<ReturnType<typeof getPublishedTours>>>;
+	stopover_package: NonNullable<Awaited<ReturnType<typeof getPublishedPackages>>>;
+	stopover_transportation: NonNullable<Awaited<ReturnType<typeof getPublishedTransportation>>>;
 };
 
 type DirectusDataKeys = keyof KeyToTypeMap;
 
-const keyToDataMap: Record<
-	DirectusDataKeys,
-	(body: DirectusRequestBody) => Promise<KeyToTypeMap[DirectusDataKeys] | null>
-> = {
+const keyToDataMap: { [Key in DirectusDataKeys]: (body: DirectusRequestBody) => Promise<KeyToTypeMap[Key] | null> } = {
 	'site-settings': getSiteSettings,
 	page: getPage,
 	sections: getSections,
@@ -77,7 +74,7 @@ const articleToKeyMap = (
 	}
 };
 
-const getData = async (key: DirectusDataKeys, body: DirectusRequestBody) => {
+const getData = async <Key extends DirectusDataKeys>(key: Key, body: DirectusRequestBody) => {
 	const data = await keyToDataMap[key](body);
 	return data;
 };

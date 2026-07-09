@@ -92,12 +92,12 @@ export function mapTourToCardViewModel(
  */
 export interface TourDetailViewModel extends TourCardViewModel {
 	description: string;
-	experience?: string;
-	included?: string;
-	notIncluded?: string;
+	experience?: TourTranslation['experience'];
+	included?: TourTranslation['included'];
+	notIncluded?: TourTranslation['not_included'];
 	startTime?: string;
-	meetingPoint?: string;
-	endPoint?: string;
+	meetingPoint?: TourSchema['meeting_point'];
+	endPoint?: TourSchema['end_point'];
 	languages?: string[];
 	pilar?: string[];
 	gallery: Array<{ id: string }>;

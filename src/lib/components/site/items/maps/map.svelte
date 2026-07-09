@@ -40,14 +40,14 @@
 	const noNameMapButtonURL = `https://www.google.com/maps/dir/?api=1&destination=${latLong.coordinates[1]},${latLong.coordinates[0]}`;
 
 	const initMap = (): void => {
-		const mapOptions: google.maps.MapOptions = {
+		const mapOptions = {
 			zoom: 17,
 			center: coordinates
 		};
 
-		const map = new google.maps.Map(document.getElementById('map') as HTMLElement, mapOptions);
+		const map = new window.google.maps.Map(document.getElementById('map') as HTMLElement, mapOptions);
 
-		new google.maps.Marker({
+		new window.google.maps.Marker({
 			position: coordinates,
 			map: map,
 			title: name
