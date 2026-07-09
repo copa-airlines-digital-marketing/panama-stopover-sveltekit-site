@@ -3,10 +3,8 @@ import { pagePathFields } from "./page"
 import { getItems, type DirectusRequestBody } from "../infrastructure/directus/utils"
 import { say } from "$lib/utils"
 import { isRestaurantSchema, restaurantSchema } from "./restaurants"
-import type { Query } from "@directus/sdk"
-import type { Schema } from "./schema"
 
-const getRestaurantQuery = ({locale, category, subCategory, article}: DirectusRequestBody): Query<Schema, 'stopover_restaurants'> => ({
+const getRestaurantQuery = ({locale, category, subCategory, article}: DirectusRequestBody) => ({
   fields: [
     'main_image',
     'promo_code',
@@ -42,7 +40,7 @@ const getRestaurantQuery = ({locale, category, subCategory, article}: DirectusRe
       { parent_page: { parent: { parent: {translations: { path: { _eq: locale } } } } } },
     ]
   },
-})
+} as const)
 
 const getRestaurant = async (filters: DirectusRequestBody) => {
   const { article, locale } = filters

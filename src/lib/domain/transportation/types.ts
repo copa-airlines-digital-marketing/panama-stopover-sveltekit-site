@@ -5,14 +5,23 @@ import { z } from 'zod';
  * View models for stopover transportation
  */
 
+const namedItemSchema = z.object({
+	name: z.string()
+}).passthrough();
+
+const contactSchema = z.object({
+	form: z.string(),
+	contact: z.string()
+}).passthrough();
+
 // Transportation translation
 const transportationTranslationSchema = z.object({
 	languages_code: z.string(),
 	path: z.string(),
 	name: z.string(),
 	description: z.string(),
-	included: z.string().nullish(),
-	not_included: z.string().nullish(),
+	included: z.array(namedItemSchema).nullish(),
+	not_included: z.array(namedItemSchema).nullish(),
 	promo_name: z.string().nullish(),
 	promo_description: z.string().nullish(),
 	url: z.string().nullish()
@@ -42,7 +51,7 @@ type ParentPage = z.infer<typeof parentPageSchema>;
 const transportationSchema = z.object({
 	main_image: z.string(),
 	type: z.string().nullish(),
-	contact: z.string().nullish(),
+	contact: z.array(contactSchema).nullish(),
 	supported_languages: z.string().array().nullish(),
 	promo_code: z.string().nullish(),
 	promo_discount_amount: z.string().nullish(),

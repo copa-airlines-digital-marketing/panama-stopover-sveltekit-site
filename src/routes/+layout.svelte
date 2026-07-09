@@ -19,23 +19,9 @@
 	{#if status === 'live'}
 		<slot></slot>
 	{:else if status === 'maintenance'}
-		<Procesor
-			{siteSettings}
-			{layout}
-			{layoutSections}
-			single_content={maintenance_message}
-			{environment}
-			{locale}
-		/>
+		<Procesor single_content={maintenance_message} />
 	{:else if status === 'coming-soon'}
-		<Procesor
-			{siteSettings}
-			{layout}
-			{layoutSections}
-			single_content={coming_soon_message}
-			{environment}
-			{locale}
-		/>
+		<Procesor single_content={coming_soon_message} />
 	{:else if status === 'dark'}
 		{console.warn('dark site not configured')}
 	{:else}

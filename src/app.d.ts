@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 
 import type { HotelSchema } from '$lib/domain/hotels';
+import type { HotelAmenity } from '$lib/directus/hotel-amenities';
 import type { RestaurantSchema } from '$lib/domain/restaurants';
 import type { PlaceSchema } from '$lib/domain/places';
 import type { PackageSchema } from '$lib/domain/packages';
@@ -27,7 +28,7 @@ declare global {
 			locale: string;
 			page?: PageSchema;
 			pageSections?: SectionSchema[];
-			stopover_hotels?: HotelSchema;
+			stopover_hotels?: { hotel: HotelSchema; amenities: HotelAmenity[] };
 			stopover_place_to_visit?: PlaceSchema;
 			stopover_restaurants?: RestaurantSchema;
 			stopover_package?: PackageSchema;

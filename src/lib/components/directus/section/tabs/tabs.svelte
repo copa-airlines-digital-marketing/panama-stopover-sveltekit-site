@@ -31,14 +31,19 @@
 		section_content
 	} = section;
 
+	const normalizeDistribution = (value: string | null | undefined) =>
+		value ? value.replace(/-/g, '_') : undefined;
+
+	type SectionVariantOptions = NonNullable<Parameters<typeof sectionVariants>[0]>;
+
 	const variantObject = {
 		vertical_spacing,
 		content_spacing,
-		content_horizontal_alignment,
-		content_horizontal_distribution,
-		content_vertical_alignment,
-		content_vertical_distribution
-	};
+		content_horizontal_aligment: content_horizontal_alignment || undefined,
+		content_horizontal_distribution: normalizeDistribution(content_horizontal_distribution),
+		content_vertical_alignment: content_vertical_alignment || undefined,
+		content_vertical_distribution: normalizeDistribution(content_vertical_distribution)
+	} as SectionVariantOptions;
 
 	let tabNames = setTabContext();
 

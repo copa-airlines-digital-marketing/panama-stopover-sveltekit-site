@@ -54,7 +54,7 @@ export interface TransportationCardViewModel {
 	mainImage: string;
 	name: string;
 	type?: string;
-	contact?: string;
+	contact?: TransportationSchema['contact'];
 	promoCode?: string;
 	promoDiscountPercent?: number;
 }
@@ -80,8 +80,8 @@ export function mapTransportationToCardViewModel(
  */
 export interface TransportationDetailViewModel extends TransportationCardViewModel {
 	description: string;
-	included?: string;
-	notIncluded?: string;
+	included?: TransportationTranslation['included'];
+	notIncluded?: TransportationTranslation['not_included'];
 	languages?: string[];
 	gallery: Array<{ id: string }>;
 }

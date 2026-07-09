@@ -5,7 +5,6 @@
 	import { cn } from '$lib/utils';
 
 	type $$Props = Dialog.CloseProps;
-	type $$Events = Dialog.CloseEvents;
 
 	let className: $$Props['class'] = undefined;
 	export { className as class };

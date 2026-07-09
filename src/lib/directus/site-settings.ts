@@ -15,7 +15,14 @@ const siteErrorMessages = z.object({
   error_code: z.number()
 })
 
-const pagePathSchema = z.object({
+type PagePathSchema = {
+  translations: {
+    path: string
+  }[]
+  parent?: PagePathSchema | null
+}
+
+const pagePathSchema: z.ZodType<PagePathSchema> = z.object({
   translations: z.array(z.object({
     path: z.string()
   })),

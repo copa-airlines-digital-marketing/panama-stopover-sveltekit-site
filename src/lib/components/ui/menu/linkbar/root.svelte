@@ -10,12 +10,10 @@
 	import { cn } from '$lib/utils';
 	import { setLinkBarContext } from './context';
 
-	type $$Props = Button.Props & {
+	type $$Props = Record<string, any> & {
 		variant?: VariantProps<typeof linkBarVariants>['variant'];
 		lablel?: boolean;
 	};
-
-	type $$Events = Button.Events;
 
 	let className: $$Props['class'] = undefined;
 	export { className as class };
@@ -31,14 +29,15 @@
 	};
 
 	setLinkBarContext(!!label);
+
+	$: rootProps = {
+		builders,
+		class: cn(linkBarVariants({ variant }), className),
+		...$$restProps
+	} as any;
 </script>
 
-<Button.Root
-	{builders}
-	class={cn(linkBarVariants({ variant }), className)}
-	{...$$restProps}
-	on:click
->
+<Button.Root {...rootProps}>
 	<slot {children} />
 	<Arrow />
 </Button.Root>

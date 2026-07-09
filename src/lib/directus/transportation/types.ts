@@ -1,43 +1,15 @@
-import type {
-	StopoverTransportation,
-	StopoverTransportationFiles,
-	StopoverTransportationTranslations
-} from '$cms/collections/stopover_transportation';
-import type { Query } from '@directus/sdk';
 import { pagePathFields } from '../page';
+import type { TransportationSchema } from '$lib/domain/transportation';
 
-type FilesQuery = Pick<StopoverTransportationFiles, 'directus_files_id' | 'sort'>;
-
-type TranslationsQuery = Pick<
-	StopoverTransportationTranslations,
-	'languages_code' | 'name' | 'promo_name' | 'promo_description' | 'url' | 'path'
->;
-
-type TransportationQuery = Pick<
-	StopoverTransportation,
-	| 'parent_page'
-	| 'name'
-	| 'main_image'
-	| 'gallery'
-	| 'promo_code'
-	| 'promo_discount_amount'
-	| 'promo_discount_percent'
-	| 'translations'
-	| 'supported_languages'
-	| 'category'
-	| 'contact'
-> & {
-	gallery: FilesQuery;
-	translations: TranslationsQuery;
-	parent_page: typeof pagePathFields;
-};
+type TransportationQuery = TransportationSchema;
+type TransportationTranslationQuery = TransportationSchema['translations'][number];
 
 const getTransportationQuery = (
 	locale: string,
 	category: string,
 	subCategory: string,
 	article: string
-): Query<Schema, StopoverTransportation> => ({
+) => ({
 	fields: [
 		'name',
 		'main_image',
@@ -66,8 +38,8 @@ const getTransportationQuery = (
 			{ parent_page: { parent: { parent: { translations: { path: { _eq: locale } } } } } }
 		]
 	}
-});
+} as const);
 
-export type { TransportationQuery, TranslationsQuery as TransportationTranslationQuery };
+export type { TransportationQuery, TransportationTranslationQuery };
 
 export { getTransportationQuery };

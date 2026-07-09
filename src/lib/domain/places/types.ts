@@ -20,12 +20,13 @@ type PlaceTranslation = z.infer<typeof placeTranslationSchema>;
 
 // Location information
 const locationSchema = z.object({
-	address: z.string(),
-	city: z.string(),
+	address: z.string().optional(),
+	city: z.string().optional(),
+	coordinates: z.number().array(),
 	phone_code: z.string().nullish(),
 	latitude: z.number().nullish(),
 	longitude: z.number().nullish()
-});
+}).passthrough();
 
 type Location = z.infer<typeof locationSchema>;
 
@@ -71,7 +72,17 @@ const isPlaceSchema = (value: unknown): value is PlaceSchema =>
 	placeSchema.safeParse(value).success;
 
 // Pilar (category) schema
-const placesPilarSchema = z.enum(['canal', 'culture', 'gastronomy', 'nature']);
+const placesPilarSchema = z.enum([
+	'beach',
+	'canal',
+	'city',
+	'culture',
+	'gastronomy',
+	'history',
+	'nature',
+	'panama-canal',
+	'shopping'
+]);
 type PlacesPilar = z.infer<typeof placesPilarSchema>;
 
 export {

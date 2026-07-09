@@ -36,7 +36,7 @@
 	const { name, description, promo_name, promo_description, included, not_included } =
 		translation[0];
 
-	const galleryImages = true ? gallery.map((img) => img.directus_files_id) : gallery;
+	const galleryImages = gallery.map((img) => img.directus_files_id);
 
 	const disclaimer = $page.data.siteSettings.error_messages?.filter((v) => v.error_code === 600)[0];
 

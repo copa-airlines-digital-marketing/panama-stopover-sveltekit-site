@@ -20,12 +20,13 @@ type RestaurantTranslation = z.infer<typeof restaurantTranslationSchema>;
 
 // Location information
 const locationSchema = z.object({
-	address: z.string(),
-	city: z.string(),
+	address: z.string().optional(),
+	city: z.string().optional(),
+	coordinates: z.number().array(),
 	phone_code: z.string().nullish(),
 	latitude: z.number().nullish(),
 	longitude: z.number().nullish()
-});
+}).passthrough();
 
 type Location = z.infer<typeof locationSchema>;
 

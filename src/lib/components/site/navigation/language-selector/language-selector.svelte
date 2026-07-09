@@ -13,7 +13,6 @@
 	} from '$lib/components/ui/modal';
 	import type { NavigationSchema } from '$lib/directus/navigation';
 	import { page } from '$app/stores';
-	import { dissoc } from 'ramda';
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils';
 	import { getTypographyVariant } from '$ui/components/typography';
@@ -31,7 +30,15 @@
 
 	let cannonicals = getPageCannonicals();
 
-	$: possibleTranslations = dissoc(locale, $cannonicals);
+	const getPossibleTranslations = (
+		cannonicals: Record<string, string>,
+		currentLocale: string
+	): Record<string, string> => {
+		const { [currentLocale]: _currentTranslation, ...translations } = cannonicals;
+		return translations;
+	};
+
+	$: possibleTranslations = getPossibleTranslations($cannonicals, locale);
 
 	const getParams = () => (environment === 'preview' && browser ? document.location.search : '');
 </script>
@@ -57,10 +64,11 @@
 				<ul class="space-y-4">
 					{#each translation.links as link}
 						{@const { icon, text, target, hreflang, rel } = link.links_id}
-						{#if possibleTranslations[hreflang]}
+						{@const translatedHref = hreflang ? possibleTranslations[hreflang] : null}
+						{#if translatedHref}
 							<li>
 								<Linkbar
-									href={possibleTranslations[hreflang] + getParams()}
+									href={translatedHref + getParams()}
 									{target}
 									{hreflang}
 									rel={rel?.join(' ')}
