@@ -19,6 +19,8 @@ import type { StopoverHotelModuleSchema } from '../../directus/stopover_hotel_mo
 import type { TextContentSchema } from '../../directus/text-content';
 
 interface Schema {
+	block_hero: Record<string, unknown>;
+	block_hero_carousel: Record<string, unknown>;
 	//Basic
 	hotel_amenities: HotelAmenity;
 	//General Content

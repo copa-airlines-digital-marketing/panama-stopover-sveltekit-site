@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { HTMLLiAttributes } from 'svelte/elements';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { cn } from '$lib/utils.js';
 
-	type $$Props = HTMLLiAttributes & {
-		el?: HTMLLIElement;
+	type $$Props = HTMLAttributes<HTMLSpanElement> & {
+		el?: HTMLSpanElement;
 	};
 
 	export let el: $$Props['el'] = undefined;
@@ -11,7 +11,7 @@
 	export { className as class };
 </script>
 
-<li
+<span
 	role="presentation"
 	aria-hidden="true"
 	class={cn('', className)}
@@ -19,4 +19,4 @@
 	{...$$restProps}
 >
 	<slot />
-</li>
+</span>

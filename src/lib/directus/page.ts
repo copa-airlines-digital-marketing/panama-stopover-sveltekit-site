@@ -20,6 +20,7 @@ type PathSchema = {
 
 type PageSchema = {
 	id: number;
+	accent?: string | null;
 	share_image: string | null;
 	translations: PageTranslationSchema[];
 	index: boolean;
@@ -53,6 +54,7 @@ const pathSchema: z.ZodType<PathSchema> = z.lazy(() =>
 const pageSchema: z.ZodType<PageSchema> = z.lazy(() =>
 	z.object({
 		id: z.number(),
+		accent: z.string().nullish(),
 		share_image: z.string().nullable(),
 		translations: pageTranslationsSchema.array(),
 		index: z.boolean(),
