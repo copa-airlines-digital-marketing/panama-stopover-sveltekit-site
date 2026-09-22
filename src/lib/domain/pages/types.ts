@@ -37,6 +37,7 @@ type PathSchema = {
 // Complete Page Domain Model
 const pageSchema = z.object({
 	id: z.number(),
+	accent: z.string().nullish(),
 	share_image: z.string().nullable(),
 	translations: pageTranslationSchema.array(),
 	index: z.boolean(),

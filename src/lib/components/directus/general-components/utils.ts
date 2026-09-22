@@ -1,3 +1,4 @@
+import Article from '$lib/components/site/text-content/article.svelte';
 import { LanguageSelector } from '$lib/components/site/navigation/language-selector'
 import { MainNavigation } from '$lib/components/site/navigation/main'
 import { NavigationHome } from '$lib/components/site/navigation/home'
@@ -44,6 +45,7 @@ const textContentToComponentMap = ( name: string | null ) => {
   const map = {
     'copyrights': Copyright,
     'hero-a': HeroA,
+    'article': Article,
     'hero-b': HeroB,
     'hero-c': HeroC,
     'bottom-content': BottomContent,

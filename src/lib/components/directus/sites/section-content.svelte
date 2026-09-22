@@ -19,10 +19,16 @@
 
 	const collectionComponent = collectionToComponent(collection);
 	const componentItem = item as any;
-	const shouldSpanFullContainer = collection === 'block_flight_search_form';
+	const shouldSpanFullContainer =
+		['block_flight_search_form', 'block_hero', 'block_hero_carousel'].includes(collection) ||
+		(collection === 'Text_Content' && component_name === 'article');
 
 	const variant = {
-		display: shouldSpanFullContainer ? 100 : display ? Number(display) as 25 | 50 | 75 | 100 : undefined,
+		display: shouldSpanFullContainer
+			? 100
+			: display
+				? (Number(display) as 25 | 50 | 75 | 100)
+				: undefined,
 		horizontal_alignment: shouldSpanFullContainer ? undefined : horizontal_alignment || undefined,
 		vertical_alignment: vertical_alignment || undefined
 	};
@@ -38,5 +44,9 @@
 		<svelte:component this={collectionComponent} item={componentItem} component={component_name} />
 	</div>
 {:else}
-	{say('section content did not match a renderable component', { collection, collectionComponent, item })}
+	{say('section content did not match a renderable component', {
+		collection,
+		collectionComponent,
+		item
+	})}
 {/if}

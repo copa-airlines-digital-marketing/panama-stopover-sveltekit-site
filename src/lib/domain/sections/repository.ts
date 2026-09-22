@@ -18,6 +18,7 @@ import { logoQuery, logosSchema } from '../../directus/logos';
 import { headerQuery, headerSchema } from '../../directus/header';
 import { stopoverMixedExperienceModuleQueryFields } from '../../directus/stopover_mixed_experience_module';
 import { isSectionSchema, sectionSchema } from './types';
+import { hydrateHeroSections } from '$lib/server/hero-repository';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
 	typeof value === 'object' && value !== null;
@@ -224,7 +225,11 @@ const hydrateNullStopoverHotelModules = async (sections: unknown, filters: Direc
  * @param locale - Locale code
  * @returns Query configuration for Directus
  */
-const sectionQuery = (storefront: string | number, page: string | number, locale: string | number) => ({
+const sectionQuery = (
+	storefront: string | number,
+	page: string | number,
+	locale: string | number
+) => ({
 	fields: [
 		'id',
 		'landmark',
@@ -259,7 +264,9 @@ const sectionQuery = (storefront: string | number, page: string | number, locale
 						form: formQueryFields,
 						stopover_hotel_module: stopoverHotelModuleQueryFields,
 						stopover_mixed_experience_module: stopoverMixedExperienceModuleQueryFields,
-						block_flight_search_form: flightSearchFormQueryFields
+						block_flight_search_form: flightSearchFormQueryFields,
+						block_hero: ['id'],
+						block_hero_carousel: ['id']
 					}
 				}
 			]
@@ -344,7 +351,9 @@ const getSections = async (filters: DirectusRequestBody) => {
 		});
 	}
 
-	const { sections, removedItems } = removeNullSectionContentItems(hydratedSections);
+	const { sections, removedItems } = removeNullSectionContentItems(
+		await hydrateHeroSections(hydratedSections, String(locale))
+	);
 
 	if (removedItems.length > 0) {
 		say('Ignoring section content entries without item', {

@@ -48,6 +48,7 @@ const siteUIIcons = z.object({
 
 const siteSettingSchema = z.object({
   id: z.optional(z.number()),
+  colors: z.unknown().optional(),
   environmet_status: environmentStatusSchema,
   favIcon: logosSchema,
   logo: logosSchema,
@@ -81,6 +82,7 @@ const getSiteSettings = async (filters: DirectusRequestBody) => {
   
   const siteSettings = await getItem<SiteSettingsSchema>( 'sites', SITE_ID,  {
     fields: [
+      'colors',
       'environmet_status',
       'head_code',
       'start_of_body_code',

@@ -19,3 +19,8 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Local Hero preview evidence
+/artifacts/hero-browser/
+/artifacts/hero-controls/
+/hero-*.log

@@ -14,6 +14,6 @@
 	export { className as class };
 </script>
 
-<li bind:this={el} class={cn('inline-flex items-center gap-1', className)}>
+<li bind:this={el} class={cn('inline-flex max-w-full min-w-0 items-center gap-1', className)}>
 	<slot {Elipsis} {Page} {Separator} />
 </li>
