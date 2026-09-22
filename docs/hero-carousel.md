@@ -43,6 +43,10 @@ Los módulos de migración bajo `scripts/migrations/` conservan alcance fijo y d
 
 ## Revisión local
 
+El sello usa el SVG de `icons.code` como imagen. Los sellos inglés (97) y portugués (99) tenían `fill="none"` en la raíz y caminos sin relleno propio: cargaban, pero quedaban transparentes. El 2026-09-22 se corrigieron esos dos recursos en Directus quitando únicamente ese atributo de la raíz; el español (98) no requería cambios. No normalizar indiscriminadamente otros SVG: pueden necesitar `fill="none"` para sus trazos. El próximo build incorpora los recursos corregidos.
+
+El hero individual usa altura automática. `height: 100%` queda limitado a los slides del carrusel para evitar que el hero individual herede la altura de un contenedor con breadcrumbs y exponga una franja bajo la imagen. La fotografía conserva altura completa y `object-fit: cover` para cubrir también el espacio adicional que requiere un texto largo en móvil.
+
 El preview de borradores solo funciona en desarrollo y loopback. Lee `.env.agent` exclusivamente en servidor, no genera entradas de producción y envía no-store/noindex. No incluir credenciales en artefactos. El servidor requiere autorización explícita; una vez autorizado: `pnpm exec vite dev --host 127.0.0.1 --port 1615`.
 
 El HTML offline se genera con `node scripts/build-hero-offline.mjs <assets.json>` y se comprueba con `node scripts/verify-hero-offline.mjs`. Requiere los assets locales del prototipo aprobado. Los resultados se sobrescriben en `artifacts/hero-controls`, excluido de Git. Ese HTML no se publica como parte del sitio.
