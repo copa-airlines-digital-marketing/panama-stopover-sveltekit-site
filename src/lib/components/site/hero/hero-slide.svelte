@@ -68,9 +68,10 @@
 
 <style>
 	.hero-slide {
-		height: 100%;
+		height: auto;
 	}
 	.hero-slide.carousel {
+		height: 100%;
 		font-family: "Suisse Int'l", sans-serif;
 	}
 	.hero-photo {
@@ -91,9 +92,6 @@
 	}
 	.carousel .hero-copy {
 		max-width: min(100%, 42rem);
-	}
-	.hero-slide:not(.carousel) .hero-photo img {
-		height: auto;
 	}
 	.carousel .hero-copy :global(.hero-title) {
 		font-family: Gilroy, sans-serif;
