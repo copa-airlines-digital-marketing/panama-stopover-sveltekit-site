@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { heroBlockSchema } from './hero';
+import { hydrateHeroSections } from '$lib/server/hero-repository';
 import { textContentQuery, textContentSchema } from './text-content';
 import { navigationQuery, navigationSchema } from './navigation';
 import { logoQuery, logosSchema } from './logos';
@@ -56,7 +58,9 @@ const directusSectionItemName = z.union([
 	z.literal('stopover_mixed_experience_module'),
 	z.literal('stopover_mixed_experiece_module'),
 	z.literal('form'),
-	z.literal('block_flight_search_form')
+	z.literal('block_flight_search_form'),
+	z.literal('block_hero'),
+	z.literal('block_hero_carousel')
 ]);
 
 const sectionContentSchema = z.object({
@@ -71,6 +75,7 @@ const sectionContentSchema = z.object({
 		.or(stopoverMixedExperienceModuleSchema)
 		.or(formSchema)
 		.or(flightSearchFormSchema)
+		.or(heroBlockSchema)
 		.nullable(),
 	collection: directusSectionItemName,
 	component_name: z.string().nullable(),
@@ -139,7 +144,11 @@ type SectionContentSchema = z.infer<typeof sectionContentSchema>;
 const isSectionSchema = (value: unknown): value is SectionSchema[] =>
 	sectionSchema.array().safeParse(value).success;
 
-const sectionQuery = (storefront: string | number, page: string | number, locale: string | number) => ({
+const sectionQuery = (
+	storefront: string | number,
+	page: string | number,
+	locale: string | number
+) => ({
 	fields: [
 		'id',
 		'landmark',
@@ -174,7 +183,9 @@ const sectionQuery = (storefront: string | number, page: string | number, locale
 						form: formQueryFields,
 						stopover_hotel_module: stopoverHotelModuleQueryFields,
 						stopover_mixed_experience_module: stopoverMixedExperienceModuleQueryFields,
-						block_flight_search_form: flightSearchFormQueryFields
+						block_flight_search_form: flightSearchFormQueryFields,
+						block_hero: ['id'],
+						block_hero_carousel: ['id']
 					}
 				}
 			]
@@ -226,12 +237,13 @@ const getSections = async (filters: DirectusRequestBody) => {
 		return null;
 	}
 
-	const sectionRequest = await getItems(
+	const rawSectionRequest = await getItems(
 		'sections',
 		sectionQuery(storefront, page, locale),
 		filters.preview
 	);
 
+	const sectionRequest = await hydrateHeroSections(rawSectionRequest, String(locale));
 	if (isSectionSchema(sectionRequest)) {
 		return sectionRequest;
 	}

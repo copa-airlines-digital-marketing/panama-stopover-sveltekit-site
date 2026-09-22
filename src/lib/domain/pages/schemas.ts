@@ -21,6 +21,7 @@ export const pagePathFields = [
 
 export const pageQueryFields = [
 	'id',
+	'accent',
 	'share_image',
 	'index',
 	'head_code',

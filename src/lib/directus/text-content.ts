@@ -17,6 +17,7 @@ const textContentTranslations = z.object({
 })
 
 const textContentSchema = z.object({
+  articleHtml: z.string().optional(),
   image: z.string().nullable(),
   translations: textContentTranslations.array()
 })

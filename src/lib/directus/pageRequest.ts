@@ -79,6 +79,7 @@ const getPage = async (filters: DirectusRequestBody) => {
   const pageRequest = await getItems<PageSchema>('pages', {
     fields: [
       'id',
+      'accent',
       'share_image',
       'index',
       'head_code',

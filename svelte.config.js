@@ -16,9 +16,16 @@ const config = {
 			assets: 'build',
 			fallback: null
 		}),
-    alias: {
-      "@/*": "./path/to/lib/*",
-    },
+		prerender: {
+			handleUnseenRoutes: ({ routes }) => {
+				// This development-only route deliberately has no production entries.
+				const unexpected = routes.filter((route) => route !== '/[locale]/hero-preview/[kind]/[id]');
+				if (unexpected.length) throw new Error(`Unseen prerender routes: ${unexpected.join(', ')}`);
+			}
+		},
+		alias: {
+			'@/*': './path/to/lib/*'
+		}
 	}
 };
 
