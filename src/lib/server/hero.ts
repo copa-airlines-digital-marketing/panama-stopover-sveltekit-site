@@ -22,7 +22,7 @@ const translation = z.object({
 	media: z.string().uuid().nullish(),
 	decorative: z.boolean(),
 	alt_text: z.string().nullish(),
-	icon: z.object({ image: z.string().nullish(), code: z.string().nullish() }).nullish(),
+	icon: z.object({ image: z.string().nullish() }).nullish(),
 	call_to_actions: z
 		.array(
 			z.object({
@@ -64,10 +64,9 @@ function slide(value: unknown, locale: string, preview: boolean): HeroSlide | nu
 	const t = translated.data,
 		image = t.media || h.image;
 	if (!image || (!t.decorative && !t.alt_text?.trim())) return null;
-	// An SVG in an img resource cannot execute script or supply interactive markup.
-	const icon = t.icon?.code?.trim().startsWith('<svg')
-		? `data:image/svg+xml,${encodeURIComponent(t.icon.code)}`
-		: t.icon?.image && z.string().uuid().safeParse(t.icon.image).success
+	// Keep icon bytes out of both the HTML image source and hydration data.
+	const icon =
+		t.icon?.image && z.string().uuid().safeParse(t.icon.image).success
 			? `https://cm-marketing.directus.app/assets/${t.icon.image}`
 			: null;
 	return {

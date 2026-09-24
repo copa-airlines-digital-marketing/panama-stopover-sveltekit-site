@@ -89,6 +89,42 @@ describe('Hero content boundary', () => {
 		for (const link of ['/es/', 'https://www.copaair.com/es/?x=1#test'])
 			expect(isSafeHeroLink(link)).toBe(true);
 	});
+	test.each(['es', 'en', 'pt'])('uses the %s icon file without serializing SVG code', (locale) => {
+		const fileIds = [id, second, '06d5fd89-f62c-44d9-9cdd-86b9eb224ef2'];
+		const locales = ['es', 'en', 'pt'];
+		const output = adaptHeroBlock(
+			'block_hero',
+			{
+				...hero,
+				translations: locales.map((languages_code, index) => ({
+					...hero.translations[0],
+					languages_code,
+					icon: { image: fileIds[index], code: `<svg>${'x'.repeat(100_000)}</svg>` }
+				}))
+			},
+			locale
+		);
+		expect(output?.slides[0].icon).toBe(
+			`https://cm-marketing.directus.app/assets/${fileIds[locales.indexOf(locale)]}`
+		);
+		expect(JSON.stringify(output)).not.toContain('data:image');
+		expect(JSON.stringify(output).length).toBeLessThan(1_000);
+	});
+	test.each([null, undefined, '', 'not-a-file-id', 'https://example.com/icon.webp'])(
+		'keeps the hero without an icon when its file reference is %s',
+		(image) => {
+			const output = adaptHeroBlock(
+				'block_hero',
+				{
+					...hero,
+					translations: [{ ...hero.translations[0], icon: { image, code: '<svg></svg>' } }]
+				},
+				'es'
+			);
+			expect(output).not.toBeNull();
+			expect(output?.slides[0].icon).toBeNull();
+		}
+	);
 	test('invalid new blocks do not remove unrelated sections', () => {
 		const other = { collection: 'Text_Content', item: { title: 'Other' } };
 		const result = prepareHeroSections(

@@ -39,7 +39,7 @@ export const heroQueryFields = [
 			'decorative',
 			'alt_text',
 			'call_to_actions',
-			{ icon: ['image', 'code'] }
+			{ icon: ['image'] }
 		]
 	}
 ];
