@@ -6,6 +6,8 @@ La página se genera con el adaptador estático del sitio y reutiliza la cabecer
 
 ## Datos y acceso
 
+El hero de esta ruta reutiliza `HeroBlock` y el carrusel Embla existente, con dos slides definidos en `src/routes/es/eventos-prueba/hero.ts`. Es contenido local de presentación, sin registros de prueba en Directus ni anuncios de eventos con fechas inventadas. Usa dos fotografías existentes y el sello español. El primer botón lleva a `#agenda`; el segundo, a `/es/conoce-panama/`. El carrusel conserva play/pausa, contador, navegación y movimiento reducido. El primer slide aporta el único h1; la agenda usa h2.
+
 - Script: `https://www.vamoseventos.com/embed/vamos-copa-events.js`.
 - Configuración observada en la demo del proveedor el 30 de septiembre de 2026: `city="ciudad de panamá"`, `lang="es"`, `view="monthly"`, `layout="row"`, `limit="12"`.
 - La guía de Vamos declara una clave de Copa preconfigurada. Este cambio no copia credenciales ni añade una API intermedia.
@@ -32,6 +34,8 @@ La página lleva `noindex,nofollow` y no se enlaza desde el menú. Eso no es con
 Fuente: `https://copa-digital-design-system.pages.dev/prompt.md`. Se reutilizan los componentes y tokens instalados en el repositorio y la referencia del prototipo validada contra el sistema del 11 de agosto de 2026. El 30 de septiembre la fuente vigente no estuvo accesible; no se afirma una nueva validación visual. No se crean tokens ni se modifica el submódulo de diseño.
 
 ## Validación local
+
+El 6 de octubre de 2026 se añadió el carrusel a esta ruta. Las 15 pruebas de reproducción y cargador Vamos pasaron; lint y formato de los archivos modificados pasaron; Svelte check reportó cero errores y advertencias. La página compilada se revisó por archivo local a 1440 y 390 px: dos imágenes distintas, sello visible, un h1, controles dentro de la foto, navegación, play/pausa y enlace a la agenda correctos, sin desbordamiento horizontal, errores JavaScript ni conexiones. Esa revisión omite únicamente cabecera y pie CMS e incrusta assets; no simula el origen autorizado ni prueba eventos en vivo. No se ejecutó un build completo del catálogo ni un despliegue para este ajuste.
 
 Ejecutar `pnpm exec vitest run src/lib/events/vamos-loader.test.ts`, `pnpm check` y el build habitual del sitio. Estas comprobaciones no requieren servidor local. La disponibilidad real de los eventos se valida después de publicar en el dominio autorizado.
 
