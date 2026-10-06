@@ -31,6 +31,10 @@ La página lleva `noindex,nofollow` y no se enlaza desde el menú. Eso no es con
 
 ## Referencia visual
 
+La composición de la ruta reproduce la cuadrícula de `directus/procesor.svelte`: cabecera y `main` comienzan en la primera fila, la cabecera tiene `z-50` y el pie ocupa la tercera fila. Esto permite que la fotografía llegue hasta el borde superior y que el menú flote sobre ella. La revisión debe incluir las secciones reales de cabecera y pie, no solo el carrusel aislado.
+
+La revisión de este ajuste del 6 de octubre se hizo sobre el prerender completo con cabecera y pie CMS reales, a 1440, 1366, 768 y 390 px. La foto comienza en y=0, la cabecera queda sobre la imagen y recibe clics, los controles caben en la foto y el pie aparece después de la agenda. Las flechas funcionan y no hay desbordamiento horizontal ni errores JavaScript. El navegador leyó los archivos generados mediante interceptación local, sin servidor ni simulación del dominio autorizado de Vamos.
+
 Fuente: `https://copa-digital-design-system.pages.dev/prompt.md`. Se reutilizan los componentes y tokens instalados en el repositorio y la referencia del prototipo validada contra el sistema del 11 de agosto de 2026. El 30 de septiembre la fuente vigente no estuvo accesible; no se afirma una nueva validación visual. No se crean tokens ni se modifica el submódulo de diseño.
 
 ## Validación local

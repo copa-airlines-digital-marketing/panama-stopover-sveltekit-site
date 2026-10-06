@@ -17,11 +17,15 @@
 	/>
 </svelte:head>
 
-<div class="min-h-svh bg-background-paper font-body text-grey-800">
-	{#if data.layoutSections[0]}
-		<Section section={data.layoutSections[0]} />
-	{/if}
-	<main id="eventos">
+<div
+	class="relative grid min-h-svh grid-cols-1 grid-rows-[auto_1fr_auto] bg-background-paper font-body text-grey-800"
+>
+	<div class="z-50 col-start-1 row-start-1">
+		{#if data.layoutSections[0]}
+			<Section section={data.layoutSections[0]} />
+		{/if}
+	</div>
+	<main id="eventos" class="col-start-1 row-span-2 row-start-1">
 		<HeroBlock item={eventsHero} />
 		<section id="agenda" aria-labelledby="agenda-title" class="container py-16 md:py-24">
 			<h2 id="agenda-title" class="font-heading text-u4 font-semibold text-primary">
@@ -34,6 +38,8 @@
 		</section>
 	</main>
 	{#if data.layoutSections[1]}
-		<Section section={data.layoutSections[1]} />
+		<div class="col-start-1 row-start-3">
+			<Section section={data.layoutSections[1]} />
+		</div>
 	{/if}
 </div>
